@@ -11,7 +11,6 @@
     <artifactId>base</artifactId>
 
     <dependencies>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -27,19 +26,6 @@
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
 
-        <!--<dependency>
-            <groupId>com.company</groupId>
-            <artifactId>principal</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
--->
-      <!--<dependency>
-            <groupId>com.company</groupId>
-            <artifactId>masterdata</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>-->
         <dependency>
             <groupId>javax.persistence</groupId>
             <artifactId>javax.persistence-api</artifactId>
@@ -59,12 +45,6 @@
                <artifactId>principal</artifactId>
                <version>0.0.1-SNAPSHOT</version>
 			   <scope>import</scope>
-           </dependency>
-           <dependency>
-               <groupId>com.myApp</groupId>
-               <artifactId>masterdata</artifactId>
-               <version>0.0.1-SNAPSHOT</version>
-			   <scope>compile</scope>
            </dependency>
        </dependencies>
 	</dependencyManagement>

@@ -20,10 +20,15 @@ public class PriceController {
         return priceService.getAllPrices();
     }
 
+    @PostMapping("/product/{id}")
+    public Price priceToProduct(@PathVariable long id, @RequestBody float price) {
+        return priceService.createEntryPriceToProduct(id, price);
+    }
+    /*
     @PutMapping("/product/{id}")
     public Price updatePrice(@PathVariable long id, @RequestBody float price) {
         return priceService.createEntryPriceToProduct(id, price);
-    }
+    }*/
 
     @GetMapping("/product/{id}")
     public List<Price> getPricesOfProduct(@PathVariable long id) {

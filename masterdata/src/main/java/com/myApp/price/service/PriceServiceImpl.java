@@ -1,13 +1,13 @@
 package com.myApp.price.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import com.myApp.price.dao.PriceDAO;
 import com.myApp.price.exceptions.PriceException;
 import com.myApp.price.model.Price;
 import com.myApp.product.exceptions.ProductException;
 import com.myApp.product.model.Product;
 import com.myApp.product.service.ProductServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
@@ -22,20 +22,6 @@ public class PriceServiceImpl implements PriceService {
     ProductServiceImpl productService;
 
     @Override
-    public Price createEntryPrice(Product product, float price) {
-        try {
-            Price newEntry = new Price();
-            newEntry.setPrice(price);
-            newEntry.setProduct(product);
-            Date date = new Date();
-            newEntry.setDate(date);
-            return priceDAO.createEntryPrice(newEntry);
-        } catch (Exception e) {
-            throw new ProductException.ProductExistException();
-        }
-    }
-
-    @Override
     public List<Price> getAllPrices() {
 
         List<Price> prices = priceDAO.getAllPrices();
@@ -47,11 +33,14 @@ public class PriceServiceImpl implements PriceService {
     @Override
     public Price createEntryPriceToProduct(long id, float price) {
 
+        //TODO cambiar el código y la forma de meter la fecha
         if(productService.existProduct(id)) {
             Product product = productService.getProduct(id);
             Price newPrice = new Price();
             newPrice.setPrice(price);
             newPrice.setProduct(product);
+            Date now = new Date();
+            newPrice.setDate(now);
             return priceDAO.createEntryPrice(newPrice);
         }
         throw new PriceException.PriceNotFoundException();

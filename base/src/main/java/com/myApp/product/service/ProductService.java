@@ -12,7 +12,9 @@ public interface ProductService {
 
 	Product getProduct(Long id);
 
-	//Product createProduct(Product product, float com.myApp.price);
+	Product create(Product product);
+
+	//Product createProduct(Product product, float price);
 
 	Product deleteProduct(Long id);
 
@@ -20,7 +22,7 @@ public interface ProductService {
 
 	Product updateState(Long id);
 
-	//Product createEntryPrice(Product product, float com.myApp.price);
+	//Product createEntryPrice(Product product, float price);
 
 	boolean existProduct(Long id);
 

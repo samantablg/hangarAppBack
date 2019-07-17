@@ -1,10 +1,11 @@
 package com.myApp.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 import com.myApp.product.model.Product;
 import com.myApp.product.service.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -20,23 +21,30 @@ public class ProductController {
 
 	@GetMapping("/allProducts")
 	public List<Product> getAllProducts() { return productService.getAllProducts();	}
-	
+
 	@GetMapping("/getProduct/{id}")
 	public Product getProductById(@PathVariable Long id) { return productService.getProduct(id); }
 
-	/*//cuando creo un producto le asocio un precio
 	@PostMapping("/product")
+	public Product createProduct(@Valid @RequestBody Product productReq) {
+		Product p = new Product();
+		p.setName(productReq.getName());
+		p.setDescription(productReq.getDescription());
+		return productService.create(p);
+	}
+
+	/*@PostMapping("/product")
 	public Product createProduct(@Valid @RequestBody ProductRequest productRequest) {
 		Product product = new Product();
 		product.setName(productRequest.getName());
 		product.setDescription(productRequest.getDescription());
 		return productService.createProduct(product, productRequest.getPrice());
-	}
+	}*/
 
-	@PostMapping("/product/{id}/com.myApp.price")
-	public Product UpdatePrice(@PathVariable Long id, @RequestBody float com.myApp.price) {
+	/*@PostMapping("/product/{id}/price")
+	public Product UpdatePrice(@PathVariable Long id, @RequestBody float price) {
 		Product product = productService.getProduct(id);
-		return productService.createEntryPrice(product, com.myApp.price);
+		return productService.createEntryPrice(product, price);
 	}*/
 	
 	/* Este método ya no se usa, se utiliza el estado activo o inactivo*/

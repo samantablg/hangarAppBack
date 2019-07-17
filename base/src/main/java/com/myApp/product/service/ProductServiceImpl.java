@@ -52,19 +52,24 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public Product getProduct(Long id) {
-		return productDAO.getProduct(id);
-		/*if(productDAO.existProduct(id)) {
+		if(productDAO.existProduct(id)) {
 			return productDAO.getProduct(id);
-		}*/
-		//throw new ProductException.NotFound(id);
+		}
+		throw new ProductException.NotFound(id);
 	}
 
+    public Product create(Product product) {
+	    if(!productDAO.existProductByName(product))
+	        return productDAO.createProduct(product);
+	    throw new ProductException.ProductExistException();
+    }
+
 	/*@Override
-	public Product createProduct(Product product, float com.myApp.price) {
+	public Product createProduct(Product product, float price) {
 		if(!productDAO.existProductByName(product)) {
 			try {
 				productDAO.createProduct(product);
-				priceService.createEntryPrice(product, com.myApp.price);
+				priceService.createEntryPrice(product, price);
 				return product;
 			} catch (Exception e) {
 				throw new ProductException.ProductExistException();
@@ -99,8 +104,8 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	/*@Override
-	public Product createEntryPrice(Product product, float com.myApp.price) {
-		priceService.createEntryPrice(product, com.myApp.price);
+	public Product createEntryPrice(Product product, float price) {
+		priceService.createEntryPrice(product, price);
 		return product;
 	}*/
 
