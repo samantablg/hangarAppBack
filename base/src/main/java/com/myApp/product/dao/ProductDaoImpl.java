@@ -9,7 +9,7 @@ import com.myApp.product.repository.ProductRepository;
 import com.myApp.product.model.Product;
 
 @Component
-public class ProductDAOImpl implements ProductDAO {
+public class ProductDaoImpl implements ProductDao {
 	
 	@Autowired
 	ProductRepository productRepository;

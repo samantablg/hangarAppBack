@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.myApp.product.model.Product;
 
-public interface ProductDAO {
+public interface ProductDao {
 	
 	List<Product> getAllProducts();
 	

@@ -9,7 +9,7 @@ import java.util.List;
 
 
 @Component
-public class HangarDAOImpl implements HangarDAO {
+public class HangarDaoImpl implements HangarDao {
 	
 	@Autowired
 	public HangarRepository hangarRepository;

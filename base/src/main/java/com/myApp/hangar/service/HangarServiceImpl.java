@@ -2,7 +2,7 @@ package com.myApp.hangar.service;
 
 import com.myApp.hangar.exceptions.HangarException;
 import com.myApp.hangar.model.Hangar;
-import com.myApp.hangar.dao.HangarDAO;
+import com.myApp.hangar.dao.HangarDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +13,7 @@ import java.util.List;
 public class HangarServiceImpl implements HangarService {
 	
 	@Autowired
-	HangarDAO hangarDAO;
+    HangarDao hangarDAO;
 
 	@Override
 	public List<Hangar> getAllHangars() {
