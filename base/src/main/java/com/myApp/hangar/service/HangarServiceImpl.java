@@ -30,9 +30,8 @@ public class HangarServiceImpl implements HangarService {
 	}
 
 	@Override
-	public Hangar getHangar(Long id) {
-
-		if (id > 0 && id <= MaxValueId())
+	public Hangar getHangar(long id) {
+		if(hangarDAO.existHangar(id))
 			return hangarDAO.getHangar(id);
 		throw new HangarException.HangarNotFoundException(id);
 	}
@@ -46,18 +45,18 @@ public class HangarServiceImpl implements HangarService {
 		throw new HangarException.HangarExistException();
 	}
 
-	/*public Hangar deleteHangar(Long id) {
+	/*public Hangar deleteHangar(long id) {
 		if (hangarDAO.existHangar(id))
 			return hangarDAO.deleteHangar(id);
 		return null;
 	}*/
 
 	@Override
-	public boolean hangarExistById(Long id) {
+	public boolean hangarExistById(long id) {
 		return hangarDAO.existHangar(id);
 	}
 	
-	/*public boolean hangarExistByName(Hangar com.myHangar.hangar) {
+	/*public boolean hangarExistByName(Hangar hangar) {
 		
 		List<Hangar> hangars = hangarDAO.getAllHangars();
 
@@ -65,7 +64,7 @@ public class HangarServiceImpl implements HangarService {
 
 
 		for (Hangar h: hangars) {
-			if (h.getName().equals(com.myHangar.hangar.getName()))
+			if (h.getName().equals(hangar.getName()))
 				cont++;
 		}
 		if(cont > 0)

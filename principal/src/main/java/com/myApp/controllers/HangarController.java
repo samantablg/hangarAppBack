@@ -1,5 +1,6 @@
 package com.myApp.controllers;
 
+import com.myApp.exceptions.ControllerException;
 import com.myApp.hangar.builder.HangarDtoBuilder;
 import com.myApp.hangar.dto.HangarDto;
 import com.myApp.hangar.model.Hangar;
@@ -27,12 +28,14 @@ public class HangarController {
 	}
 
 	@GetMapping("/hangar/{id}")
-	public ResponseEntity<HangarDto> getHangarById(@PathVariable Long id) {
+	public ResponseEntity<HangarDto> getHangarById(@PathVariable long id) {
+		if(id<=0)
+			throw new ControllerException.idNotAllowed(id);
 
-		final Hangar hangar = this.hangarService.getHangar(id);
+		final Hangar hangar = hangarService.getHangar(id);
 		return new ResponseEntity<HangarDto>(
-				new HangarDtoBuilder(hangar).getHangarDto(),
-				HttpStatus.OK
+			new HangarDtoBuilder(hangar).getHangarDto(),
+			HttpStatus.OK
 		);
 	}
 
