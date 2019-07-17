@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>EJERCICIO</artifactId>
-        <groupId>com.company</groupId>
+        <groupId>com.myApp</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -55,13 +55,13 @@
     <dependencyManagement>
 		<dependencies>
            <dependency>
-               <groupId>com.company</groupId>
+               <groupId>com.myApp</groupId>
                <artifactId>principal</artifactId>
                <version>0.0.1-SNAPSHOT</version>
 			   <scope>import</scope>
            </dependency>
            <dependency>
-               <groupId>com.company</groupId>
+               <groupId>com.myApp</groupId>
                <artifactId>masterdata</artifactId>
                <version>0.0.1-SNAPSHOT</version>
 			   <scope>compile</scope>
