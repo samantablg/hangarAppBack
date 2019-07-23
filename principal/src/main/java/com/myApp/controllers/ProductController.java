@@ -47,7 +47,6 @@ public class ProductController {
 		return productService.create(p);
 	}
 
-	
 	/* Este método ya no se usa, se utiliza el estado activo o inactivo*/
 	@DeleteMapping("/product/{id}")
 	public Product deleteProduct(@PathVariable Long id) {
