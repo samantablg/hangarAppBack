@@ -42,7 +42,6 @@ public class HangarDAOImpl implements HangarDAO {
 
 	/*@Override
 	public Hangar deleteHangar(Long id) {
-		
 		Hangar com.myHangar.hangar = hangarRepository.getOne(id);
 		if(com.myHangar.hangar != null)
 			hangarRepository.delete(com.myHangar.hangar);
