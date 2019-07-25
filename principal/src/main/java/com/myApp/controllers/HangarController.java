@@ -1,8 +1,13 @@
 package com.myApp.controllers;
 
+import com.myApp.exceptions.ControllerException;
+import com.myApp.hangar.builder.HangarDtoBuilder;
+import com.myApp.hangar.dto.HangarDto;
 import com.myApp.hangar.model.Hangar;
 import com.myApp.hangar.service.HangarServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -17,19 +22,21 @@ public class HangarController {
 	@Autowired
     HangarServiceImpl hangarService;
 
-	@GetMapping(value="/hello")
-	public String hello() {
-		return "hello";
-	}
-
 	@GetMapping(value="/hangars")
 	public List<Hangar> getAllHangars() {
 		return hangarService.getAllHangars();
 	}
 
 	@GetMapping("/hangar/{id}")
-	public Hangar getHangarById(@PathVariable Long id) {
-		return hangarService.getHangar(id);
+	public ResponseEntity<HangarDto> getHangarById(@PathVariable long id) {
+		if(id<=0)
+			throw new ControllerException.idNotAllowed(id);
+
+		final Hangar hangar = hangarService.getHangar(id);
+		return new ResponseEntity<HangarDto>(
+			new HangarDtoBuilder(hangar).getHangarDto(),
+			HttpStatus.OK
+		);
 	}
 
 	@PostMapping("/hangar")
@@ -46,5 +53,11 @@ public class HangarController {
 		return hangarService.deleteHangar(id);
 	}*/
 
-
+	@PutMapping("/hangar")
+	public Hangar updateHangar(@RequestBody Hangar update) {
+		Hangar hangar = new Hangar();
+		hangar.setName(update.getName());
+		hangar.setAddress(update.getAddress());
+		return hangarService.updateHangar(hangar);
+	}
 }

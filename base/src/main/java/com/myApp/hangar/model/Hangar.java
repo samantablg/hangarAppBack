@@ -1,7 +1,6 @@
 package com.myApp.hangar.model;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name="HANGAR")
@@ -13,11 +12,9 @@ public class Hangar {
 	private long id;
 
 	@Column(name="name")
-	@NotEmpty
 	private String name;
 
     @Column(name="address")
-	@NotEmpty
 	private String address;
 
     @Column(name="state")

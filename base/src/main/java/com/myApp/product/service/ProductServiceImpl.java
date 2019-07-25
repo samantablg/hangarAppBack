@@ -1,7 +1,7 @@
 package com.myApp.product.service;
 
 import com.myApp.hangar.service.HangarServiceImpl;
-import com.myApp.product.dao.ProductDAO;
+import com.myApp.product.dao.ProductDao;
 import com.myApp.product.exceptions.ProductException;
 import com.myApp.product.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
 
 	@Autowired
-	ProductDAO productDAO;
+    ProductDao productDAO;
 
 	@Autowired
 	HangarServiceImpl hangarService;

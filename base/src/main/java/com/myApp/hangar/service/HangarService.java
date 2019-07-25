@@ -8,14 +8,16 @@ public interface HangarService {
 	
 	List<Hangar> getAllHangars();
 	
-	Hangar getHangar(Long id);
+	Hangar getHangar(long id);
 	
 	Hangar createHangar(Hangar hangar);
 	
-	//Hangar deleteHangar(Long id);
+	//Hangar deleteHangar(long id);
 
 	boolean hangarExist(Hangar hangar);
 
-	boolean hangarExistById(Long id);
+	boolean hangarExistById(long id);
+
+	Hangar updateHangar(Hangar hangar);
 	
 }

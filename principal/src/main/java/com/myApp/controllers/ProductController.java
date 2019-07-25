@@ -1,8 +1,13 @@
 package com.myApp.controllers;
 
+import com.myApp.exceptions.ControllerException;
+import com.myApp.product.builder.ProductDtoBuilder;
+import com.myApp.product.dto.ProductDto;
 import com.myApp.product.model.Product;
 import com.myApp.product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -22,8 +27,17 @@ public class ProductController {
 	@GetMapping("/allProducts")
 	public List<Product> getAllProducts() { return productService.getAllProducts();	}
 
-	@GetMapping("/getProduct/{id}")
-	public Product getProductById(@PathVariable Long id) { return productService.getProduct(id); }
+	@GetMapping("/product/{id}")
+	public ResponseEntity<ProductDto> getProductById(@PathVariable long id) {
+		if(id<=0)
+			throw new ControllerException.idNotAllowed(id);
+
+		final Product product = productService.getProduct(id);
+		return new ResponseEntity<ProductDto>(
+				new ProductDtoBuilder(product).getProductDto(),
+				HttpStatus.OK
+		);
+	}
 
 	@PostMapping("/product")
 	public Product createProduct(@Valid @RequestBody Product productReq) {
@@ -33,23 +47,11 @@ public class ProductController {
 		return productService.create(p);
 	}
 
-	/*@PostMapping("/product")
-	public Product createProduct(@Valid @RequestBody ProductRequest productRequest) {
-		Product product = new Product();
-		product.setName(productRequest.getName());
-		product.setDescription(productRequest.getDescription());
-		return productService.createProduct(product, productRequest.getPrice());
-	}*/
-
-	/*@PostMapping("/product/{id}/price")
-	public Product UpdatePrice(@PathVariable Long id, @RequestBody float price) {
-		Product product = productService.getProduct(id);
-		return productService.createEntryPrice(product, price);
-	}*/
-	
 	/* Este método ya no se usa, se utiliza el estado activo o inactivo*/
 	@DeleteMapping("/product/{id}")
 	public Product deleteProduct(@PathVariable Long id) {
+		if(id<=0)
+			throw new ControllerException.idNotAllowed(id);
 		return productService.deleteProduct(id);
 	}
 
@@ -61,6 +63,10 @@ public class ProductController {
 	}*/
 
 	@PutMapping("/product/{id}")
-	public Product updateState(@PathVariable Long id) {	return productService.updateState(id); }
+	public Product updateState(@PathVariable Long id) {
+		if(id<=0)
+			throw new ControllerException.idNotAllowed(id);
+		return productService.updateState(id);
+	}
 
 }

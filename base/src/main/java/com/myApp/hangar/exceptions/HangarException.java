@@ -10,11 +10,11 @@ public class HangarException {
     public static class HangarNotFoundException extends RuntimeException {
 
         public HangarNotFoundException() {
-            super("There is not com.myHangar.hangar");
+            super("There is not hangar");
         }
 
         public HangarNotFoundException(Long id) {
-            super(String.format("The com.myHangar.hangar %d doesn't exist", id));
+            super(String.format("The hangar %d doesn't exist", id));
         }
     }
 
@@ -24,7 +24,7 @@ public class HangarException {
         public HangarExistException() { super("Hangar already exist"); }
 
         public HangarExistException(Long id) {
-            super(String.format("The com.myHangar.hangar %d already exist", id));
+            super(String.format("The hangar %d already exist", id));
         }
     }
 

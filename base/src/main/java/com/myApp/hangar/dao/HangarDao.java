@@ -1,10 +1,10 @@
 package com.myApp.hangar.dao;
 
-import java.util.List;
-
 import com.myApp.hangar.model.Hangar;
 
-public interface HangarDAO {
+import java.util.List;
+
+public interface HangarDao {
 	
 	List<Hangar> getAllHangars();
 
