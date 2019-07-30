@@ -1,5 +1,6 @@
 package com.myApp.hangar.dao;
 
+import com.myApp.hangar.model.BasicDataHangar;
 import com.myApp.hangar.model.Hangar;
 import com.myApp.hangar.repository.HangarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,4 +55,8 @@ public class HangarDaoImpl implements HangarDao {
 		return hangarRepository.existsById(id);
 	}
 
+    @Override
+    public List<Object> getBasicDataHangars() {
+        return hangarRepository.getBasicHangars();
+    }
 }

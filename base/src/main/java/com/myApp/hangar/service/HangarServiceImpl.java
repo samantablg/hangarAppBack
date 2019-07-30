@@ -1,11 +1,13 @@
 package com.myApp.hangar.service;
 
 import com.myApp.hangar.exceptions.HangarException;
+import com.myApp.hangar.model.BasicDataHangar;
 import com.myApp.hangar.model.Hangar;
 import com.myApp.hangar.dao.HangarDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -71,8 +73,20 @@ public class HangarServiceImpl implements HangarService {
 			return true;
 		return false;
 	}*/
-	
-	private long MaxValueId() {
+
+    public Hangar modifyHangar(Hangar update) {
+        Hangar hangar = hangarDAO.getHangar(update.getId());
+        hangar.setName(update.getName());
+        hangar.setAddress(update.getAddress());
+        return hangarDAO.createHangar(hangar);
+    }
+
+    @Override
+    public List<Object> getColumnIdAndName() {
+        return hangarDAO.getBasicDataHangars();
+    }
+
+    private long MaxValueId() {
 		
 		List<Hangar> hangars = hangarDAO.getAllHangars();
 		
