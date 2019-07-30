@@ -3,6 +3,7 @@ package com.myApp.controllers;
 import com.myApp.exceptions.ControllerException;
 import com.myApp.hangar.builder.HangarDtoBuilder;
 import com.myApp.hangar.dto.HangarDto;
+import com.myApp.hangar.model.BasicDataHangar;
 import com.myApp.hangar.model.Hangar;
 import com.myApp.hangar.service.HangarServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,11 @@ public class HangarController {
 		);
 	}
 
+	@GetMapping("/basicDataHangars")
+    public List<Object> getBasicDataOfHangars() {
+	    return hangarService.getColumnIdAndName();
+    }
+
 	@PostMapping("/hangar")
 	public Hangar createHangar(@Valid @RequestBody Hangar hangar) {
 		Hangar newHangar = new Hangar();
@@ -54,10 +60,9 @@ public class HangarController {
 	}*/
 
 	@PutMapping("/hangar")
-	public Hangar updateHangar(@RequestBody Hangar update) {
-		Hangar hangar = new Hangar();
-		hangar.setName(update.getName());
-		hangar.setAddress(update.getAddress());
-		return hangarService.updateHangar(hangar);
-	}
+    public Hangar updateHangar(@RequestBody Hangar update) {
+	    return hangarService.modifyHangar(update);
+    }
+
+
 }

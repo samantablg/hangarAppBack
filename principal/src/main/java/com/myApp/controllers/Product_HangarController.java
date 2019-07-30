@@ -51,6 +51,13 @@ public class Product_HangarController {
         return product_hangarService.getHangarsOfProduct(idProduct);
     }
 
+    @GetMapping("/products/hangar/{idHangar}")
+    public List<Product_Hangar> getProductOfHangar(@PathVariable long idHangar) {
+        if(idHangar<=0)
+            throw new ControllerException.idNotAllowed(idHangar);
+        return product_hangarService.getProductsOfHangar(idHangar);
+    }
+
     @PutMapping(value="/productOfHangar/update", produces = "application/json; charset=utf-8")
     public Product_Hangar updateAmount(@RequestBody ProductOfHangar update) {
         return product_hangarService.updateAmount(update.getProduct(), update.getHangar(), update.getAmount());
