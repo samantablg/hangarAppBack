@@ -103,6 +103,14 @@ public class ProductServiceImpl implements ProductService {
 		throw new ProductException.NotFound(id);
 	}
 
+    @Override
+    public Product modifyProduct(Product update) {
+	    Product product = productDAO.getProduct(update.getId());
+	    product.setName(update.getName());
+	    product.setDescription(update.getDescription());
+        return productDAO.editProduct(product);
+    }
+
 	/*@Override
 	public Product createEntryPrice(Product product, float price) {
 		priceService.createEntryPrice(product, price);

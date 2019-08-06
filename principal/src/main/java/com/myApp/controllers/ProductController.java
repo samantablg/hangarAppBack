@@ -69,4 +69,9 @@ public class ProductController {
 		return productService.updateState(id);
 	}
 
+	@PutMapping("/product")
+    public Product updateProduct(@RequestBody Product update) {
+	    return productService.modifyProduct(update);
+    }
+
 }

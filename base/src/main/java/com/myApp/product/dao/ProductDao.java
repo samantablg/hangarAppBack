@@ -11,6 +11,8 @@ public interface ProductDao {
 	Product getProduct(Long id);
 	
 	Product createProduct(Product product);
+
+	Product editProduct(Product product);
 	
 	Product deleteProduct(long id);
 

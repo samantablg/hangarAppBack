@@ -35,8 +35,16 @@ public class ProductDaoImpl implements ProductDao {
 		}
 		return null;
 	}
-	
-	public Product deleteProduct(long id) {
+
+    @Override
+    public Product editProduct(Product product) {
+	    if(productRepository.findProductByNameAndDescription(product.getName(), product.getDescription()) == null) {
+	        return productRepository.save(product);
+        }
+        return null;
+    }
+
+    public Product deleteProduct(long id) {
 		
 		Product product = productRepository.getOne(id);
 		if(product != null)

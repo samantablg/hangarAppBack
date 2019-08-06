@@ -3,14 +3,18 @@ package com.myApp.product_hangar.service;
 import com.myApp.hangar.exceptions.HangarException;
 import com.myApp.hangar.service.HangarServiceImpl;
 import com.myApp.product.exceptions.ProductException;
+import com.myApp.product.model.Product;
 import com.myApp.product.service.ProductServiceImpl;
 import com.myApp.product_hangar.dao.Product_HangarDAO;
+import com.myApp.product_hangar.model.ProductInfo_Hangar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.myApp.product_hangar.exceptions.Product_HangarException;
 import com.myApp.product_hangar.model.Product_Hangar;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class Product_HangarServiceImpl implements Product_HangarService {
@@ -50,6 +54,7 @@ public class Product_HangarServiceImpl implements Product_HangarService {
 
     @Override
     public List<Product_Hangar> getHangarsOfProduct(long id) {
+
         if(productService.existProduct(id)) {
             List<Product_Hangar> result = product_hangarDAO.getHangarsOfProduct(id);
             if(result != null)
@@ -58,6 +63,13 @@ public class Product_HangarServiceImpl implements Product_HangarService {
         }
         throw new ProductException.NotFound(id);
     }
+
+    public List<ProductInfo_Hangar> getInfoProductsOfHangar(List<Product_Hangar> product_hangar) {
+        List<Product> products = product_hangar.stream().map(item -> productService.getProduct(item.getProduct())).collect(Collectors.toList());
+        List<Product_Hangar> p_h = new ArrayList<>();
+        return null;
+    }
+
 
     @Override
     public Product_Hangar updateAmount(long product, long hangar, long amount) {

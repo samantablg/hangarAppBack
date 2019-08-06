@@ -26,4 +26,6 @@ public interface ProductService {
 
 	boolean existProduct(Long id);
 
+    Product modifyProduct(Product update);
+
 }
