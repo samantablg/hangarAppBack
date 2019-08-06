@@ -79,6 +79,24 @@ public class HangarServiceImpl implements HangarService {
     }
 
     @Override
+    public Hangar updateState(Long id) {
+
+        if(hangarDAO.existHangar(id)) {
+            Hangar hangar = hangarDAO.getHangar(id);
+            if(hangar.isState()) {
+                hangar.setState(false);
+            } else {
+                hangar.setState(true);
+            }
+
+            Hangar aHangar = hangar;
+            return hangarDAO.updateHangar(aHangar);
+
+        }
+        throw new HangarException.HangarNotFoundException(id);
+    }
+
+    @Override
     public List<Object> getColumnIdAndName() {
         return hangarDAO.getBasicDataHangars();
     }

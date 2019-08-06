@@ -47,13 +47,13 @@ public class ProductController {
 		return productService.create(p);
 	}
 
-	/* Este método ya no se usa, se utiliza el estado activo o inactivo*/
-	@DeleteMapping("/product/{id}")
+	//Este método ya no se usa, se utiliza el estado activo o inactivo
+	/*@DeleteMapping("/product/{id}")
 	public Product deleteProduct(@PathVariable Long id) {
 		if(id<=0)
 			throw new ControllerException.idNotAllowed(id);
 		return productService.deleteProduct(id);
-	}
+	}*/
 
 	/*
 	@GetMapping("/products/search/{letter}")
@@ -62,6 +62,7 @@ public class ProductController {
 		return new Product(filterProduct.getName(), filterProduct.getHangar());
 	}*/
 
+	//Logic Delete
 	@PutMapping("/product/{id}")
 	public Product updateState(@PathVariable Long id) {
 		if(id<=0)

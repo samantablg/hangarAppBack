@@ -55,6 +55,11 @@ public class HangarDaoImpl implements HangarDao {
 	}
 
     @Override
+    public Hangar updateHangar(Hangar hangar) {
+        return hangarRepository.save(hangar);
+    }
+
+    @Override
     public List<Object> getBasicDataHangars() {
         return hangarRepository.getBasicHangars();
     }

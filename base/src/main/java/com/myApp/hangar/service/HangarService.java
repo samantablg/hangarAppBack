@@ -21,6 +21,8 @@ public interface HangarService {
 
 	Hangar modifyHangar(Hangar update);
 
+    Hangar updateState(Long id);
+
 	List<Object> getColumnIdAndName();
 	
 }

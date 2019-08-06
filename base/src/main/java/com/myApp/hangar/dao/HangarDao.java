@@ -16,6 +16,8 @@ public interface HangarDao {
 
 	boolean existHangar(Long id);
 
+    Hangar updateHangar(Hangar hangar);
+
     List<Object> getBasicDataHangars();
 
 }
