@@ -5,6 +5,7 @@ public class ProductDto {
     private long id;
     private String name;
     private String description;
+    private boolean state;
 
     public long getId() {
         return id;
@@ -28,5 +29,13 @@ public class ProductDto {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean isState() {
+        return state;
+    }
+
+    public void setState(boolean state) {
+        this.state = state;
     }
 }

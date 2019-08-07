@@ -17,6 +17,15 @@ public class Hangar {
     @Column(name="address")
 	private String address;
 
+    @Column(name="owner")
+    private String owner;
+
+    @Column(name="email")
+    private String email;
+
+    @Column(name="phone")
+    private long phone;
+
     @Column(name="state")
     private boolean state = true;
 
@@ -34,7 +43,32 @@ public class Hangar {
 	}
 	public String getAddress() { return address; }
 	public void setAddress(String address) { this.address = address; }
-	public boolean isState() {
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public long getPhone() {
+        return phone;
+    }
+
+    public void setPhone(long phone) {
+        this.phone = phone;
+    }
+
+    public boolean isState() {
 		return state;
 	}
 	public void setState(boolean state) {

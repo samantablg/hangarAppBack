@@ -12,4 +12,21 @@ public class ControllerException {
             super(String.format("id: %d  is not allowed", id));
         }
     }
+
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public static class hangarEmptyException extends RuntimeException {
+
+        public hangarEmptyException() {
+            super("Hangar can't be create");
+        }
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public static class productEmptyException extends RuntimeException {
+
+        public productEmptyException() {
+            super("Product can't be create");
+        }
+    }
 }
