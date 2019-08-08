@@ -20,7 +20,8 @@
 		<module>base</module>
 		<module>masterdata</module>
 		<module>principal</module>
-	</modules>
+        <module>login</module>
+    </modules>
 
 	<dependencies>
 		<dependency>
