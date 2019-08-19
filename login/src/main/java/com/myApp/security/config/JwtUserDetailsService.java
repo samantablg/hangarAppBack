@@ -34,21 +34,20 @@ public class JwtUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         UserApp us = userRepository.findByUsername(username);
-        User_Role u_r = user_roleRepository.findByUser(us.getId());
-        Role role = roleRepository.findById(u_r.getRole());
-        //TODO cuidado! un usuario puede tener dos roles -> implementar la funcionalidad para ello
+        if (us != null) {
+            User_Role u_r = user_roleRepository.findByUser(us.getId());
+            Role role = roleRepository.findById(u_r.getRole());
+            //TODO cuidado! un usuario puede tener dos roles -> implementar la funcionalidad para ello
 
-        List<GrantedAuthority> roles = new ArrayList<>();
-        roles.add(new SimpleGrantedAuthority( role.getRole()));
+            List<GrantedAuthority> roles = new ArrayList<>();
+            roles.add(new SimpleGrantedAuthority(role.getRole()));
 
-        UserDetails userDet = new User(us.getUsername(), us.getPassword(), roles);
-        return userDet;
-
-        /*if ("javainuse".equals(username)) {
-            return new User("javainuse", "$2a$10$slYQmyNdGzTn7ZLBXBChFOC9f6kFjAqPhccnP6DxlWXx2lPk1C3G6",
-                    new ArrayList<>());
+            UserDetails userDet = new User(us.getUsername(), us.getPassword(), roles);
+            return userDet;
         } else {
-            throw new UsernameNotFoundException("User not found with username: " + username);
-        }*/
+            throw new UsernameNotFoundException("User not found");
+        }
+
+
     }
 }

@@ -7,6 +7,7 @@ import com.myApp.hangar.dto.HangarDto;
 import com.myApp.hangar.model.Hangar;
 import com.myApp.hangar.repository.HangarRepository;
 import com.myApp.hangar.service.HangarServiceImpl;
+import com.myApp.security.model.UserApp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
