@@ -60,4 +60,13 @@ public class JwtUserDetailsService implements UserDetailsService {
         newUser.setPassword(bcryptEncoder.encode(user.getPassword()));
         return userRepository.save(newUser);
     }
+
+    public List<UserApp> listUsers() {
+        List<UserApp> result = userRepository.findAll();
+        if (result != null) {
+            return result;
+        } else {
+        throw new UsernameNotFoundException("Users not found");
+        }
+    }
 }

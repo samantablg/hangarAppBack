@@ -4,7 +4,9 @@ import com.myApp.security.dto.UserAppDto;
 import com.myApp.security.model.UserApp;
 import com.myApp.security.model.UserAppResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -51,5 +53,14 @@ public class JwtAuthenticationController {
         } catch (BadCredentialsException e) {
             throw new Exception("INVALID_CREDENTIALS", e);
         }
+    }
+
+    //TODO esto solo debe permitirse para un administrador, y tiene que mostrarse la contraseña sin cifrar
+    @RequestMapping(value = "/users", method = RequestMethod.GET)
+    public ResponseEntity<?> listUsers() throws Exception {
+        return new ResponseEntity<>(
+                userDetailsService.listUsers(),
+                HttpStatus.OK
+        );
     }
 }
