@@ -1,5 +1,6 @@
 package com.myApp.security.config;
 
+import com.myApp.security.dto.UserAppDto;
 import com.myApp.security.model.Role;
 import com.myApp.security.model.UserApp;
 import com.myApp.security.model.User_Role;
@@ -13,6 +14,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,6 +22,9 @@ import java.util.List;
 
 @Service
 public class JwtUserDetailsService implements UserDetailsService {
+
+    @Autowired
+    private PasswordEncoder bcryptEncoder;
 
     @Autowired
     private UserRepository userRepository;
@@ -45,9 +50,14 @@ public class JwtUserDetailsService implements UserDetailsService {
             UserDetails userDet = new User(us.getUsername(), us.getPassword(), roles);
             return userDet;
         } else {
-            throw new UsernameNotFoundException("User not found");
+            throw new UsernameNotFoundException("User not found with username: " + username);
         }
+    }
 
-
+    public UserApp save(UserAppDto user) {
+        UserApp newUser = new UserApp();
+        newUser.setUsername(user.getUsername());
+        newUser.setPassword(bcryptEncoder.encode(user.getPassword()));
+        return userRepository.save(newUser);
     }
 }

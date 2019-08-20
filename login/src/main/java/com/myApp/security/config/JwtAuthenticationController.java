@@ -1,5 +1,6 @@
 package com.myApp.security.config;
 
+import com.myApp.security.dto.UserAppDto;
 import com.myApp.security.model.UserApp;
 import com.myApp.security.model.UserAppResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,11 @@ public class JwtAuthenticationController {
         final String token = jwtTokenUtil.generateToken(userDetails);
 
         return ResponseEntity.ok(new UserAppResponse(token));
+    }
+
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public ResponseEntity<?> saveUser(@RequestBody UserAppDto user) throws Exception {
+        return ResponseEntity.ok(userDetailsService.save(user));
     }
 
     private void authenticate(String username, String password) throws Exception {

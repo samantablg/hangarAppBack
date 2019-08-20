@@ -56,7 +56,7 @@ public class ProductController {
 
     //TODO implementar a lo largo de todas las capas
     @GetMapping("/products/{page}/{items}")
-    public Page<Product> productList(@PathVariable("page") int page, @PathVariable("items") int items) {
+    public ResponseEntity<Page<Product>> productList(@PathVariable("page") int page, @PathVariable("items") int items) {
 
         Pageable itemsToPage = PageRequest.of(page, items);
         Page<Product> allProducts = productRepository.findByStateTrue(itemsToPage);
@@ -66,7 +66,10 @@ public class ProductController {
                 itemsToPage,
                 allProducts.getTotalElements());
 
-        return result;
+        return new ResponseEntity<>(
+                result,
+                HttpStatus.OK
+        );
     }
 
 	@GetMapping("/product/{id}")

@@ -1,6 +1,7 @@
 package com.myApp.hangar.dao;
 
 import com.myApp.hangar.model.Hangar;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 

@@ -45,8 +45,8 @@ public class HangarController {
 	}
 
 	//TODO implementar a lo largo de todas las capas
-	@GetMapping("/hangars/{page}/{items}")
-    public Page<Hangar> hangarList(@PathVariable("page") int page, @PathVariable("items") int items) {
+    @GetMapping("/hangars/{page}/{items}")
+    public ResponseEntity<Page<Hangar>> hangarList(@PathVariable("page") int page, @PathVariable("items") int items) {
 
         Pageable itemsToPage = PageRequest.of(page, items);
         Page<Hangar> allHangars = hangarRepository.findByStateTrue(itemsToPage);
@@ -56,7 +56,10 @@ public class HangarController {
                 itemsToPage,
                 allHangars.getTotalElements());
 
-        return result;
+        return new ResponseEntity<>(
+                result,
+                HttpStatus.OK
+                );
     }
 
     public ResponseEntity<HangarDto> getHangarById(@PathVariable long id) {
