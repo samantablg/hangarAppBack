@@ -1,5 +1,6 @@
 package com.myApp.security.config;
 
+import com.myApp.security.builder.UserAppBuilder;
 import com.myApp.security.dto.UserAppDto;
 import com.myApp.security.model.Role;
 import com.myApp.security.model.UserApp;
@@ -55,9 +56,9 @@ public class JwtUserDetailsService implements UserDetailsService {
     }
 
     public UserApp save(UserAppDto user) {
-        UserApp newUser = new UserApp();
-        newUser.setUsername(user.getUsername());
-        newUser.setPassword(bcryptEncoder.encode(user.getPassword()));
+        String passw = bcryptEncoder.encode(user.getPassword());
+        user.setPassword(passw);
+        UserApp newUser = new UserAppBuilder(user).getUserApp();
         return userRepository.save(newUser);
     }
 
