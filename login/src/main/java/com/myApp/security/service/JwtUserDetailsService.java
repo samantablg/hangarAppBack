@@ -1,13 +1,16 @@
-package com.myApp.security.config;
+package com.myApp.security.service;
 
 import com.myApp.security.builder.UserAppBuilder;
+import com.myApp.security.builder.User_RoleBuilder;
 import com.myApp.security.dto.UserAppDto;
+import com.myApp.security.exceptions.LoginExceptions;
 import com.myApp.security.model.Role;
 import com.myApp.security.model.UserApp;
 import com.myApp.security.model.User_Role;
 import com.myApp.security.repository.RoleRepository;
 import com.myApp.security.repository.UserRepository;
 import com.myApp.security.repository.User_RoleRepository;
+import org.omg.CORBA.UserException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -56,10 +59,20 @@ public class JwtUserDetailsService implements UserDetailsService {
     }
 
     public UserApp save(UserAppDto user) {
-        String passw = bcryptEncoder.encode(user.getPassword());
-        user.setPassword(passw);
-        UserApp newUser = new UserAppBuilder(user).getUserApp();
-        return userRepository.save(newUser);
+        System.out.println(user);
+        System.out.println(userRepository.findByUsername(user.getUsername()));
+        if (userRepository.findByUsername(user.getUsername()) != null) {
+            throw new LoginExceptions.userExistException();
+        } else {
+            String passw = bcryptEncoder.encode(user.getPassword());
+            user.setPassword(passw);
+            UserApp newUser = new UserAppBuilder(user).getUserApp();
+            UserApp saveUser = userRepository.save(newUser);
+            User_Role roleUser =  new User_RoleBuilder(saveUser).getUser_role();
+            User_Role saveUserRole = user_roleRepository.save(roleUser);
+            return saveUser;
+        }
+
     }
 
     public List<UserApp> listUsers() {

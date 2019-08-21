@@ -1,12 +1,13 @@
-package com.myApp.security.config;
+package com.myApp.controllers;
 
+import com.myApp.security.config.JwtTokenUtil;
+import com.myApp.security.service.JwtUserDetailsService;
 import com.myApp.security.dto.UserAppDto;
 import com.myApp.security.model.UserApp;
 import com.myApp.security.model.UserAppResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -42,7 +43,10 @@ public class JwtAuthenticationController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ResponseEntity<?> saveUser(@RequestBody UserAppDto user) throws Exception {
-        return ResponseEntity.ok(userDetailsService.save(user));
+        if(user.getUsername()!= null && user.getUsername() != null) {
+            return new ResponseEntity<>(userDetailsService.save(user), HttpStatus.OK);
+        } throw new Exception("INVALID_CREDENTIALS");
+
     }
 
     private void authenticate(String username, String password) throws Exception {
