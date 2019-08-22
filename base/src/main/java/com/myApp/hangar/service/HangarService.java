@@ -8,6 +8,8 @@ import java.util.List;
 public interface HangarService {
 	
 	List<Hangar> getAllHangars();
+
+    List<Hangar> getAllHangarsWithName(String name);
 	
 	Hangar getHangar(long id);
 	

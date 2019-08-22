@@ -9,6 +9,8 @@ public interface HangarDao {
 	
 	List<Hangar> getAllHangars();
 
+    List<Hangar> findHangarsByName(String name);
+
 	Hangar getHangar(Long id);
 	
 	Hangar createHangar(Hangar reqHangar);

@@ -21,8 +21,13 @@ public class HangarDaoImpl implements HangarDao {
 		if(hangars !=null)  
 			return hangars;
 		return null;
-		
 	}
+
+    @Override
+    public List<Hangar> findHangarsByName(String name) {
+	    System.out.println(hangarRepository.findByNameWithTrueState(name));
+	    return hangarRepository.findByNameWithTrueState(name);
+    }
 
 	@Override
 	public Hangar getHangar(Long id) {
@@ -31,7 +36,6 @@ public class HangarDaoImpl implements HangarDao {
 		if(hangar != null)
 			return hangar;
 		return null;
-		
 	}
 
 	@Override

@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,5 +21,8 @@ public interface HangarRepository extends JpaRepository<Hangar, Long> {
 
     @Query(value = "SELECT h.id, h.name FROM Hangar h", nativeQuery = true)
     List<Object> getBasicHangars();
+
+    @Query("Select hangar FROM Hangar hangar WHERE hangar.name LIKE :name% AND hangar.state = true")
+    public List<Hangar> findByNameWithTrueState(@Param("name") String name);
 
 }

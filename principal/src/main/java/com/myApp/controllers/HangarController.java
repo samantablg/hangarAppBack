@@ -113,4 +113,12 @@ public class HangarController {
         return new ResponseEntity<>(hangarService.updateState(id), HttpStatus.OK);
     }
 
+    @GetMapping("search")
+    public ResponseEntity<List<Hangar>> findHangarLikeName(@RequestParam String name) {
+	    if (name.length()>0) {
+            return new ResponseEntity<>(hangarService.getAllHangarsWithName(name), HttpStatus.OK);
+        }
+        throw new ControllerException.searchHangarException();
+    }
+
 }

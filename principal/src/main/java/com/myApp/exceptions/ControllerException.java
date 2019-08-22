@@ -23,6 +23,14 @@ public class ControllerException {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public static class searchHangarException extends RuntimeException {
+
+        public searchHangarException() {
+            super("Write the name of hangar");
+        }
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public static class productEmptyException extends RuntimeException {
 
         public productEmptyException() {
