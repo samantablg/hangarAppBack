@@ -25,7 +25,6 @@ public class HangarDaoImpl implements HangarDao {
 
     @Override
     public List<Hangar> findHangarsByName(String name) {
-	    System.out.println(hangarRepository.findByNameWithTrueState(name));
 	    return hangarRepository.findByNameWithTrueState(name);
     }
 

@@ -26,11 +26,7 @@ public class HangarServiceImpl implements HangarService {
     @Override
     public List<Hangar> getAllHangarsWithName(String name) {
 
-	    System.out.println(name);
-
 	    List<Hangar> result = hangarDAO.findHangarsByName(name);
-	    System.out.println(result);
-	    System.out.println(result.size());
         if (result.size() > 0 )
             return result;
         throw new HangarException.HangarNotFoundException();
