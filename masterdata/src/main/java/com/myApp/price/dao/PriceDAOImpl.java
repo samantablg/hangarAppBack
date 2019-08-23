@@ -34,6 +34,7 @@ public class PriceDAOImpl implements PriceDAO {
         return priceRepository.findAll();
     }
 
+    //TODO pending
     @Override
     public Price getLastPriceOfProduct(long id) {
         return null;

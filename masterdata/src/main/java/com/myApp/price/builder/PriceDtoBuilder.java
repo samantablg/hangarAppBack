@@ -3,7 +3,9 @@ package com.myApp.price.builder;
 import com.myApp.price.dto.PriceDto;
 import com.myApp.price.model.Price;
 
-public class PriceDtoBuilder {
+import java.io.Serializable;
+
+public class PriceDtoBuilder implements Serializable {
 
     private PriceDto priceDto;
 

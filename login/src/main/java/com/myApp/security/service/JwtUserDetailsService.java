@@ -59,7 +59,6 @@ public class JwtUserDetailsService implements UserDetailsService {
     }
 
     public UserApp save(UserAppDto user) {
-        System.out.println(userRepository.findByUsername(user.getUsername()));
         if (userRepository.findByUsername(user.getUsername()) != null) {
             throw new LoginExceptions.userExistException();
         } else {

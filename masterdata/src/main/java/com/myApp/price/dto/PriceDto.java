@@ -1,7 +1,9 @@
 package com.myApp.price.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.myApp.product.model.Product;
 
+import java.io.Serializable;
 import java.util.Date;
 
 public class PriceDto {
@@ -9,6 +11,7 @@ public class PriceDto {
     private long id;
     private Date date;
     private float price;
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Product product;
 
     public long getId() {

@@ -46,7 +46,7 @@ public class PriceController {
         List<Price> prices = priceService.getAllPricesOfProduct(id);
         return new ResponseEntity<>(
                 prices.stream().map(
-                        price -> new PriceDtoBuilder(price).getPriceDto()).collect(Collectors.toList()),
+                      price -> new PriceDtoBuilder(price).getPriceDto()).collect(Collectors.toList()),
                 HttpStatus.OK
         );
     }
