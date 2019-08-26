@@ -11,7 +11,7 @@ public class User_RoleBuilder {
         this.user_role = new User_Role();
 
         this.user_role.setUser(userApp.getId());
-        this.user_role.setUser(2);
+        this.user_role.setRole(2);
     }
 
     public User_Role getUser_role() {

@@ -67,7 +67,7 @@ public class JwtUserDetailsService implements UserDetailsService {
             UserApp newUser = new UserAppBuilder(user).getUserApp();
             UserApp saveUser = userRepository.save(newUser);
             User_Role roleUser =  new User_RoleBuilder(saveUser).getUser_role();
-            User_Role saveUserRole = user_roleRepository.save(roleUser);
+            user_roleRepository.save(roleUser);
             return saveUser;
         }
 
@@ -81,4 +81,13 @@ public class JwtUserDetailsService implements UserDetailsService {
         throw new UsernameNotFoundException("Users not found");
         }
     }
+
+    public boolean existsByUsername(String username) {
+        UserApp user = userRepository.findByUsername(username);
+        if(user!= null) {
+            return true;
+        }
+        return false;
+    }
+
 }

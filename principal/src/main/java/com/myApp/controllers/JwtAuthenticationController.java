@@ -16,7 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin
+@CrossOrigin("http://localhost:4200")
 public class JwtAuthenticationController {
 
     @Autowired
@@ -66,5 +66,14 @@ public class JwtAuthenticationController {
                 userDetailsService.listUsers(),
                 HttpStatus.OK
         );
+    }
+
+    @RequestMapping(value ="/register/{username}", method = RequestMethod.GET)
+    private ResponseEntity<Boolean> findByUsername(@PathVariable String username) {
+        boolean user = userDetailsService.existsByUsername(username);
+        if(user) {
+            return new ResponseEntity<>(true, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(false, HttpStatus.OK);
     }
 }
