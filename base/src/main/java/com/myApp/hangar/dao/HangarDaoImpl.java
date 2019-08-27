@@ -28,7 +28,12 @@ public class HangarDaoImpl implements HangarDao {
 	    return hangarRepository.findByNameWithTrueState(name);
     }
 
-	@Override
+    @Override
+    public Boolean existHangarByName(String name) {
+	   return hangarRepository.existHangarByName(name);
+    }
+
+    @Override
 	public Hangar getHangar(Long id) {
 		
 		Hangar hangar = hangarRepository.getOne(id);

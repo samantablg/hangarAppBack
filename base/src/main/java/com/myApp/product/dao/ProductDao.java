@@ -9,6 +9,8 @@ public interface ProductDao {
 	List<Product> getAllProducts();
 	
 	Product getProduct(Long id);
+
+    List<Product> findProductsByName(String name);
 	
 	Product createProduct(Product product);
 

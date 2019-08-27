@@ -33,6 +33,11 @@ public class HangarServiceImpl implements HangarService {
     }
 
     @Override
+    public Boolean existHangarByName(String name) {
+        return hangarDAO.existHangarByName(name);
+    }
+
+    @Override
 	public boolean hangarExist(Hangar hangar) { //Comprobamos si existe por id
 		return hangarDAO.existHangar(hangar.getId());
 	}

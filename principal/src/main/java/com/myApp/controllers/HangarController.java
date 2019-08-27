@@ -7,7 +7,6 @@ import com.myApp.hangar.dto.HangarDto;
 import com.myApp.hangar.model.Hangar;
 import com.myApp.hangar.repository.HangarRepository;
 import com.myApp.hangar.service.HangarServiceImpl;
-import com.myApp.security.model.UserApp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -81,8 +80,7 @@ public class HangarController {
 
 	@PostMapping("/hangar")
 	public ResponseEntity<HangarDto> createHangar(@RequestBody HangarDto hdto) {
-
-	    if(hdto.getName()!= null && hdto.getAddress() != null) {
+	    if(hdto.getName()!= "" && hdto.getAddress() != "") {
             Hangar hangar = new HangarBuilder(hdto).getHangar();
             Hangar newHangar =  hangarService.createHangar(hangar);
             return new ResponseEntity<>(
@@ -124,9 +122,9 @@ public class HangarController {
     }
 
     @GetMapping("search")
-    public ResponseEntity<List<HangarDto>> findHangarLikeName(@RequestParam String name) {
-	    if (name.length()>0) {
-	        List<Hangar> result = hangarService.getAllHangarsWithName(name);
+    public ResponseEntity<List<HangarDto>> findHangarLikeName(@RequestParam String h_name) {
+	    if (h_name.length()>0) {
+	        List<Hangar> result = hangarService.getAllHangarsWithName(h_name);
             return new ResponseEntity<>(
                     result.stream().map(
                             hangar -> new DtoBuilder(hangar).getHangarDto()).collect(Collectors.toList()),
@@ -135,4 +133,12 @@ public class HangarController {
         throw new ControllerException.searchHangarException();
     }
 
+    @RequestMapping(value ="/hangarExist/{name}", method = RequestMethod.GET)
+    private ResponseEntity<Boolean> findByUsername(@PathVariable String name) {
+        boolean hangar = hangarService.existHangarByName(name);
+        if (hangar) {
+            return new ResponseEntity<>(true, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(false, HttpStatus.OK);
+    }
 }

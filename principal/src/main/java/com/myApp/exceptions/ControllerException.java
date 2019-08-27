@@ -31,6 +31,14 @@ public class ControllerException {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public static class searchProductException extends RuntimeException {
+
+        public searchProductException() {
+            super("Write the name of product");
+        }
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public static class productEmptyException extends RuntimeException {
 
         public productEmptyException() {

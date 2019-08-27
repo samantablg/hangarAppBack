@@ -126,4 +126,16 @@ public class ProductController {
         return new ResponseEntity<>(productService.updateState(id), HttpStatus.OK);
     }
 
+    @GetMapping("search/product")
+    public ResponseEntity<List<ProductDto>> findProductByName(@RequestParam String p_name) {
+        if (p_name.length()>0) {
+            List<Product> result = productService.getAllProductsWithName(p_name);
+            return new ResponseEntity<>(
+                    result.stream().map(
+                            product -> new DtoBuilder(product).getProductDto()).collect(Collectors.toList()),
+                    HttpStatus.OK);
+        }
+        throw new ControllerException.searchProductException();
+    }
+
 }

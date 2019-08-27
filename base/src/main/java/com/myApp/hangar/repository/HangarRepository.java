@@ -16,10 +16,16 @@ public interface HangarRepository extends JpaRepository<Hangar, Long> {
 
     Page<Hangar> findByStateTrue(Pageable pageable);
 
-    @Query("SELECT h FROM  Hangar h WHERE h.name = ?1 and h.address = ?2")
+    @Query("SELECT hangar FROM  Hangar hangar WHERE hangar.name = ?1 and hangar.address = ?2")
     Hangar findHangarByNameAndAddress(String name, String address);
 
-    @Query(value = "SELECT h.id, h.name FROM Hangar h", nativeQuery = true)
+    @Query("SELECT hangar FROM  Hangar hangar WHERE hangar.name = ?1")
+    Hangar findHangarByName(String name);
+
+    @Query("SELECT hangar FROM  Hangar hangar WHERE hangar.name = ?1")
+    Boolean existHangarByName(String name);
+
+    @Query(value = "SELECT hangar.id, hangar.name FROM Hangar hangar", nativeQuery = true)
     List<Object> getBasicHangars();
 
     @Query("Select hangar FROM Hangar hangar WHERE hangar.name LIKE :name% AND hangar.state = true")

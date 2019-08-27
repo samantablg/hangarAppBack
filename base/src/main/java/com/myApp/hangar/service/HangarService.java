@@ -14,6 +14,8 @@ public interface HangarService {
 	Hangar getHangar(long id);
 	
 	Hangar createHangar(Hangar hangar);
+
+	Boolean existHangarByName(String name);
 	
 	//Hangar deleteHangar(long id);
 

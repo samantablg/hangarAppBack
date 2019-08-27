@@ -23,6 +23,11 @@ public class ProductDaoImpl implements ProductDao {
 		return null;
 	}
 
+    @Override
+    public List<Product> findProductsByName(String name) {
+        return productRepository.findByNameWithTrueState(name);
+    }
+
 	@Override
 	public Product getProduct(Long id) {
 		return productRepository.getOne(id);

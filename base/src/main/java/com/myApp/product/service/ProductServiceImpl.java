@@ -50,6 +50,15 @@ public class ProductServiceImpl implements ProductService {
 		throw new ProductException.NotFound();
 	}
 
+    @Override
+    public List<Product> getAllProductsWithName(String name) {
+
+        List<Product> result = productDAO.findProductsByName(name);
+        if (result.size() > 0 )
+            return result;
+        throw new ProductException.NotFound();
+    }
+
 	@Override
 	public Product getProduct(Long id) {
 		if(productDAO.existProduct(id)) {
