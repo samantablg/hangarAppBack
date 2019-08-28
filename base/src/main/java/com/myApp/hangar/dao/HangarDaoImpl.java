@@ -30,7 +30,10 @@ public class HangarDaoImpl implements HangarDao {
 
     @Override
     public Boolean existHangarByName(String name) {
-	   return hangarRepository.existHangarByName(name);
+	   Hangar hangar = hangarRepository.findHangarByName(name);
+	   if(hangar!=null)
+	       return true;
+	   return false;
     }
 
     @Override
@@ -64,7 +67,7 @@ public class HangarDaoImpl implements HangarDao {
 
     @Override
     public Hangar updateHangar(Hangar hangar) {
-        return hangarRepository.save(hangar);
+        return hangarRepository.saveAndFlush(hangar);
     }
 
     @Override

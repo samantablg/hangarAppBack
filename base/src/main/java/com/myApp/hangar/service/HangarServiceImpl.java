@@ -85,11 +85,13 @@ public class HangarServiceImpl implements HangarService {
 		return false;
 	}*/
 
+	//TODO modificar lógica
     public Hangar modifyHangar(Hangar update) {
-        Hangar hangar = hangarDAO.getHangar(update.getId());
-        hangar.setName(update.getName());
-        hangar.setAddress(update.getAddress());
-        return hangarDAO.createHangar(hangar);
+        if (update!= null) {
+            return hangarDAO.updateHangar(update);
+        }
+        throw new HangarException.HangarExistException();
+
     }
 
     @Override

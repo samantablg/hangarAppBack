@@ -65,7 +65,7 @@ public class ProductDaoImpl implements ProductDao {
 
 	@Override
 	public Product updateProduct(Product product) {
-		return productRepository.save(product);
+		return productRepository.saveAndFlush(product);
 	}
 
 	@Override

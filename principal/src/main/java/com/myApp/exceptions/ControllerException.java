@@ -45,4 +45,12 @@ public class ControllerException {
             super("Product can't be create");
         }
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public static class hangarExistException extends RuntimeException {
+
+        public hangarExistException() {
+            super("Hangar already exist");
+        }
+    }
 }

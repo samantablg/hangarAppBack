@@ -7,6 +7,7 @@ import com.myApp.hangar.dto.HangarDto;
 import com.myApp.hangar.model.Hangar;
 import com.myApp.hangar.repository.HangarRepository;
 import com.myApp.hangar.service.HangarServiceImpl;
+import jdk.nashorn.internal.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
 
 
 @RestController
-@CrossOrigin
+@CrossOrigin("http://localhost:4200")
 @RequestMapping("/api")
 public class HangarController {
 
@@ -99,7 +100,7 @@ public class HangarController {
 
 	@PutMapping("/hangar")
     public ResponseEntity<HangarDto> updateHangar(@RequestBody HangarDto update) {
-	    if(update.getName()!= null && update.getAddress()!= null) {
+	    if(update.getName()!= "" && update.getAddress()!= "" && update.getOwner() != "") {
             Hangar hangar = new HangarBuilder(update).getHangar();
             Hangar modifyHangar = hangarService.modifyHangar(hangar);
             return new ResponseEntity<>(
@@ -133,12 +134,12 @@ public class HangarController {
         throw new ControllerException.searchHangarException();
     }
 
-    @RequestMapping(value ="/hangarExist/{name}", method = RequestMethod.GET)
-    private ResponseEntity<Boolean> findByUsername(@PathVariable String name) {
-        boolean hangar = hangarService.existHangarByName(name);
-        if (hangar) {
+    @RequestMapping(value ="hangar/exist/{name}", method = RequestMethod.GET)
+    private ResponseEntity<?> findByUsername(@PathVariable String name) {
+        boolean hangarExist = hangarService.existHangarByName(name);
+        if (!hangarExist) {
             return new ResponseEntity<>(true, HttpStatus.OK);
         }
-        return new ResponseEntity<>(false, HttpStatus.OK);
+        throw new ControllerException.hangarExistException();
     }
 }

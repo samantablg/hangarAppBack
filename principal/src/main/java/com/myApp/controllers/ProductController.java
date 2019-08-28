@@ -110,10 +110,11 @@ public class ProductController {
 	}*/
 
 	@PutMapping("/product")
-    public ResponseEntity<Product> updateProduct(@RequestBody ProductDto update) {
+    public ResponseEntity<ProductDto> updateProduct(@RequestBody ProductDto update) {
         if(update.getName()!= null && update.getDescription()!= null) {
             Product product = new ProductBuilder(update).getProduct();
-            return new ResponseEntity<>(productService.modifyProduct(product), HttpStatus.OK);
+            Product modify = productService.modifyProduct(product);
+            return new ResponseEntity<> (new DtoBuilder(modify).getProductDto(), HttpStatus.OK);
         }
 	    throw new ControllerException.productEmptyException();
     }
