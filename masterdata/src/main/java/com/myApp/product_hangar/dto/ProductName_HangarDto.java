@@ -3,6 +3,7 @@ package com.myApp.product_hangar.dto;
 public class ProductName_HangarDto {
 
     private long hangar;
+    private long product;
     private String nameProduct;
     private long amount;
 
@@ -12,6 +13,14 @@ public class ProductName_HangarDto {
 
     public void setHangar(long hangar) {
         this.hangar = hangar;
+    }
+
+    public long getProduct() {
+        return product;
+    }
+
+    public void setProduct(long product) {
+        this.product = product;
     }
 
     public String getNameProduct() {

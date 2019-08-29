@@ -11,6 +11,7 @@ public class ProductName_HangarDtoBuilder {
         this.productName_hangarDto = new ProductName_HangarDto();
 
         this.productName_hangarDto.setHangar(product_hangar.getHangar());
+        this.productName_hangarDto.setProduct(product_hangar.getProduct());
         this.productName_hangarDto.setAmount(product_hangar.getAmount());
         this.productName_hangarDto.setNameProduct(nameProduct);
     }

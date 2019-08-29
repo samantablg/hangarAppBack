@@ -87,6 +87,7 @@ public class Product_HangarController {
         );
     }
 
+    //TODO devolver true o false -> implementar en el servicio
     @PutMapping(value="/productOfHangar/delete", produces = "application/json; charset=utf-8")
     public ResponseEntity<Product_HangarDto> unlinkProductOfHangar(@RequestBody Product_HangarDto delete) {
         Product_Hangar p_h = new Product_HangarBuilder(delete).getProduct_hangar();
