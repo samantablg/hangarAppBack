@@ -27,7 +27,6 @@ public class Product_HangarDAOImpl implements Product_HangarDAO {
     @Override
     public List<Product_Hangar> getAll() {
         List<Product_Hangar> result = product_hangarRepository.findAll();
-        System.out.println("---");
         return result;
     }
 

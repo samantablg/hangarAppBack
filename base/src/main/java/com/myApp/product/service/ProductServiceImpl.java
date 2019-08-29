@@ -160,4 +160,9 @@ public class ProductServiceImpl implements ProductService {
 		return filterProductByLength(listUpper);
 	}
 	*/
+
+    @Override
+    public String getNameOfProductById(long id) {
+        return productDAO.getNameOfProductById(id);
+    }
 }

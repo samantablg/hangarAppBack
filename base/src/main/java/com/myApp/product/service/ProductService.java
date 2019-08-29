@@ -30,4 +30,6 @@ public interface ProductService {
 
     Product modifyProduct(Product update);
 
+    String getNameOfProductById(long id);
+
 }

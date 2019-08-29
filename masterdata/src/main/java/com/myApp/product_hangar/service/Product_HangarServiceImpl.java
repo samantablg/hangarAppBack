@@ -5,7 +5,9 @@ import com.myApp.hangar.service.HangarServiceImpl;
 import com.myApp.product.exceptions.ProductException;
 import com.myApp.product.model.Product;
 import com.myApp.product.service.ProductServiceImpl;
+import com.myApp.product_hangar.builder.ProductName_HangarDtoBuilder;
 import com.myApp.product_hangar.dao.Product_HangarDAO;
+import com.myApp.product_hangar.dto.ProductName_HangarDto;
 import com.myApp.product_hangar.model.ProductInfo_Hangar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,7 @@ import com.myApp.product_hangar.model.Product_Hangar;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,6 +53,35 @@ public class Product_HangarServiceImpl implements Product_HangarService {
             throw new Product_HangarException.HangarNotAssociatedException(id);
         }
         throw new HangarException.HangarNotFoundException(id);
+    }
+
+    @Override
+    public List<ProductName_HangarDto> getNameOfProductsOfHangar(long id) {
+        if(hangarService.hangarExistById(id)) {
+            List<Product_Hangar> productsOfHangar = product_hangarDAO.getProductsOfHangar(id);
+            if (productsOfHangar != null) {
+                List<String> nameOfProducts = getNameOfProducts(productsOfHangar);
+                return buildProductsWithNameOfHangar(productsOfHangar, nameOfProducts);
+            }
+            throw new Product_HangarException.HangarNotAssociatedException(id);
+        }
+        throw new HangarException.HangarNotFoundException(id);
+    }
+
+    private List<String> getNameOfProducts(List<Product_Hangar> products_hangar) {
+        return products_hangar.stream()
+                .map(product_hangar -> productService.getNameOfProductById(product_hangar.getProduct()))
+                .collect(Collectors.toList());
+    }
+
+    private List<ProductName_HangarDto> buildProductsWithNameOfHangar(List<Product_Hangar> productsOfHangar, List<String> nameOfProducts) {
+        AtomicInteger i = new AtomicInteger();
+        return productsOfHangar.stream()
+                .map((item) -> {
+                    String name = nameOfProducts.get(i.get());
+                    i.getAndIncrement();
+                    return new ProductName_HangarDtoBuilder(item, name).getProductName_hangarDto_hangarDto();
+                }).collect(Collectors.toList());
     }
 
     @Override

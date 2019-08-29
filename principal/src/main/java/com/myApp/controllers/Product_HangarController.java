@@ -3,6 +3,7 @@ package com.myApp.controllers;
 import com.myApp.exceptions.ControllerException;
 import com.myApp.product_hangar.builder.Product_HangarBuilder;
 import com.myApp.product_hangar.builder.Product_HangarDtoBuilder;
+import com.myApp.product_hangar.dto.ProductName_HangarDto;
 import com.myApp.product_hangar.dto.Product_HangarDto;
 import com.myApp.product_hangar.model.Product_Hangar;
 import com.myApp.product_hangar.service.Product_HangarServiceImpl;
@@ -66,6 +67,14 @@ public class Product_HangarController {
                         p_h -> new Product_HangarDtoBuilder(p_h).getProduct_hangarDto()).collect(Collectors.toList()),
                 HttpStatus.OK
         );
+    }
+
+    @GetMapping("/link/productsOfHangar/{idHangar}")
+    public ResponseEntity<List<ProductName_HangarDto>> getNameOfProductOfHangar(@PathVariable long idHangar) {
+        if(idHangar<=0) {
+            throw new ControllerException.idNotAllowed(idHangar);
+        }
+        return new ResponseEntity<>(product_hangarService.getNameOfProductsOfHangar(idHangar), HttpStatus.OK);
     }
 
     @PutMapping(value="/productOfHangar/update", produces = "application/json; charset=utf-8")

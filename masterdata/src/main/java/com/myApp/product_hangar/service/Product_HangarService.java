@@ -1,6 +1,7 @@
 package com.myApp.product_hangar.service;
 
 import com.myApp.product.model.Product;
+import com.myApp.product_hangar.dto.ProductName_HangarDto;
 import com.myApp.product_hangar.model.ProductInfo_Hangar;
 import com.myApp.product_hangar.model.Product_Hangar;
 
@@ -13,6 +14,8 @@ public interface Product_HangarService {
     List<Product_Hangar> getAll();
 
     List<Product_Hangar> getProductsOfHangar(long id);
+
+    List<ProductName_HangarDto> getNameOfProductsOfHangar(long id);
 
     List<Product_Hangar> getHangarsOfProduct(long id);
 

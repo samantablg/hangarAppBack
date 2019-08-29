@@ -26,6 +26,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Product findProductByNameAndDescription(String name, String description);
 
     @Query("Select product FROM Product product WHERE product.name LIKE :name% AND product.state = true")
-    public List<Product> findByNameWithTrueState(@Param("name") String name);
+    List<Product> findByNameWithTrueState(@Param("name") String name);
+
+    @Query(value = "SELECT product.name FROM Product product WHERE product.id =?1")
+    String getNameOfProduct(long id);
 
 }

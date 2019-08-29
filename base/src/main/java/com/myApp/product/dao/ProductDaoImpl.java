@@ -74,4 +74,9 @@ public class ProductDaoImpl implements ProductDao {
 			return true;
 		return false;
 	}
+
+    @Override
+    public String getNameOfProductById(long id) {
+        return productRepository.getNameOfProduct(id);
+    }
 }

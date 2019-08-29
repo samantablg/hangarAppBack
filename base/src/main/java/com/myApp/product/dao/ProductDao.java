@@ -24,4 +24,6 @@ public interface ProductDao {
 
 	boolean existProductByName(Product product);
 
+	String getNameOfProductById(long id);
+
 }
