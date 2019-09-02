@@ -11,10 +11,14 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+
 @Repository
 public interface HangarRepository extends JpaRepository<Hangar, Long> {
 
     Page<Hangar> findByStateTrue(Pageable pageable);
+
+    @Query("SELECT hangar FROM Hangar hangar WHERE hangar.state = true ")
+    List<Hangar> findAllWithTrueState();
 
     @Query("SELECT hangar FROM  Hangar hangar WHERE hangar.name = ?1 and hangar.address = ?2")
     Hangar findHangarByNameAndAddress(String name, String address);
@@ -25,10 +29,7 @@ public interface HangarRepository extends JpaRepository<Hangar, Long> {
     @Query("SELECT hangar FROM  Hangar hangar WHERE hangar.name = ?1")
     Boolean existHangarByName(String name);
 
-    @Query(value = "SELECT hangar.id, hangar.name FROM Hangar hangar", nativeQuery = true)
-    List<Object> getBasicHangars();
-
     @Query("Select hangar FROM Hangar hangar WHERE hangar.name LIKE :name% AND hangar.state = true")
-    public List<Hangar> findByNameWithTrueState(@Param("name") String name);
+    List<Hangar> findByNameWithTrueState(@Param("name") String name);
 
 }

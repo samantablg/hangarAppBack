@@ -7,12 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
-
 @Service
 public class HangarServiceImpl implements HangarService {
 	
 	@Autowired
-    HangarDao hangarDAO;
+    private HangarDao hangarDAO;
 
 	@Override
 	public List<Hangar> getAllHangars() {
@@ -68,22 +67,6 @@ public class HangarServiceImpl implements HangarService {
 	public boolean hangarExistById(long id) {
 		return hangarDAO.existHangar(id);
 	}
-	
-	/*public boolean hangarExistByName(Hangar hangar) {
-		
-		List<Hangar> hangars = hangarDAO.getAllHangars();
-
-		int cont = 0;
-
-
-		for (Hangar h: hangars) {
-			if (h.getName().equals(hangar.getName()))
-				cont++;
-		}
-		if(cont > 0)
-			return true;
-		return false;
-	}*/
 
 	//TODO modificar lógica
     public Hangar modifyHangar(Hangar update) {
@@ -91,7 +74,6 @@ public class HangarServiceImpl implements HangarService {
             return hangarDAO.updateHangar(update);
         }
         throw new HangarException.HangarExistException();
-
     }
 
     @Override
@@ -104,20 +86,12 @@ public class HangarServiceImpl implements HangarService {
             } else {
                 hangar.setState(true);
             }
-
-            Hangar aHangar = hangar;
-            return hangarDAO.updateHangar(aHangar);
-
+            return hangarDAO.updateHangar(hangar);
         }
         throw new HangarException.HangarNotFoundException(id);
     }
 
-    @Override
-    public List<Object> getColumnIdAndName() {
-        return hangarDAO.getBasicDataHangars();
-    }
-
-    private long MaxValueId() {
+  /*  private long MaxValueId() {
 		
 		List<Hangar> hangars = hangarDAO.getAllHangars();
 		
@@ -127,6 +101,6 @@ public class HangarServiceImpl implements HangarService {
 				max = h.getId();
 		}
 		return max;
-	}
+	}*/
 
 }

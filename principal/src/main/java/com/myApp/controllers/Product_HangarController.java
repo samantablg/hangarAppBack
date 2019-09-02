@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class Product_HangarController {
 
     @Autowired
-    Product_HangarServiceImpl product_hangarService;
+    private Product_HangarServiceImpl product_hangarService;
 
     @PostMapping(value = "/productOfHangar", produces = "application/json; charset=utf-8")
     public ResponseEntity<Product_HangarDto> addProductToHangar(@RequestBody Product_HangarDto product_hangarDto) {
@@ -79,10 +79,10 @@ public class Product_HangarController {
 
     @PutMapping(value="/productOfHangar/update", produces = "application/json; charset=utf-8")
     public ResponseEntity<Product_HangarDto> updateAmount(@RequestBody Product_HangarDto update) {
-        Product_Hangar p_h = new Product_HangarBuilder(update).getProduct_hangar();
-        Product_Hangar updatep_h = product_hangarService.updateAmount(p_h.getProduct(), p_h.getHangar(), p_h.getAmount());
+        Product_Hangar productOfHangar = new Product_HangarBuilder(update).getProduct_hangar();
+        Product_Hangar productOfHangarUpdated = product_hangarService.updateAmount(productOfHangar.getProduct(), productOfHangar.getHangar(), productOfHangar.getAmount());
         return new ResponseEntity<>(
-                new Product_HangarDtoBuilder(updatep_h).getProduct_hangarDto(),
+                new Product_HangarDtoBuilder(productOfHangarUpdated).getProduct_hangarDto(),
                 HttpStatus.OK
         );
     }

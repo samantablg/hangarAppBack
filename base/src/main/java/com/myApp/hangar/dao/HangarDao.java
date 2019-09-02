@@ -1,8 +1,6 @@
 package com.myApp.hangar.dao;
 
 import com.myApp.hangar.model.Hangar;
-import org.springframework.data.domain.Page;
-
 import java.util.List;
 
 public interface HangarDao {
@@ -23,6 +21,5 @@ public interface HangarDao {
 
     Hangar updateHangar(Hangar hangar);
 
-    List<Object> getBasicDataHangars();
 
 }

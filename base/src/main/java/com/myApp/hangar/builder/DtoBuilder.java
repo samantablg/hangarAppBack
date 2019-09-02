@@ -23,5 +23,4 @@ public class DtoBuilder {
         return hangarDto;
     }
 
-
 }

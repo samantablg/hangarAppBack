@@ -1,6 +1,6 @@
 package com.myApp.hangar.dao;
 
-import com.myApp.hangar.model.BasicDataHangar;
+
 import com.myApp.hangar.model.Hangar;
 import com.myApp.hangar.repository.HangarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,20 +8,13 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-
 @Component
 public class HangarDaoImpl implements HangarDao {
 	
 	@Autowired
-	public HangarRepository hangarRepository;
+	private HangarRepository hangarRepository;
 	
-	public List<Hangar> getAllHangars() {
-		
-		List<Hangar> hangars = hangarRepository.findAll();
-		if(hangars !=null)  
-			return hangars;
-		return null;
-	}
+	public List<Hangar> getAllHangars() { return hangarRepository.findAllWithTrueState(); }
 
     @Override
     public List<Hangar> findHangarsByName(String name) {
@@ -30,19 +23,12 @@ public class HangarDaoImpl implements HangarDao {
 
     @Override
     public Boolean existHangarByName(String name) {
-	   Hangar hangar = hangarRepository.findHangarByName(name);
-	   if(hangar!=null)
-	       return true;
-	   return false;
+        return hangarRepository.findHangarByName(name)!=null;
     }
 
     @Override
 	public Hangar getHangar(Long id) {
-		
-		Hangar hangar = hangarRepository.getOne(id);
-		if(hangar != null)
-			return hangar;
-		return null;
+		return hangarRepository.getOne(id);
 	}
 
 	@Override
@@ -70,8 +56,4 @@ public class HangarDaoImpl implements HangarDao {
         return hangarRepository.saveAndFlush(hangar);
     }
 
-    @Override
-    public List<Object> getBasicDataHangars() {
-        return hangarRepository.getBasicHangars();
-    }
 }

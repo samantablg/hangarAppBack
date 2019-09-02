@@ -1,8 +1,6 @@
 package com.myApp.hangar.service;
 
-import com.myApp.hangar.model.BasicDataHangar;
 import com.myApp.hangar.model.Hangar;
-
 import java.util.List;
 
 public interface HangarService {
@@ -26,7 +24,5 @@ public interface HangarService {
 	Hangar modifyHangar(Hangar update);
 
     Hangar updateState(Long id);
-
-	List<Object> getColumnIdAndName();
 	
 }

@@ -12,7 +12,7 @@ import java.util.List;
 public class Product_HangarDAOImpl implements Product_HangarDAO {
 
     @Autowired
-    Product_HangarRepository product_hangarRepository;
+    private Product_HangarRepository product_hangarRepository;
 
     @Override
     public Product_Hangar addProductToHangar(Product_Hangar product_hangar) {
@@ -26,8 +26,7 @@ public class Product_HangarDAOImpl implements Product_HangarDAO {
 
     @Override
     public List<Product_Hangar> getAll() {
-        List<Product_Hangar> result = product_hangarRepository.findAll();
-        return result;
+        return product_hangarRepository.findAll();
     }
 
     @Override
@@ -42,7 +41,7 @@ public class Product_HangarDAOImpl implements Product_HangarDAO {
 
     @Override
     public Product_Hangar updateAmount(Product_Hangar update) {
-        return product_hangarRepository.save(update);
+        return product_hangarRepository.saveAndFlush(update);
     }
 
     /*@Override

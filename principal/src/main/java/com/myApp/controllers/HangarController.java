@@ -1,13 +1,14 @@
 package com.myApp.controllers;
 
 import com.myApp.exceptions.ControllerException;
+import com.myApp.hangar.builder.BasicDataHangarDtoBuilder;
 import com.myApp.hangar.builder.DtoBuilder;
 import com.myApp.hangar.builder.HangarBuilder;
+import com.myApp.hangar.dto.BasicDataHangarDto;
 import com.myApp.hangar.dto.HangarDto;
 import com.myApp.hangar.model.Hangar;
 import com.myApp.hangar.repository.HangarRepository;
 import com.myApp.hangar.service.HangarServiceImpl;
-import jdk.nashorn.internal.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -28,12 +29,12 @@ import java.util.stream.Collectors;
 public class HangarController {
 
     @Autowired
-    HangarRepository hangarRepository;
+    private HangarRepository hangarRepository;
 
 	@Autowired
-    HangarServiceImpl hangarService;
+    private HangarServiceImpl hangarService;
 
-	@GetMapping("/hangars")
+    @GetMapping("/hangars")
 	public ResponseEntity<List<HangarDto>> getAllHangars() {
 		 List<Hangar> hangars = hangarService.getAllHangars();
 
@@ -49,15 +50,13 @@ public class HangarController {
     public ResponseEntity<Page<Hangar>> hangarList(@PathVariable("page") int page, @PathVariable("items") int items) {
 
         Pageable itemsToPage = PageRequest.of(page, items);
-        Page<Hangar> allHangars = hangarRepository.findByStateTrue(itemsToPage);
-
-        Page<Hangar> result = new PageImpl<Hangar>(
-                new ArrayList<>(allHangars.getContent()),
-                itemsToPage,
-                allHangars.getTotalElements());
+        Page<Hangar> hangars = hangarRepository.findByStateTrue(itemsToPage);
 
         return new ResponseEntity<>(
-                result,
+                new PageImpl<Hangar>(
+                        new ArrayList<>(hangars.getContent()),
+                        itemsToPage,
+                        hangars.getTotalElements()),
                 HttpStatus.OK
                 );
     }
@@ -73,15 +72,20 @@ public class HangarController {
         );
     }
 
-    //TODO es realmente necesario...?code .
     @GetMapping("/basicDataHangars")
-    public List<Object> getBasicDataOfHangars() {
-	    return hangarService.getColumnIdAndName();
-    }
+    public ResponseEntity<List<BasicDataHangarDto>> getBasicDataOfHangars() {
+        List<Hangar> hangars = hangarService.getAllHangars();
+
+        return new ResponseEntity<>(hangars.stream()
+                .map(hangar ->
+                    new BasicDataHangarDtoBuilder(hangar).getBasicDataHangarDto()).collect(Collectors.toList()),
+                HttpStatus.OK
+        );
+	}
 
 	@PostMapping("/hangar")
 	public ResponseEntity<HangarDto> createHangar(@RequestBody HangarDto hdto) {
-	    if(hdto.getName()!= "" && hdto.getAddress() != "") {
+	    if(!hdto.getName().equals("") && !hdto.getAddress().equals("")) {
             Hangar hangar = new HangarBuilder(hdto).getHangar();
             Hangar newHangar =  hangarService.createHangar(hangar);
             return new ResponseEntity<>(
@@ -100,7 +104,7 @@ public class HangarController {
 
 	@PutMapping("/hangar")
     public ResponseEntity<HangarDto> updateHangar(@RequestBody HangarDto update) {
-	    if(update.getName()!= "" && update.getAddress()!= "" && update.getOwner() != "") {
+	    if(!update.getName().equals("") && !update.getAddress().equals("") && !update.getOwner().equals("")) {
             Hangar hangar = new HangarBuilder(update).getHangar();
             Hangar modifyHangar = hangarService.modifyHangar(hangar);
             return new ResponseEntity<>(
@@ -123,9 +127,9 @@ public class HangarController {
     }
 
     @GetMapping("search")
-    public ResponseEntity<List<HangarDto>> findHangarLikeName(@RequestParam String h_name) {
-	    if (h_name.length()>0) {
-	        List<Hangar> result = hangarService.getAllHangarsWithName(h_name);
+    public ResponseEntity<List<HangarDto>> findHangarLikeName(@RequestParam String hangarName) {
+	    if (hangarName.length()>0) {
+	        List<Hangar> result = hangarService.getAllHangarsWithName(hangarName);
             return new ResponseEntity<>(
                     result.stream().map(
                             hangar -> new DtoBuilder(hangar).getHangarDto()).collect(Collectors.toList()),
@@ -142,4 +146,5 @@ public class HangarController {
         }
         throw new ControllerException.hangarExistException();
     }
+
 }
