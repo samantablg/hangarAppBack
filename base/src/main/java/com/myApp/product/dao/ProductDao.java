@@ -16,13 +16,13 @@ public interface ProductDao {
 
 	Product editProduct(Product product);
 	
-	Product deleteProduct(long id);
+	Boolean deleteProduct(long id);
 
 	boolean existProduct(long id);
 
 	Product updateProduct(Product product);
 
-	boolean existProductByName(Product product);
+	boolean existProductByName(String name);
 
 	String getNameOfProductById(long id);
 

@@ -25,7 +25,7 @@ public class ProductException {
         }
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.CONFLICT)
     public static class ProductExistException extends RuntimeException {
 
         public ProductExistException() {

@@ -139,7 +139,7 @@ public class HangarController {
     }
 
     @RequestMapping(value ="hangar/exist/{name}", method = RequestMethod.GET)
-    private ResponseEntity<?> findByUsername(@PathVariable String name) {
+    public ResponseEntity<?> findByHangarName(@PathVariable String name) {
         boolean hangarExist = hangarService.existHangarByName(name);
         if (!hangarExist) {
             return new ResponseEntity<>(true, HttpStatus.OK);

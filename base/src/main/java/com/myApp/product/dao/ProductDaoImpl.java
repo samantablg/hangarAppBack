@@ -12,13 +12,13 @@ import com.myApp.product.model.Product;
 public class ProductDaoImpl implements ProductDao {
 	
 	@Autowired
-	ProductRepository productRepository;
+	private ProductRepository productRepository;
 
 	@Override
 	public List<Product> getAllProducts() {
 		
 		List<Product> products = productRepository.findAll();
-		if(products != null)
+		if(!products.isEmpty())
 			return products;
 		return null;
 	}
@@ -49,12 +49,12 @@ public class ProductDaoImpl implements ProductDao {
         return null;
     }
 
-    public Product deleteProduct(long id) {
-		
-		Product product = productRepository.getOne(id);
-		if(product != null)
-			productRepository.delete(product);
-		return null;	
+    public Boolean deleteProduct(long id) {
+		if(productRepository.existsById(id)) {
+            productRepository.deleteById(id);
+            return true;
+        }
+        return false;
 	}
 
 
@@ -68,15 +68,13 @@ public class ProductDaoImpl implements ProductDao {
 		return productRepository.saveAndFlush(product);
 	}
 
-	@Override
-	public boolean existProductByName(Product product) {
-		if(productRepository.findProductByName(product.getName()) != null)
-			return true;
-		return false;
-	}
-
     @Override
     public String getNameOfProductById(long id) {
         return productRepository.getNameOfProduct(id);
+    }
+
+    @Override
+    public boolean existProductByName(String name) {
+        return (productRepository.findProductByName(name) != null);
     }
 }

@@ -12,21 +12,19 @@ public interface ProductService {
 
     List<Product> getAllProductsWithName(String name);
 
-	Product getProduct(Long id);
+	Product getProduct(long id);
 
 	Product create(Product product);
 
-	//Product createProduct(Product product, float price);
-
-	Product deleteProduct(Long id);
+	void deleteProduct(long id);
 
 	//Product filterName(char letter);
 
-	Product updateState(Long id);
+	Product updateState(long id);
 
-	//Product createEntryPrice(Product product, float price);
+	boolean existProduct(long id);
 
-	boolean existProduct(Long id);
+    boolean existProductByName(String name);
 
     Product modifyProduct(Product update);
 

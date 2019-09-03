@@ -1,6 +1,5 @@
 package com.myApp.product.service;
 
-import com.myApp.hangar.service.HangarServiceImpl;
 import com.myApp.product.dao.ProductDao;
 import com.myApp.product.exceptions.ProductException;
 import com.myApp.product.model.Product;
@@ -14,22 +13,13 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
 
 	@Autowired
-    ProductDao productDAO;
-
-	@Autowired
-	HangarServiceImpl hangarService;
-
-	/*@Autowired
-	PriceServiceImpl priceService;
-
-	@Autowired
-	Product_HangarServiceImpl product_hangarService;*/
+    private ProductDao productDAO;
 
 	@Override
 	public List<Product> getAllProducts() {
 
 		List<Product> products = productDAO.getAllProducts();
-		if(products != null)
+		if(!products.isEmpty())
 			return products;
 		throw new ProductException.NotFound();
 	}
@@ -40,11 +30,10 @@ public class ProductServiceImpl implements ProductService {
 		List<Product> products = productDAO.getAllProducts();
 		List<Product> result = new ArrayList<>();
 
-		if(products != null) {
+		if(!products.isEmpty()) {
 			for(Product p: products)
 				if(p.isState())
 					result.add(p);
-
 			return result;
 		}
 		throw new ProductException.NotFound();
@@ -54,60 +43,37 @@ public class ProductServiceImpl implements ProductService {
     public List<Product> getAllProductsWithName(String name) {
 
         List<Product> result = productDAO.findProductsByName(name);
-        if (result.size() > 0 )
+        if (!result.isEmpty())
             return result;
         throw new ProductException.NotFound();
     }
 
 	@Override
-	public Product getProduct(Long id) {
-		if(productDAO.existProduct(id)) {
+	public Product getProduct(long id) {
+		if(productDAO.existProduct(id))
 			return productDAO.getProduct(id);
-		}
 		throw new ProductException.NotFound(id);
 	}
 
+    @Override
     public Product create(Product product) {
-	    if(!productDAO.existProductByName(product))
+	    if(!productDAO.existProductByName(product.getName()))
 	        return productDAO.createProduct(product);
 	    throw new ProductException.ProductExistException();
     }
 
-	/*@Override
-	public Product createProduct(Product product, float price) {
-		if(!productDAO.existProductByName(product)) {
-			try {
-				productDAO.createProduct(product);
-				priceService.createEntryPrice(product, price);
-				return product;
-			} catch (Exception e) {
-				throw new ProductException.ProductExistException();
-			}
-		}
-		throw new ProductException.ProductExistException();
-	}*/
-
-	public Product deleteProduct(Long id) {
-
+	public void deleteProduct(long id) {
 		if (productDAO.existProduct(id))
-			return productDAO.deleteProduct(id);
+			 productDAO.deleteProduct(id);
 		throw new ProductException.NotFound(id);
 	}
 
 	@Override
-	public Product updateState(Long id) {
-
+	public Product updateState(long id) {
 		if(productDAO.existProduct(id)) {
 			Product product = productDAO.getProduct(id);
-			if(product.isState()) {
-				product.setState(false);
-			} else {
-				product.setState(true);
-			}
-
-			Product aProduct = product;
-			return productDAO.updateProduct(aProduct);
-
+			product.setState(!product.isState());
+			return productDAO.updateProduct(product);
 		}
 		throw new ProductException.NotFound(id);
 	}
@@ -120,19 +86,14 @@ public class ProductServiceImpl implements ProductService {
         return productDAO.editProduct(product);
     }
 
-	/*@Override
-	public Product createEntryPrice(Product product, float price) {
-		priceService.createEntryPrice(product, price);
-		return product;
-	}*/
 
 	@Override
-	public boolean existProduct(Long id) {
+	public boolean existProduct(long id) {
 		return productDAO.existProduct(id);
 	}
 
 	/*Ejercicio java 8
-	TODO actualizar al nuevo modelo producto -> sin com.myHangar.hangar asignado
+	TODO actualizar al nuevo modelo producto -> sin hangar asignado
 
 	private List<Product> searchByFirstLetter(char letter) {
 
@@ -164,5 +125,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public String getNameOfProductById(long id) {
         return productDAO.getNameOfProductById(id);
+    }
+
+    @Override
+    public boolean existProductByName(String name) {
+        return productDAO.existProductByName(name);
     }
 }

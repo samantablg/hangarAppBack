@@ -75,19 +75,14 @@ public class JwtUserDetailsService implements UserDetailsService {
 
     public List<UserApp> listUsers() {
         List<UserApp> result = userRepository.findAll();
-        if (result != null) {
+        if (!result.isEmpty())
             return result;
-        } else {
         throw new UsernameNotFoundException("Users not found");
-        }
     }
 
     public boolean existsByUsername(String username) {
         UserApp user = userRepository.findByUsername(username);
-        if(user!= null) {
-            return true;
-        }
-        return false;
+        return (user != null);
     }
 
 }

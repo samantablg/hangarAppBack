@@ -53,4 +53,10 @@ public class Product_HangarDAOImpl implements Product_HangarDAO {
     public void deleteRelationship(Product_Hangar product_hangar) {
         product_hangarRepository.delete(product_hangar);
     }
+
+    @Override
+    public Boolean isProductLinkToHangar(long idProduct) {
+        List<Product_Hangar> hangarsWithProduct = product_hangarRepository.findAllByProduct(idProduct);
+        return !hangarsWithProduct.isEmpty();
+    }
 }

@@ -22,15 +22,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@CrossOrigin
+@CrossOrigin("http://localhost:4200")
 @RequestMapping("/api")
 public class ProductController {
 
     @Autowired
-    ProductRepository productRepository;
+    private ProductRepository productRepository;
 
 	@Autowired
-	ProductService productService;
+	private ProductService productService;
 
 	@GetMapping("/products")
 	public ResponseEntity<List<ProductDto>> getAllActiveProducts() {
@@ -76,7 +76,6 @@ public class ProductController {
 	public ResponseEntity<ProductDto> getProductById(@PathVariable long id) {
 		if(id<=0)
 			throw new ControllerException.idNotAllowed(id);
-
 		final Product product = productService.getProduct(id);
 		return new ResponseEntity<>(
 				new DtoBuilder(product).getProductDto(),
@@ -85,11 +84,13 @@ public class ProductController {
 	}
 
 	@PostMapping("/product")
-	public ResponseEntity<Product> createProduct(@Valid @RequestBody ProductDto productReq) {
+	public ResponseEntity<ProductDto> createProduct(@Valid @RequestBody ProductDto productReq) {
 
-	    if(productReq.getName()!= null && productReq.getDescription()!= null) {
+	    if(!productReq.getName().isEmpty() && !productReq.getDescription().isEmpty()) {
 	        Product product = new ProductBuilder(productReq).getProduct();
-	        return new ResponseEntity<>(productService.create(product), HttpStatus.OK);
+	        return new ResponseEntity<>(
+	                new DtoBuilder(productService.create(product)).getProductDto(),
+                    HttpStatus.OK);
         }
         throw new ControllerException.productEmptyException();
 	}
@@ -111,7 +112,7 @@ public class ProductController {
 
 	@PutMapping("/product")
     public ResponseEntity<ProductDto> updateProduct(@RequestBody ProductDto update) {
-        if(update.getName()!= null && update.getDescription()!= null) {
+        if(!update.getName().isEmpty() && !update.getDescription().isEmpty()) {
             Product product = new ProductBuilder(update).getProduct();
             Product modify = productService.modifyProduct(product);
             return new ResponseEntity<> (new DtoBuilder(modify).getProductDto(), HttpStatus.OK);
@@ -137,6 +138,15 @@ public class ProductController {
                     HttpStatus.OK);
         }
         throw new ControllerException.searchProductException();
+    }
+
+    @RequestMapping(value ="product/exist/{name}", method = RequestMethod.GET)
+    public ResponseEntity<Boolean> existProductByName(@PathVariable String name) {
+        boolean isProductExist = productService.existProductByName(name);
+        if (!isProductExist) {
+            return new ResponseEntity<>(true, HttpStatus.OK);
+        }
+        throw new ControllerException.productExistException();
     }
 
 }

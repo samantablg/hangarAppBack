@@ -25,20 +25,19 @@ public class Product_HangarController {
 
     @PostMapping(value = "/productOfHangar", produces = "application/json; charset=utf-8")
     public ResponseEntity<Product_HangarDto> addProductToHangar(@RequestBody Product_HangarDto product_hangarDto) {
-        Product_Hangar p_h = new Product_HangarBuilder(product_hangarDto).getProduct_hangar();
-        Product_Hangar newp_h = product_hangarService.associateProductToHangar(p_h);
+        Product_Hangar productOfHangar = new Product_HangarBuilder(product_hangarDto).getProduct_hangar();
         return new ResponseEntity<>(
-                new Product_HangarDtoBuilder(newp_h).getProduct_hangarDto(),
+                new Product_HangarDtoBuilder(product_hangarService.associateProductToHangar(productOfHangar)).getProduct_hangarDto(),
                 HttpStatus.OK
         ) ;
     }
 
     @GetMapping("/productsOfHangar")
-    public ResponseEntity<List<Product_HangarDto>> getProducts() {
-        List<Product_Hangar> result = product_hangarService.getAll();
+    public ResponseEntity<List<Product_HangarDto>> getRelationships() {
+        List<Product_Hangar> productsOfHangars = product_hangarService.getAll();
         return new ResponseEntity<>(
-                result.stream().map(
-                        p_h -> new Product_HangarDtoBuilder(p_h).getProduct_hangarDto()).collect(Collectors.toList()),
+                productsOfHangars.stream().map(
+                        productOfHangar -> new Product_HangarDtoBuilder(productOfHangar).getProduct_hangarDto()).collect(Collectors.toList()),
                 HttpStatus.OK
         );
     }
@@ -48,10 +47,10 @@ public class Product_HangarController {
         if(idProduct<=0) {
             throw new ControllerException.idNotAllowed(idProduct);
         }
-        List<Product_Hangar> result = product_hangarService.getHangarsOfProduct(idProduct);
+        List<Product_Hangar> productsOfHangar = product_hangarService.getHangarsOfProduct(idProduct);
         return new ResponseEntity<>(
-                result.stream().map(
-                        p_h -> new Product_HangarDtoBuilder(p_h).getProduct_hangarDto()).collect(Collectors.toList()),
+                productsOfHangar.stream().map(
+                        productOfHangar -> new Product_HangarDtoBuilder(productOfHangar).getProduct_hangarDto()).collect(Collectors.toList()),
                 HttpStatus.OK
         );
     }
@@ -61,10 +60,10 @@ public class Product_HangarController {
         if(idHangar<=0) {
             throw new ControllerException.idNotAllowed(idHangar);
         }
-        List<Product_Hangar> result = product_hangarService.getProductsOfHangar(idHangar);
+        List<Product_Hangar> productsOfHangar = product_hangarService.getProductsOfHangar(idHangar);
         return new ResponseEntity<>(
-                result.stream().map(
-                        p_h -> new Product_HangarDtoBuilder(p_h).getProduct_hangarDto()).collect(Collectors.toList()),
+                productsOfHangar.stream().map(
+                        productOfHangar -> new Product_HangarDtoBuilder(productOfHangar).getProduct_hangarDto()).collect(Collectors.toList()),
                 HttpStatus.OK
         );
     }
@@ -91,11 +90,19 @@ public class Product_HangarController {
     @PutMapping(value="/productOfHangar/delete", produces = "application/json; charset=utf-8")
     public ResponseEntity<Product_HangarDto> unlinkProductOfHangar(@RequestBody Product_HangarDto delete) {
         Product_Hangar p_h = new Product_HangarBuilder(delete).getProduct_hangar();
-        Product_Hangar deletep_h = product_hangarService.unlinkProductOfHangar(p_h.getProduct(), p_h.getHangar());
+        Product_Hangar deleteRelation = product_hangarService.unlinkProductOfHangar(p_h.getProduct(), p_h.getHangar());
         return new ResponseEntity<>(
-                new Product_HangarDtoBuilder(deletep_h).getProduct_hangarDto(),
+                new Product_HangarDtoBuilder(deleteRelation).getProduct_hangarDto(),
                 HttpStatus.OK
         );
     }
 
+    @GetMapping(value="productOfHangar/link/{idProduct}")
+    public ResponseEntity<Boolean> isProductLinkToHangar(@PathVariable long idProduct) {
+        if(idProduct<=0)
+            throw new ControllerException.idNotAllowed(idProduct);
+        return new ResponseEntity<>(
+                product_hangarService.isProductLinkToHangar(idProduct), HttpStatus.OK
+        );
+    }
 }
