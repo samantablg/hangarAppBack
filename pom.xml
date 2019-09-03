@@ -21,6 +21,7 @@
 		<module>masterdata</module>
 		<module>principal</module>
         <module>login</module>
+        <module>purchase</module>
     </modules>
 
 

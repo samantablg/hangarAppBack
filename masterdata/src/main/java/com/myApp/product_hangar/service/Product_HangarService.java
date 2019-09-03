@@ -1,5 +1,6 @@
 package com.myApp.product_hangar.service;
 
+import com.myApp.product.model.Product;
 import com.myApp.product_hangar.dto.ProductName_HangarDto;
 import com.myApp.product_hangar.model.Product_Hangar;
 
@@ -19,8 +20,10 @@ public interface Product_HangarService {
 
     Product_Hangar updateAmount(long product, long hangar, long amount);
 
-    Product_Hangar unlinkProductOfHangar(long product, long hangar);
+    Boolean unlinkProductOfHangar(long product, long hangar);
 
     Boolean isProductLinkToHangar(long idProduct);
+
+    List<Product> getProductsUnlinkOfHangar(long idHangar);
 
 }

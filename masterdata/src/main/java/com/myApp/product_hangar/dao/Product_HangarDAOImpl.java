@@ -44,15 +44,11 @@ public class Product_HangarDAOImpl implements Product_HangarDAO {
         return product_hangarRepository.saveAndFlush(update);
     }
 
-    /*@Override
-    public boolean existRelationship(long product, long com.myHangar.hangar) {
-        return product_hangarRepository.existsByProductAndHangar(product, com.myHangar.hangar);
-    }*/
-
     @Override
-    public void deleteRelationship(Product_Hangar product_hangar) {
+    public Boolean deleteRelationship(Product_Hangar product_hangar) {
         product_hangarRepository.delete(product_hangar);
-    }
+        return (product_hangarRepository.findByProductAndHangar(product_hangar.getProduct(), product_hangar.getHangar()) == null);
+    };
 
     @Override
     public Boolean isProductLinkToHangar(long idProduct) {

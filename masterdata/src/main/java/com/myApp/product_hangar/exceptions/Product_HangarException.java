@@ -5,11 +5,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 public class Product_HangarException {
 
-    @ResponseStatus(HttpStatus.CONFLICT)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public static class Product_HangarNotExistException extends RuntimeException {
 
         public Product_HangarNotExistException() {
-            super("Not exist");
+            super("Not exist any relationship");
         }
     }
 
@@ -17,7 +17,7 @@ public class Product_HangarException {
     public static class ProductNotAssociatedException extends RuntimeException {
 
         public ProductNotAssociatedException(long id) {
-            super(String.format("The product %d is not associated to any com.myHangar.hangar",id));
+            super(String.format("The product %d is not associated to any hangar",id));
         }
     }
 
@@ -25,7 +25,7 @@ public class Product_HangarException {
     public static class HangarNotAssociatedException extends RuntimeException {
 
         public HangarNotAssociatedException(long id) {
-            super(String.format("The com.myHangar.hangar %d is not associated to any product",id));
+            super(String.format("The hangar %d is not associated to any product",id));
         }
     }
 
@@ -33,7 +33,7 @@ public class Product_HangarException {
     public static class ProductAndHangarNotAssociatedException extends RuntimeException {
 
         public ProductAndHangarNotAssociatedException() {
-            super("The product is not in the com.myHangar.hangar");
+            super("The product is not in the hangar");
         }
     }
 

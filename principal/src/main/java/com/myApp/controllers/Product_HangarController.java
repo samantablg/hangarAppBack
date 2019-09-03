@@ -1,6 +1,9 @@
 package com.myApp.controllers;
 
 import com.myApp.exceptions.ControllerException;
+import com.myApp.product.builder.DtoBuilder;
+import com.myApp.product.dto.ProductDto;
+import com.myApp.product.model.Product;
 import com.myApp.product_hangar.builder.Product_HangarBuilder;
 import com.myApp.product_hangar.builder.Product_HangarDtoBuilder;
 import com.myApp.product_hangar.dto.ProductName_HangarDto;
@@ -28,7 +31,7 @@ public class Product_HangarController {
         Product_Hangar productOfHangar = new Product_HangarBuilder(product_hangarDto).getProduct_hangar();
         return new ResponseEntity<>(
                 new Product_HangarDtoBuilder(product_hangarService.associateProductToHangar(productOfHangar)).getProduct_hangarDto(),
-                HttpStatus.OK
+                HttpStatus.CREATED
         ) ;
     }
 
@@ -38,7 +41,7 @@ public class Product_HangarController {
         return new ResponseEntity<>(
                 productsOfHangars.stream().map(
                         productOfHangar -> new Product_HangarDtoBuilder(productOfHangar).getProduct_hangarDto()).collect(Collectors.toList()),
-                HttpStatus.OK
+                HttpStatus.ACCEPTED
         );
     }
 
@@ -51,7 +54,7 @@ public class Product_HangarController {
         return new ResponseEntity<>(
                 productsOfHangar.stream().map(
                         productOfHangar -> new Product_HangarDtoBuilder(productOfHangar).getProduct_hangarDto()).collect(Collectors.toList()),
-                HttpStatus.OK
+                HttpStatus.ACCEPTED
         );
     }
 
@@ -64,7 +67,7 @@ public class Product_HangarController {
         return new ResponseEntity<>(
                 productsOfHangar.stream().map(
                         productOfHangar -> new Product_HangarDtoBuilder(productOfHangar).getProduct_hangarDto()).collect(Collectors.toList()),
-                HttpStatus.OK
+                HttpStatus.ACCEPTED
         );
     }
 
@@ -73,6 +76,7 @@ public class Product_HangarController {
         if(idHangar<=0) {
             throw new ControllerException.idNotAllowed(idHangar);
         }
+        product_hangarService.getNameOfProductsOfHangar(idHangar);
         return new ResponseEntity<>(product_hangarService.getNameOfProductsOfHangar(idHangar), HttpStatus.OK);
     }
 
@@ -82,17 +86,15 @@ public class Product_HangarController {
         Product_Hangar productOfHangarUpdated = product_hangarService.updateAmount(productOfHangar.getProduct(), productOfHangar.getHangar(), productOfHangar.getAmount());
         return new ResponseEntity<>(
                 new Product_HangarDtoBuilder(productOfHangarUpdated).getProduct_hangarDto(),
-                HttpStatus.OK
+                HttpStatus.CREATED
         );
     }
 
-    //TODO devolver true o false -> implementar en el servicio
     @PutMapping(value="/productOfHangar/delete", produces = "application/json; charset=utf-8")
-    public ResponseEntity<Product_HangarDto> unlinkProductOfHangar(@RequestBody Product_HangarDto delete) {
-        Product_Hangar p_h = new Product_HangarBuilder(delete).getProduct_hangar();
-        Product_Hangar deleteRelation = product_hangarService.unlinkProductOfHangar(p_h.getProduct(), p_h.getHangar());
+    public ResponseEntity<Boolean> unlinkProductOfHangar(@RequestBody Product_HangarDto delete) {
+        Product_Hangar productOfHangar = new Product_HangarBuilder(delete).getProduct_hangar();
         return new ResponseEntity<>(
-                new Product_HangarDtoBuilder(deleteRelation).getProduct_hangarDto(),
+                product_hangarService.unlinkProductOfHangar(productOfHangar.getProduct(), productOfHangar.getHangar()),
                 HttpStatus.OK
         );
     }
@@ -104,5 +106,14 @@ public class Product_HangarController {
         return new ResponseEntity<>(
                 product_hangarService.isProductLinkToHangar(idProduct), HttpStatus.OK
         );
+    }
+
+    @GetMapping("/products/unlink/{idHangar}")
+    public ResponseEntity<List<ProductDto>> getProductsUnlinkToHangar(@PathVariable long idHangar) {
+        List<Product> productsOfHangarById = product_hangarService.getProductsUnlinkOfHangar(idHangar);
+        return new ResponseEntity<>(
+                productsOfHangarById.stream().map(
+                    product -> new DtoBuilder(product).getProductDto()).collect(Collectors.toList()),
+                HttpStatus.OK);
     }
 }

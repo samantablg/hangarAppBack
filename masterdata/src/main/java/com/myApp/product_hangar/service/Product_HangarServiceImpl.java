@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.myApp.product_hangar.exceptions.Product_HangarException;
 import com.myApp.product_hangar.model.Product_Hangar;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -38,8 +39,10 @@ public class Product_HangarServiceImpl implements Product_HangarService {
 
     @Override
     public List<Product_Hangar> getAll() {
-        List<Product_Hangar> result = product_hangarDAO.getAll();
-        return result;
+        List<Product_Hangar> productsOfHangars = product_hangarDAO.getAll();
+        if (!productsOfHangars.isEmpty())
+            return productsOfHangars;
+        throw new Product_HangarException.Product_HangarNotExistException();
     }
 
     @Override
@@ -84,7 +87,6 @@ public class Product_HangarServiceImpl implements Product_HangarService {
 
     @Override
     public List<Product_Hangar> getHangarsOfProduct(long id) {
-
         if(productService.existProduct(id)) {
             List<Product_Hangar> result = product_hangarDAO.getHangarsOfProduct(id);
             if(result != null)
@@ -105,11 +107,10 @@ public class Product_HangarServiceImpl implements Product_HangarService {
     }
 
     @Override
-    public Product_Hangar unlinkProductOfHangar(long product, long hangar) {
+    public Boolean unlinkProductOfHangar(long product, long hangar) {
         Product_Hangar delete = product_hangarDAO.getRelationship(product, hangar);
         if(delete != null) {
-            product_hangarDAO.deleteRelationship(delete);
-            return delete;
+            return product_hangarDAO.deleteRelationship(delete);
         }
         throw new Product_HangarException.ProductAndHangarNotAssociatedException();
     }
@@ -130,4 +131,23 @@ public class Product_HangarServiceImpl implements Product_HangarService {
     private void deleteProductIfIsNotLinkToHangar(long idProduct) {
         productService.updateState(idProduct);
     }
+
+    @Override
+    public List<Product> getProductsUnlinkOfHangar(long idHangar) {
+        List<Product> products = productService.getAllActiveProducts();
+        try {
+            List<Product_Hangar> productsOfHangar = getProductsOfHangar(idHangar);
+            if (!productsOfHangar.isEmpty()) {
+                List<Product> prod = productsOfHangar.stream().map(productOfHangar -> productService.getProduct(productOfHangar.getProduct()))
+                        .collect(Collectors.toList());
+                return products.stream().filter(
+                        product -> !prod.contains(product)
+                ).collect(Collectors.toList());
+            }
+        } catch (Exception e) {
+            return products;
+        }
+        return products;
+    }
+
 }

@@ -16,9 +16,6 @@ public interface Product_HangarRepository extends JpaRepository<Product_Hangar, 
     @Query("SELECT p_h FROM Product_Hangar p_h WHERE p_h.product =?1")
     List<Product_Hangar> findAllByProduct(long product);
 
-    /*@Query("SELECT p_h FROM Product_Hangar p_h WHERE p_h.product =?1 AND p_h.com.myHangar.hangar =?2")
-    boolean existsByProductAndHangar(long product, long com.myHangar.hangar);*/
-
     @Query("SELECT p_h FROM Product_Hangar p_h WHERE p_h.product =?1 AND p_h.hangar =?2")
     Product_Hangar findByProductAndHangar(long product, long hangar);
 
