@@ -20,6 +20,8 @@ public interface ProductService {
 
 	//Product filterName(char letter);
 
+    // ProductExtendedDto getProductWithCurrentPrice();
+
 	Product updateState(long id);
 
 	boolean existProduct(long id);

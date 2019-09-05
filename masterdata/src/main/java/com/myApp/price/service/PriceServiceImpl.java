@@ -16,10 +16,10 @@ import java.util.List;
 public class PriceServiceImpl implements PriceService {
 
     @Autowired
-    PriceDAO priceDAO;
+    private PriceDAO priceDAO;
 
     @Autowired
-    ProductServiceImpl productService;
+    private ProductServiceImpl productService;
 
     @Override
     public List<Price> getAllPrices() {
@@ -53,6 +53,13 @@ public class PriceServiceImpl implements PriceService {
             Product product = productService.getProduct(id);
             return priceDAO.getAllPricesOfProduct(product);
         }
+        throw new ProductException.ProductExistException();
+    }
+
+    @Override
+    public Price getCurrentPriceOfProduct(long id) {
+        if(productService.existProduct(id))
+            return priceDAO.getLastPriceOfProduct(id);
         throw new ProductException.ProductExistException();
     }
 }

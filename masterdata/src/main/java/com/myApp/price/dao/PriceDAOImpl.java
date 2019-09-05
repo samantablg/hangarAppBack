@@ -12,7 +12,7 @@ import java.util.List;
 public class PriceDAOImpl implements PriceDAO {
 
     @Autowired
-    PriceRepository priceRepository;
+    private PriceRepository priceRepository;
 
     @Override
     public Price createEntryPrice(Price price) {
@@ -33,11 +33,10 @@ public class PriceDAOImpl implements PriceDAO {
     public List<Price> getAllPrices() {
         return priceRepository.findAll();
     }
-
-    //TODO pending
+    
     @Override
     public Price getLastPriceOfProduct(long id) {
-        return null;
+        return priceRepository.getLastPriceOfProduct(id);
     }
 
     @Override

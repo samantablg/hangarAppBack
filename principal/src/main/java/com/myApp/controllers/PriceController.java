@@ -1,5 +1,6 @@
 package com.myApp.controllers;
 
+import com.myApp.exceptions.ControllerException;
 import com.myApp.price.builder.PriceDtoBuilder;
 import com.myApp.price.dto.PriceDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,6 @@ import com.myApp.price.model.Price;
 import com.myApp.price.service.PriceServiceImpl;
 
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @RestController
@@ -49,6 +49,14 @@ public class PriceController {
                       price -> new PriceDtoBuilder(price).getPriceDto()).collect(Collectors.toList()),
                 HttpStatus.OK
         );
+    }
+
+    @GetMapping("last/{id}")
+    public ResponseEntity<Price> getLastPriceOfProduct(@PathVariable long id) {
+        if(id<=0)
+            throw new ControllerException.idNotAllowed(id);
+
+        return new ResponseEntity<>(priceService.getCurrentPriceOfProduct(id), HttpStatus.OK);
     }
 
 }

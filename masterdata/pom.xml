@@ -22,23 +22,12 @@
                         <groupId>com.myApp</groupId>
                         <artifactId>masterdata</artifactId>
                     </exclusion>
+                    <exclusion>
+                        <groupId>com.myApp</groupId>
+                        <artifactId>login</artifactId>
+                    </exclusion>
                 </exclusions>
             </dependency>
         </dependencies>
     </dependencyManagement>
-
-    <dependencies>
-        <dependency>
-            <groupId>com.myApp</groupId>
-            <artifactId>base</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.myApp</groupId>
-                    <artifactId>masterdata</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-    </dependencies>
 </project>

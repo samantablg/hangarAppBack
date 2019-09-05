@@ -1,15 +1,20 @@
 package com.myApp.product.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 
+
 @Entity
 @Table(name = "PRODUCT")
+@Getter @Setter
 public class Product {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+    private long id;
 	@Column(name = "name")
 	@NotEmpty
 	private String name;
@@ -17,38 +22,10 @@ public class Product {
 	@NotEmpty
 	private String  description;
 	@Column(name="state")
-	private boolean state = true;
+	private boolean state;
 
+    public Product() {
+        state = true;
+    }
 
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public boolean isState() {
-		return state;
-	}
-
-	public void setState(boolean state) {
-		this.state = state;
-	}
 }

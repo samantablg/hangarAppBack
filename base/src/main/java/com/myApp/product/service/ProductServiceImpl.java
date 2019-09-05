@@ -1,6 +1,8 @@
 package com.myApp.product.service;
 
+// import com.myApp.price.service.PriceServiceImpl;
 import com.myApp.product.dao.ProductDao;
+import com.myApp.product.dto.ProductExtendedDto;
 import com.myApp.product.exceptions.ProductException;
 import com.myApp.product.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,10 @@ public class ProductServiceImpl implements ProductService {
 
 	@Autowired
     private ProductDao productDAO;
+
+	/*@Autowired
+    private PriceServiceImpl priceService;
+    */
 
 	@Override
 	public List<Product> getAllProducts() {
@@ -68,7 +74,12 @@ public class ProductServiceImpl implements ProductService {
 		throw new ProductException.NotFound(id);
 	}
 
-	@Override
+   /* @Override
+    public ProductExtendedDto getProductWithCurrentPrice() {
+        return null;
+    }*/
+
+    @Override
 	public Product updateState(long id) {
 		if(productDAO.existProduct(id)) {
 			Product product = productDAO.getProduct(id);

@@ -3,7 +3,6 @@ package com.myApp.product_hangar.model;
 import java.io.Serializable;
 import java.util.Objects;
 
-
 public class Product_Hangar_PK implements Serializable {
 
     private static final long serialVersionUID = -3064410667944568906L;

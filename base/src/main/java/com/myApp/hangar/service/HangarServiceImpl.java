@@ -68,9 +68,8 @@ public class HangarServiceImpl implements HangarService {
 		return hangarDAO.existHangar(id);
 	}
 
-	//TODO modificar lógica
     public Hangar modifyHangar(Hangar update) {
-        if (update!= null) {
+        if (update != null) {
             return hangarDAO.updateHangar(update);
         }
         throw new HangarException.HangarExistException();

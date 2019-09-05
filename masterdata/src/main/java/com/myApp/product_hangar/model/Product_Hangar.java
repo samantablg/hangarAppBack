@@ -1,6 +1,5 @@
 package com.myApp.product_hangar.model;
 
-
 import javax.persistence.*;
 import java.io.Serializable;
 

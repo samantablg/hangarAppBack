@@ -12,4 +12,6 @@ public interface PriceService {
 
     List<Price> getAllPricesOfProduct(long id);
 
+    Price getCurrentPriceOfProduct(long id);
+
 }

@@ -1,7 +1,12 @@
 package com.myApp.security.model;
 
+import com.myApp.userProfile.model.UserProfile;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 @Table(name="user")
@@ -9,6 +14,9 @@ public class UserApp implements Serializable {
 
     private static final long serialVersionUID = 5926468583005150707L;
 
+    /*@Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    @OneToOne(mappedBy = "id", cascade = CascadeType.ALL)*/
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name="user_id")
@@ -17,34 +25,20 @@ public class UserApp implements Serializable {
     private String username;
     @Column(name="password")
     private String password;
+    // @OneToOne(fetch = FetchType.LAZY)
+    // @JoinColumn(name = "userprofile_id")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private UserProfile userProfile;
 
-
-    public long getId() {
-        return id;
+    /*public void addUserProfile(UserProfile userProfile) {
+        userProfile.setId(this);
+        this.userProfile = userProfile;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void UserAppRequest(String username, String password) {
-        this.setUsername(username);
-        this.setPassword(password);
-    }
+    public void removeUserProfile() {
+        if (userProfile != null) {
+            userProfile.setId(null);
+            this.userProfile = null;
+        }
+    }*/
 }
