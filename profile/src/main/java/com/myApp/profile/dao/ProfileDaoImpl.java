@@ -4,6 +4,7 @@ import com.myApp.model.UserProfile;
 import com.myApp.profile.repository.ProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 

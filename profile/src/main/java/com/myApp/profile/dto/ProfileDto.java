@@ -10,14 +10,10 @@ import javax.validation.constraints.NotNull;
 @Getter @Setter
 public class ProfileDto {
 
-    @NotNull
     private long id;
-    @NotNull @Min(3)
     private String name;
-    @NotNull @Min(3)
     private String surname;
     private String phone;
-    @NotNull @Email
     private String mail;
     private String address;
 

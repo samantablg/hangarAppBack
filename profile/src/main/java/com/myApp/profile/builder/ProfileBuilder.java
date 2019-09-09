@@ -10,6 +10,7 @@ public class ProfileBuilder {
     public ProfileBuilder(ProfileDto profileDto) {
         this.profile = new UserProfile();
 
+        this.profile.setId(profileDto.getId());
         this.profile.setName(profileDto.getName());
         this.profile.setSurname(profileDto.getSurname());
         this.profile.setPhone(profileDto.getPhone());

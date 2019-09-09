@@ -1,5 +1,7 @@
 package com.myApp.security.service;
 
+import com.myApp.model.UserProfile;
+import com.myApp.profile.service.ProfileService;
 import com.myApp.security.builder.UserAppBuilder;
 import com.myApp.security.builder.User_RoleBuilder;
 import com.myApp.security.dto.UserAppDto;
@@ -19,11 +21,15 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 public class JwtUserDetailsService implements UserDetailsService {
 
     @Autowired
@@ -37,6 +43,9 @@ public class JwtUserDetailsService implements UserDetailsService {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private ProfileService profileService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -61,15 +70,14 @@ public class JwtUserDetailsService implements UserDetailsService {
         if (userRepository.findByUsername(user.getUsername()) != null) {
             throw new LoginExceptions.userExistException();
         } else {
-            String passw = bcryptEncoder.encode(user.getPassword());
-            user.setPassword(passw);
+            user.setPassword(bcryptEncoder.encode(user.getPassword()));
             UserApp newUser = new UserAppBuilder(user).getUserApp();
             UserApp saveUser = userRepository.save(newUser);
             User_Role roleUser =  new User_RoleBuilder(saveUser).getUser_role();
             user_roleRepository.save(roleUser);
+            UserProfile profile = new UserProfile(saveUser);
             return saveUser;
         }
-
     }
 
     public List<UserApp> listUsers() {

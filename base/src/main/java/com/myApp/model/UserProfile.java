@@ -2,18 +2,26 @@ package com.myApp.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
-@Table(name = "PROFILE")
+@Table(name = "profile")
 @Getter @Setter
-public class UserProfile {
+public class UserProfile implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
+    @GenericGenerator(name = "generator", strategy = "foreign",
+            parameters = @Parameter(name = "property", value = "userApp"))
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "user_id")
+    @GeneratedValue(generator = "generator")
+    @Column(name="user_id", unique = true, nullable = false)
     private long id;
+
     @Column(name = "name")
     private String name;
     @Column(name = "surname")
@@ -24,5 +32,17 @@ public class UserProfile {
     private String mail;
     @Column(name = "address")
     private String address;
+
+    @MapsId
+    @OneToOne(fetch = FetchType.LAZY)
+    @PrimaryKeyJoinColumn(name = "user_id")
+    private UserApp userApp;
+
+    public UserProfile() {}
+
+    public UserProfile(UserApp userApp) {
+        this.userApp = userApp;
+        userApp.setProfile(this);
+    }
 
 }

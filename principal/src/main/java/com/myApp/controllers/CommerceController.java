@@ -1,15 +1,22 @@
 package com.myApp.controllers;
 
+import com.myApp.model.UserProfile;
 import com.myApp.order.builder.OrderBuilder;
 import com.myApp.order.builder.OrderDtoBuilder;
 import com.myApp.order.dto.OrderDto;
 import com.myApp.order.model.Order;
 import com.myApp.order.service.OrderService;
 import com.myApp.product_order.service.Product_OrderService;
+import com.myApp.profile.builder.ProfileBuilder;
+import com.myApp.profile.builder.ProfileDtoBuilder;
+import com.myApp.profile.dto.ProfileDto;
+import com.myApp.profile.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @CrossOrigin("http://localhost:4200")
@@ -22,13 +29,26 @@ public class CommerceController {
     @Autowired
     private Product_OrderService product_orderService;
 
-    @PostMapping("/test")
+    @Autowired
+    private ProfileService profileService;
+
+    @PostMapping("/testOrder")
     public ResponseEntity<OrderDto> saveOrderTest(@RequestBody OrderDto orderDto) {
         Order order = new OrderBuilder(orderDto).getOrder();
         Order newOrder = orderService.saveOrder(order);
         return new ResponseEntity<>(
                 new OrderDtoBuilder(order).getOrderDto(),
                 HttpStatus.OK
+        );
+    }
+
+    @PostMapping("/testProfile")
+    public ResponseEntity<ProfileDto> saveProfile(@RequestBody ProfileDto profileDto) {
+
+        UserProfile profile = new ProfileBuilder(profileDto).getProfile();
+        return new ResponseEntity<>(
+                new ProfileDtoBuilder(profileService.save(profile)).getProfileDto(),
+                HttpStatus.CREATED
         );
     }
 
