@@ -21,7 +21,10 @@
 		<module>masterdata</module>
 		<module>principal</module>
         <module>login</module>
-        <module>order</module>
+        <module>hangar</module>
+        <module>product</module>
+        <module>commerce</module>
+        <module>profile</module>
     </modules>
 
     <dependencies>

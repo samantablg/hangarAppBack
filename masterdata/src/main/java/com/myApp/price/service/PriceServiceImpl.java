@@ -4,7 +4,7 @@ import com.myApp.price.dao.PriceDAO;
 import com.myApp.price.exceptions.PriceException;
 import com.myApp.price.model.Price;
 import com.myApp.product.exceptions.ProductException;
-import com.myApp.product.model.Product;
+import com.myApp.model.Product;
 import com.myApp.product.service.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

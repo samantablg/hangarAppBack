@@ -1,7 +1,7 @@
 package com.myApp;
 
 import com.myApp.app.Application;
-import com.myApp.security.model.UserApp;
+import com.myApp.model.UserApp;
 import com.myApp.security.repository.UserRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;

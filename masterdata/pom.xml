@@ -10,6 +10,21 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>masterdata</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.myApp</groupId>
+            <artifactId>hangar</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.myApp</groupId>
+            <artifactId>product</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -17,16 +32,6 @@
                 <artifactId>principal</artifactId>
                 <version>0.0.1-SNAPSHOT</version>
                 <scope>import</scope>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.myApp</groupId>
-                        <artifactId>masterdata</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.myApp</groupId>
-                        <artifactId>login</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
         </dependencies>
     </dependencyManagement>

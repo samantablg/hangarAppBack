@@ -1,9 +1,8 @@
 package com.myApp.price.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.myApp.product.model.Product;
+import com.myApp.model.Product;
 
-import java.io.Serializable;
 import java.util.Date;
 
 public class PriceDto {

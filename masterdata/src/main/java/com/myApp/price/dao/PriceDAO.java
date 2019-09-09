@@ -1,7 +1,7 @@
 package com.myApp.price.dao;
 
 import com.myApp.price.model.Price;
-import com.myApp.product.model.Product;
+import com.myApp.model.Product;
 
 import java.util.List;
 

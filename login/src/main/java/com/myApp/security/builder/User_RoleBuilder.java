@@ -1,6 +1,6 @@
 package com.myApp.security.builder;
 
-import com.myApp.security.model.UserApp;
+import com.myApp.model.UserApp;
 import com.myApp.security.model.User_Role;
 
 public class User_RoleBuilder {

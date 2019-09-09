@@ -1,7 +1,7 @@
 package com.myApp.security.builder;
 
 import com.myApp.security.dto.UserAppDto;
-import com.myApp.security.model.UserApp;
+import com.myApp.model.UserApp;
 
 public class UserAppBuilder {
 

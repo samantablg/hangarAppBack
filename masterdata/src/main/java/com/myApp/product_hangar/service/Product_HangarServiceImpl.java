@@ -3,7 +3,7 @@ package com.myApp.product_hangar.service;
 import com.myApp.hangar.exceptions.HangarException;
 import com.myApp.hangar.service.HangarServiceImpl;
 import com.myApp.product.exceptions.ProductException;
-import com.myApp.product.model.Product;
+import com.myApp.model.Product;
 import com.myApp.product.service.ProductServiceImpl;
 import com.myApp.product_hangar.builder.ProductName_HangarDtoBuilder;
 import com.myApp.product_hangar.dao.Product_HangarDAO;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import com.myApp.product_hangar.exceptions.Product_HangarException;
 import com.myApp.product_hangar.model.Product_Hangar;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;

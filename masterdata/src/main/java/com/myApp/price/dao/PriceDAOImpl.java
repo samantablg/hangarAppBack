@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.myApp.price.model.Price;
 import com.myApp.price.repository.PriceRepository;
-import com.myApp.product.model.Product;
+import com.myApp.model.Product;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package com.myApp.product_hangar.service;
 
-import com.myApp.product.model.Product;
+import com.myApp.model.Product;
 import com.myApp.product_hangar.dto.ProductName_HangarDto;
 import com.myApp.product_hangar.model.Product_Hangar;
 

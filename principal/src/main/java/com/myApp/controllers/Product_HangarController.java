@@ -3,7 +3,7 @@ package com.myApp.controllers;
 import com.myApp.exceptions.ControllerException;
 import com.myApp.product.builder.DtoBuilder;
 import com.myApp.product.dto.ProductDto;
-import com.myApp.product.model.Product;
+import com.myApp.model.Product;
 import com.myApp.product_hangar.builder.Product_HangarBuilder;
 import com.myApp.product_hangar.builder.Product_HangarDtoBuilder;
 import com.myApp.product_hangar.dto.ProductName_HangarDto;

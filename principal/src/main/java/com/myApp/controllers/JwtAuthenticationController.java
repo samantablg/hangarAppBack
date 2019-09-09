@@ -3,7 +3,7 @@ package com.myApp.controllers;
 import com.myApp.security.config.JwtTokenUtil;
 import com.myApp.security.service.JwtUserDetailsService;
 import com.myApp.security.dto.UserAppDto;
-import com.myApp.security.model.UserApp;
+import com.myApp.model.UserApp;
 import com.myApp.security.model.UserAppResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

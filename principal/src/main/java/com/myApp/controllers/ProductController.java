@@ -4,7 +4,7 @@ import com.myApp.exceptions.ControllerException;
 import com.myApp.product.builder.DtoBuilder;
 import com.myApp.product.builder.ProductBuilder;
 import com.myApp.product.dto.ProductDto;
-import com.myApp.product.model.Product;
+import com.myApp.model.Product;
 import com.myApp.product.repository.ProductRepository;
 import com.myApp.product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
