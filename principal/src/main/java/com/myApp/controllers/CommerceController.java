@@ -12,6 +12,7 @@ import com.myApp.profile.builder.ProfileBuilder;
 import com.myApp.profile.builder.ProfileDtoBuilder;
 import com.myApp.profile.dto.ProfileDto;
 import com.myApp.profile.service.ProfileService;
+import com.myApp.security.service.JwtUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,9 +36,14 @@ public class CommerceController {
     @Autowired
     private ProfileService profileService;
 
+    @Autowired
+    private JwtUserDetailsService userDetailsService;
+
     @GetMapping(value = "/hello")
     public String hello(@RequestHeader(value = "Authorization") String token) {
-        System.out.println(token);
+        String _token = token.replace("Bearer ", "");
+        System.out.println(_token);
+        System.out.println(userDetailsService.getUsernameByToken(_token));
         return  token;
     }
 

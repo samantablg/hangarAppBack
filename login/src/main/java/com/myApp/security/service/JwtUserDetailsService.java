@@ -4,6 +4,8 @@ import com.myApp.model.UserProfile;
 import com.myApp.profile.service.ProfileService;
 import com.myApp.security.builder.UserAppBuilder;
 import com.myApp.security.builder.User_RoleBuilder;
+import com.myApp.security.config.JwtTokenUtil;
+import com.myApp.security.dao.UserAppDao;
 import com.myApp.security.dto.UserAppDto;
 import com.myApp.security.exceptions.LoginExceptions;
 import com.myApp.security.model.Role;
@@ -32,6 +34,11 @@ public class JwtUserDetailsService implements UserDetailsService {
     private PasswordEncoder bcryptEncoder;
 
     @Autowired
+    private UserAppDao userAppDao;
+
+    //servicio para rol?
+
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
@@ -42,6 +49,9 @@ public class JwtUserDetailsService implements UserDetailsService {
 
     @Autowired
     private ProfileService profileService;
+
+    @Autowired
+    private JwtTokenUtil tokenUtil;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -87,5 +97,10 @@ public class JwtUserDetailsService implements UserDetailsService {
         UserApp user = userRepository.findByUsername(username);
         return (user != null);
     }
+
+    public String getUsernameByToken(String token) {
+        return tokenUtil.getUsernameFromToken(token);
+    }
+
 
 }
