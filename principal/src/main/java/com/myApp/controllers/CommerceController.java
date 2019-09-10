@@ -35,6 +35,12 @@ public class CommerceController {
     @Autowired
     private ProfileService profileService;
 
+    @GetMapping(value = "/hello")
+    public String hello(@RequestHeader(value = "Authorization") String token) {
+        System.out.println(token);
+        return  token;
+    }
+
     @PostMapping("/testOrder")
     public ResponseEntity<OrderDto> saveOrderTest(@RequestBody OrderDto orderDto) {
         Order order = new OrderBuilder(orderDto).getOrder();
