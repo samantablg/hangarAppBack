@@ -22,6 +22,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -29,7 +30,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@Transactional
 public class JwtUserDetailsService implements UserDetailsService {
 
     @Autowired
@@ -48,19 +48,19 @@ public class JwtUserDetailsService implements UserDetailsService {
     private ProfileService profileService;
 
     @Override
+    @TransactionalEventListener
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        UserApp us = userRepository.findByUsername(username);
-        if (us != null) {
-            User_Role u_r = user_roleRepository.findByUser(us.getId());
-            Role role = roleRepository.findById(u_r.getRole());
+        UserApp user = userRepository.findByUsername(username);
+        if (user != null) {
+            User_Role user_role = user_roleRepository.findByUser(user.getId());
+            Role role = roleRepository.findById(user_role.getRole());
             //TODO cuidado! un usuario puede tener dos roles -> implementar la funcionalidad para ello
 
             List<GrantedAuthority> roles = new ArrayList<>();
             roles.add(new SimpleGrantedAuthority(role.getRole()));
 
-            UserDetails userDet = new User(us.getUsername(), us.getPassword(), roles);
-            return userDet;
+            return new User(user.getUsername(), user.getPassword(), roles);
         } else {
             throw new UsernameNotFoundException("User not found with username: " + username);
         }
@@ -71,12 +71,12 @@ public class JwtUserDetailsService implements UserDetailsService {
             throw new LoginExceptions.userExistException();
         } else {
             user.setPassword(bcryptEncoder.encode(user.getPassword()));
-            UserApp newUser = new UserAppBuilder(user).getUserApp();
-            UserApp saveUser = userRepository.save(newUser);
-            User_Role roleUser =  new User_RoleBuilder(saveUser).getUser_role();
-            user_roleRepository.save(roleUser);
-            UserProfile profile = new UserProfile(saveUser);
-            return saveUser;
+            UserApp new_user = new UserAppBuilder(user).getUserApp();
+            UserApp save_user = userRepository.save(new_user);
+            User_Role role_user =  new User_RoleBuilder(save_user).getUser_role();
+            user_roleRepository.save(role_user);
+            UserProfile profile = new UserProfile(save_user);
+            return save_user;
         }
     }
 
