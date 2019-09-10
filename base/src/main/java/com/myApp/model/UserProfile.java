@@ -17,7 +17,7 @@ public class UserProfile {
             parameters = @Parameter(name = "property", value = "userApp"))
     @Id
     @GeneratedValue(generator = "generator")
-    @Column(name="user_id", unique = true, nullable = false)
+    @Column(name="user_id", unique = true, nullable = true)
     private long id;
 
     @Column(name = "name")

@@ -67,7 +67,6 @@ public class CommerceController {
     @GetMapping("/testGetById/{id}")
     public ResponseEntity<ProfileDto> getProfileById(@PathVariable long id) {
         UserProfile profile = profileService.getUserProfileById(id);
-        System.out.println(profile.getId());
         return new ResponseEntity<>(
                 new ProfileDtoBuilder(profile).getProfileDto(),
                 HttpStatus.OK

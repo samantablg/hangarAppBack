@@ -11,6 +11,7 @@ public class ProfileDtoBuilder {
     public ProfileDtoBuilder(UserProfile profile) {
         this.profileDto = new ProfileDto();
 
+        this.profileDto.setId(profile.getId());
         this.profileDto.setName(profile.getName());
         this.profileDto.setSurname(profile.getSurname());
         this.profileDto.setPhone(profile.getPhone());
