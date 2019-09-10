@@ -3,7 +3,6 @@ package com.myApp.profile.builder;
 import com.myApp.model.UserProfile;
 import com.myApp.profile.dto.ProfileDto;
 
-
 public class ProfileDtoBuilder {
 
     private ProfileDto profileDto;

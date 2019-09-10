@@ -1,5 +1,6 @@
 package com.myApp.controllers;
 
+import com.myApp.exceptions.ControllerException;
 import com.myApp.model.UserProfile;
 import com.myApp.order.builder.OrderBuilder;
 import com.myApp.order.builder.OrderDtoBuilder;
@@ -71,6 +72,18 @@ public class CommerceController {
                 new ProfileDtoBuilder(profile).getProfileDto(),
                 HttpStatus.OK
         );
+    }
+
+    @PutMapping("/user/update")
+    public ResponseEntity<ProfileDto> updateProfile(@RequestBody ProfileDto profileDto) {
+
+        if(profileDto.getId()>=0) {
+            UserProfile profile = new ProfileBuilder(profileDto).getProfile();
+            return new ResponseEntity<>(
+                    new ProfileDtoBuilder(profileService.updateProfile(profile)).getProfileDto(),
+                    HttpStatus.OK
+            );
+        } throw new ControllerException.idNotAllowed(profileDto.getId());
     }
 
 }
