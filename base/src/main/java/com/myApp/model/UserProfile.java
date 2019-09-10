@@ -1,5 +1,8 @@
 package com.myApp.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
@@ -31,9 +34,10 @@ public class UserProfile {
     @Column(name = "address")
     private String address;
 
-    @MapsId
     @OneToOne(fetch = FetchType.LAZY)
+    @MapsId
     @PrimaryKeyJoinColumn(name = "user_id")
+    @JsonIgnore
     private UserApp userApp;
 
     public UserProfile() {}

@@ -21,11 +21,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.event.TransactionalEventListener;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +44,6 @@ public class JwtUserDetailsService implements UserDetailsService {
     private ProfileService profileService;
 
     @Override
-    @TransactionalEventListener
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         UserApp user = userRepository.findByUsername(username);
@@ -69,13 +64,14 @@ public class JwtUserDetailsService implements UserDetailsService {
     public UserApp save(UserAppDto user) {
         if (userRepository.findByUsername(user.getUsername()) != null) {
             throw new LoginExceptions.userExistException();
-        } else {
+        } else { //TODO reorganizar codigo
             user.setPassword(bcryptEncoder.encode(user.getPassword()));
             UserApp new_user = new UserAppBuilder(user).getUserApp();
+            UserProfile profile = new UserProfile(new_user);
+            new_user.setProfile(profile);
             UserApp save_user = userRepository.save(new_user);
             User_Role role_user =  new User_RoleBuilder(save_user).getUser_role();
             user_roleRepository.save(role_user);
-            UserProfile profile = new UserProfile(save_user);
             return save_user;
         }
     }
