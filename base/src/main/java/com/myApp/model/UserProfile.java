@@ -34,7 +34,7 @@ public class UserProfile {
     @Column(name = "address")
     private String address;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @MapsId
     @JsonIgnore
     private UserApp userApp;
