@@ -11,9 +11,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "profile")
 @Getter @Setter
-public class UserProfile implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class UserProfile {
 
     @GenericGenerator(name = "generator", strategy = "foreign",
             parameters = @Parameter(name = "property", value = "userApp"))

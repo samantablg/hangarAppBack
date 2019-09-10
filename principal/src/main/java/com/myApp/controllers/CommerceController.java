@@ -17,6 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin("http://localhost:4200")
@@ -49,6 +51,26 @@ public class CommerceController {
         return new ResponseEntity<>(
                 new ProfileDtoBuilder(profileService.save(profile)).getProfileDto(),
                 HttpStatus.CREATED
+        );
+    }
+
+    @GetMapping("/testGet")
+    public ResponseEntity<List<ProfileDto>> getAllProfiles() {
+        List<UserProfile> profiles = profileService.getAllUsers();
+        return new ResponseEntity<>(
+                profiles.stream().map(
+                        profile -> new ProfileDtoBuilder(profile).getProfileDto()).collect(Collectors.toList()),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/testGetById/{id}")
+    public ResponseEntity<ProfileDto> getProfileById(@PathVariable long id) {
+        UserProfile profile = profileService.getUserProfileById(id);
+        System.out.println(profile.getId());
+        return new ResponseEntity<>(
+                new ProfileDtoBuilder(profile).getProfileDto(),
+                HttpStatus.OK
         );
     }
 
