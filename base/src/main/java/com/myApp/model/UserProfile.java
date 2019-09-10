@@ -36,7 +36,6 @@ public class UserProfile {
 
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
-    @PrimaryKeyJoinColumn(name = "user_id")
     @JsonIgnore
     private UserApp userApp;
 
