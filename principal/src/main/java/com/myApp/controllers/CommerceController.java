@@ -1,5 +1,6 @@
 package com.myApp.controllers;
 
+import com.myApp.exceptions.ControllerException;
 import com.myApp.model.Order;
 import com.myApp.model.UserProfile;
 import com.myApp.order.builder.OrderBuilder;
@@ -11,6 +12,7 @@ import com.myApp.profile.builder.ProfileBuilder;
 import com.myApp.profile.builder.ProfileDtoBuilder;
 import com.myApp.profile.dto.ProfileDto;
 import com.myApp.profile.service.ProfileService;
+import com.myApp.security.config.JwtTokenUtil;
 import com.myApp.security.service.JwtUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,14 +39,23 @@ public class CommerceController {
     @Autowired
     private JwtUserDetailsService userDetailsService;
 
-    @PostMapping("/testOrder")
-    public ResponseEntity<OrderDto> saveOrderTest(@RequestBody OrderDto orderDto) {
-        Order order = new OrderBuilder(orderDto).getOrder();
-        Order newOrder = orderService.saveOrder(order);
-        return new ResponseEntity<>(
-                new OrderDtoBuilder(order).getOrderDto(),
-                HttpStatus.OK
-        );
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+
+    @PostMapping("/order")
+    public ResponseEntity<OrderDto> saveOrderTest(@RequestHeader(value = "Authorization") String token, @RequestBody OrderDto orderDto) {
+
+        String _token = token.replace("Bearer ", "");
+        long id = userDetailsService.getIdByUsername(jwtTokenUtil.getUsernameFromToken(_token));
+
+        if(id == orderDto.getProfile().getId()) {
+
+            Order order = new OrderBuilder(orderDto).getOrder();
+            return new ResponseEntity<>(
+                    new OrderDtoBuilder(orderService.saveOrder(order)).getOrderDto(),
+                    HttpStatus.OK
+            );
+        } throw new ControllerException.methodNotAllowed();
     }
 
     @PostMapping("/testProfile")

@@ -60,4 +60,11 @@ public class ControllerException {
             super("Permission to modify denied");
         }
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public static class methodNotAllowed extends RuntimeException {
+        public methodNotAllowed() {
+            super("Permission denied");
+        }
+    }
 }
