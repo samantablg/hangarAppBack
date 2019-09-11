@@ -39,14 +39,6 @@ public class CommerceController {
     @Autowired
     private JwtUserDetailsService userDetailsService;
 
-    @GetMapping(value = "/hello")
-    public String hello(@RequestHeader(value = "Authorization") String token) {
-        String _token = token.replace("Bearer ", "");
-        System.out.println(_token);
-        System.out.println(userDetailsService.getUsernameByToken(_token));
-        return  token;
-    }
-
     @PostMapping("/testOrder")
     public ResponseEntity<OrderDto> saveOrderTest(@RequestBody OrderDto orderDto) {
         Order order = new OrderBuilder(orderDto).getOrder();
