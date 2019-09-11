@@ -1,11 +1,15 @@
 package com.myApp.security.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
 @Table(name="USER_ROLE")
 @IdClass(User_Role_PK.class)
+@Getter @Setter
 public class User_Role implements Serializable {
 
     private static final long serialVersionUID = -3064410667944568907L;
@@ -17,20 +21,4 @@ public class User_Role implements Serializable {
     @Id
     @Column(name="role_id")
     private long role;
-
-    public long getUser() {
-        return user;
-    }
-
-    public void setUser(long user) {
-        this.user = user;
-    }
-
-    public long getRole() {
-        return role;
-    }
-
-    public void setRole(long role) {
-        this.role = role;
-    }
 }

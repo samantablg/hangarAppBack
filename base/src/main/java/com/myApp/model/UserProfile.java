@@ -8,6 +8,8 @@ import org.hibernate.annotations.Parameter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "profile")
@@ -37,11 +39,26 @@ public class UserProfile {
     @JsonIgnore
     private UserApp userApp;
 
+    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Order> orders = new ArrayList<>();
+
     public UserProfile() {}
 
     public UserProfile(UserApp userApp) {
         this.userApp = userApp;
         userApp.setProfile(this);
+    }
+
+    // Helpers
+
+    public void addOrder(Order order) {
+        orders.add(order);
+        order.setProfile(this);
+    }
+
+    public void removePhone(Order order) {
+        orders.remove(order);
+        order.setProfile(null);
     }
 
 }

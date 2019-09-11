@@ -2,46 +2,20 @@ package com.myApp.price.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.myApp.model.Product;
+import lombok.Getter;
+import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
+@Getter @Setter
 public class PriceDto {
 
     private long id;
     private Date date;
+    @NotNull
     private float price;
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @NotNull
     private Product product;
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public float getPrice() {
-        return price;
-    }
-
-    public void setPrice(float price) {
-        this.price = price;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
 }

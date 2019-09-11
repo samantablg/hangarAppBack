@@ -1,7 +1,7 @@
 package com.myApp.order.repository;
 
 
-import com.myApp.order.model.Order;
+import com.myApp.model.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

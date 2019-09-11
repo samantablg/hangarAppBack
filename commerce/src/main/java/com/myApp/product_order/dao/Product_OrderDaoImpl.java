@@ -1,6 +1,6 @@
 package com.myApp.product_order.dao;
 
-import com.myApp.product_order.model.Product_Order;
+import com.myApp.model.Product_Order;
 import com.myApp.product_order.repository.Product_OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

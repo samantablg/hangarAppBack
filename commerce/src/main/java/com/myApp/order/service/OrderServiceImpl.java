@@ -1,9 +1,9 @@
 package com.myApp.order.service;
 
+import com.myApp.model.Order;
+import com.myApp.model.Product_Order;
 import com.myApp.order.dao.OrderDaoImpl;
 
-import com.myApp.order.model.Order;
-import com.myApp.product_order.model.Product_Order;
 import com.myApp.product_order.service.Product_OrderServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

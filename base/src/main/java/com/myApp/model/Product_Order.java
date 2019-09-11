@@ -1,4 +1,4 @@
-package com.myApp.product_order.model;
+package com.myApp.model;
 
 import lombok.Getter;
 import lombok.Setter;

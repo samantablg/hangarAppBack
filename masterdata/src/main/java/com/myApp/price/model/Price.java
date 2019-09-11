@@ -22,14 +22,10 @@ public class Price {
     private Date date;
 
     @Column(name="price")
-    @NotNull
     private float price;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @NotNull
     @JoinColumn(name="product")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Product product;
 }
-
-//TODO validaciones en el dto

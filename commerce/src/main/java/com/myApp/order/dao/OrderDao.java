@@ -1,6 +1,6 @@
 package com.myApp.order.dao;
 
-import com.myApp.order.model.Order;
+import com.myApp.model.Order;
 
 public interface OrderDao {
 

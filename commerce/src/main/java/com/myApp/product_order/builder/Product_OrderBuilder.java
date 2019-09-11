@@ -1,7 +1,7 @@
 package com.myApp.product_order.builder;
 
+import com.myApp.model.Product_Order;
 import com.myApp.product_order.dto.Product_OrderDto;
-import com.myApp.product_order.model.Product_Order;
 
 public class Product_OrderBuilder {
 

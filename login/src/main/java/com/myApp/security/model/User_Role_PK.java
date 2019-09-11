@@ -1,8 +1,12 @@
 package com.myApp.security.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.util.Objects;
 
+@Getter @Setter
 public class User_Role_PK implements Serializable {
 
     private static final long serialVersionUID = -3064410667944568906L;
@@ -15,22 +19,6 @@ public class User_Role_PK implements Serializable {
     public User_Role_PK(long user_pk, long role_pk) {
         this.user = user_pk;
         this.role = role_pk;
-    }
-
-    public long getUser() {
-        return user;
-    }
-
-    public void setUser(long user) {
-        this.user = user;
-    }
-
-    public long getRole() {
-        return role;
-    }
-
-    public void setRole(long role) {
-        this.role = role;
     }
 
     @Override
