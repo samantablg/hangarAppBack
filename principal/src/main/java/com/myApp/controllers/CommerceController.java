@@ -14,6 +14,7 @@ import com.myApp.profile.dto.ProfileDto;
 import com.myApp.profile.service.ProfileService;
 import com.myApp.security.config.JwtTokenUtil;
 import com.myApp.security.service.JwtUserDetailsService;
+import com.myApp.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,14 +43,12 @@ public class CommerceController {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
+    @Autowired
+    private SecurityUtils securityUtils;
+
     @PostMapping("/order")
-    public ResponseEntity<OrderDto> saveOrderTest(@RequestHeader(value = "Authorization") String token, @RequestBody OrderDto orderDto) {
-
-        String _token = token.replace("Bearer ", "");
-        long id = userDetailsService.getIdByUsername(jwtTokenUtil.getUsernameFromToken(_token));
-
-        if(id == orderDto.getProfile().getId()) {
-
+    public ResponseEntity<OrderDto> saveOrderTest(@RequestHeader(value = "Authorization") String token, @RequestBody OrderDto orderDto) throws Exception {
+        if(securityUtils.getIdByToken(token) == orderDto.getProfile().getId()) {
             Order order = new OrderBuilder(orderDto).getOrder();
             return new ResponseEntity<>(
                     new OrderDtoBuilder(orderService.saveOrder(order)).getOrderDto(),
@@ -59,7 +58,7 @@ public class CommerceController {
     }
 
     @PostMapping("/testProfile")
-    public ResponseEntity<ProfileDto> saveProfile(@RequestBody ProfileDto profileDto) {
+    public ResponseEntity<ProfileDto> saveProfile(@RequestBody ProfileDto profileDto) throws Exception {
 
         UserProfile profile = new ProfileBuilder(profileDto).getProfile();
         return new ResponseEntity<>(
@@ -69,7 +68,7 @@ public class CommerceController {
     }
 
     @GetMapping("/testGet")
-    public ResponseEntity<List<ProfileDto>> getAllProfiles() {
+    public ResponseEntity<List<ProfileDto>> getAllProfiles() throws Exception {
         List<UserProfile> profiles = profileService.getAllUsers();
         return new ResponseEntity<>(
                 profiles.stream().map(
@@ -79,7 +78,7 @@ public class CommerceController {
     }
 
     @GetMapping("/testGetById/{id}")
-    public ResponseEntity<ProfileDto> getProfileById(@PathVariable long id) {
+    public ResponseEntity<ProfileDto> getProfileById(@PathVariable long id) throws Exception {
         UserProfile profile = profileService.getUserProfileById(id);
         return new ResponseEntity<>(
                 new ProfileDtoBuilder(profile).getProfileDto(),
