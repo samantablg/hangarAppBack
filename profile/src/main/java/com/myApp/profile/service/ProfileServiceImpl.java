@@ -29,18 +29,23 @@ public class ProfileServiceImpl implements ProfileService {
         return profileDao.getProfiles();
     }
 
-    @Override
-    public UserProfile updateProfile(UserProfile update_profile) {
+    @Override //TODO mejorar código -> hacer el builder en el controlador cuando recibo el profileDto y mandarlo ya actualizado al servicio
+    public UserProfile updateProfile(UserProfile profile) {
 
-        if(profileDao.existById(update_profile)) {
-            UserProfile profile = profileDao.getProfileById(update_profile.getId());
-            profile.setName(update_profile.getName());
-            profile.setSurname(update_profile.getSurname());
-            profile.setAddress(update_profile.getAddress());
-            profile.setMail(update_profile.getMail());
-            profile.setPhone(update_profile.getPhone());
+        if(profileDao.existById(profile)) {
+            UserProfile _profile = profileDao.getProfileById(profile.getId());
+            _profile.setName(profile.getName());
+            _profile.setSurname(profile.getSurname());
+            _profile.setAddress(profile.getAddress());
+            _profile.setMail(profile.getMail());
+            _profile.setPhone(profile.getPhone());
             return profileDao.save(profile);
         }
-        return null;
+        return null; //TODO lanzar excepcion
+    }
+
+    @Override
+    public long getIdByUsername(String username) {
+        return 5; //profileDao.ge;
     }
 }

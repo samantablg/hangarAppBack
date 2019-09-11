@@ -1,8 +1,6 @@
 package com.myApp.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
@@ -20,7 +18,7 @@ public class UserProfile {
             parameters = @Parameter(name = "property", value = "userApp"))
     @Id
     @GeneratedValue(generator = "generator")
-    @Column(name="user_id", unique = true, nullable = true)
+    @Column(name="user_id", unique = true, nullable = false)
     private long id;
 
     @Column(name = "name")

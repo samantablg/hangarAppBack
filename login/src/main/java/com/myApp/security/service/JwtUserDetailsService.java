@@ -36,8 +36,6 @@ public class JwtUserDetailsService implements UserDetailsService {
     @Autowired
     private UserAppDao userAppDao;
 
-    //servicio para rol?
-
     @Autowired
     private UserRepository userRepository;
 
@@ -100,6 +98,10 @@ public class JwtUserDetailsService implements UserDetailsService {
 
     public String getUsernameByToken(String token) {
         return tokenUtil.getUsernameFromToken(token);
+    }
+
+    public long getIdByUsername(String username) {
+        return userAppDao.findByUsername(username).getId();
     }
 
 

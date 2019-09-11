@@ -53,4 +53,11 @@ public class ControllerException {
             super("Product already exist");
         }
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public static class profileUpdateNotAllowed extends RuntimeException {
+        public profileUpdateNotAllowed() {
+            super("Permission to modify denied");
+        }
+    }
 }

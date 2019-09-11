@@ -1,7 +1,6 @@
 package com.myApp.profile.service;
 
 import com.myApp.model.UserProfile;
-import sun.java2d.cmm.Profile;
 
 import java.util.List;
 
@@ -15,5 +14,6 @@ public interface ProfileService {
 
     UserProfile updateProfile(UserProfile profile);
 
+    long getIdByUsername(String username);
 
 }
