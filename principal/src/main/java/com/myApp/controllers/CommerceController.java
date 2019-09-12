@@ -12,9 +12,7 @@ import com.myApp.profile.builder.ProfileBuilder;
 import com.myApp.profile.builder.ProfileDtoBuilder;
 import com.myApp.profile.dto.ProfileDto;
 import com.myApp.profile.service.ProfileService;
-import com.myApp.security.config.JwtTokenUtil;
 import com.myApp.security.service.JwtUserDetailsService;
-import com.myApp.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,23 +30,18 @@ public class CommerceController {
     private OrderService orderService;
 
     @Autowired
-    private Product_OrderService product_orderService;
-
-    @Autowired
     private ProfileService profileService;
 
-    @Autowired
-    private JwtUserDetailsService userDetailsService;
-
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
-
-    @Autowired
-    private SecurityUtils securityUtils;
+   @Autowired
+   private JwtUserDetailsService userDetailsService;
 
     @PostMapping("/order")
-    public ResponseEntity<OrderDto> saveOrderTest(@RequestHeader(value = "Authorization") String token, @RequestBody OrderDto orderDto) throws Exception {
-        if(securityUtils.getIdByToken(token) == orderDto.getProfile().getId()) {
+    public ResponseEntity<OrderDto> saveOrder(@RequestHeader(value = "Authorization") String token, @RequestBody OrderDto orderDto) throws Exception {
+
+        if(orderDto.getId()<=0) {
+            throw new ControllerException.idNotAllowed(orderDto.getId());
+        }
+        if(userDetailsService.getIdByToken(token) == orderDto.getProfile().getId()) {
             Order order = new OrderBuilder(orderDto).getOrder();
             return new ResponseEntity<>(
                     new OrderDtoBuilder(orderService.saveOrder(order)).getOrderDto(),
@@ -57,17 +50,22 @@ public class CommerceController {
         } throw new ControllerException.methodNotAllowed();
     }
 
-    @PostMapping("/testProfile")
-    public ResponseEntity<ProfileDto> saveProfile(@RequestBody ProfileDto profileDto) throws Exception {
+    @PostMapping("/profile/update")
+    public ResponseEntity<ProfileDto> saveProfile(@RequestHeader(value = "Authorization") String token, @RequestBody ProfileDto profileDto) throws Exception {
 
-        UserProfile profile = new ProfileBuilder(profileDto).getProfile();
-        return new ResponseEntity<>(
-                new ProfileDtoBuilder(profileService.save(profile)).getProfileDto(),
-                HttpStatus.CREATED
-        );
+        if(profileDto.getId()<=0) {
+            throw new ControllerException.idNotAllowed(profileDto.getId());
+        }
+        if(userDetailsService.getIdByToken(token) == profileDto.getId()) {
+            UserProfile profile = new ProfileBuilder(profileDto).getProfile();
+            return new ResponseEntity<>(
+                    new ProfileDtoBuilder(profileService.save(profile)).getProfileDto(),
+                    HttpStatus.CREATED
+            );
+        } throw new ControllerException.methodNotAllowed();
     }
 
-    @GetMapping("/testGet")
+    @GetMapping("/profiles")
     public ResponseEntity<List<ProfileDto>> getAllProfiles() throws Exception {
         List<UserProfile> profiles = profileService.getAllUsers();
         return new ResponseEntity<>(
@@ -77,7 +75,7 @@ public class CommerceController {
         );
     }
 
-    @GetMapping("/testGetById/{id}")
+    @GetMapping("/profile/{id}")
     public ResponseEntity<ProfileDto> getProfileById(@PathVariable long id) throws Exception {
         UserProfile profile = profileService.getUserProfileById(id);
         return new ResponseEntity<>(

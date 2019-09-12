@@ -70,17 +70,17 @@ public class JwtUserDetailsService implements UserDetailsService {
     }
 
     public UserApp save(UserAppDto user) {
-        if (userRepository.findByUsername(user.getUsername()) != null) {
+        if (userRepository.findByUsername(user.getUsername()) == null) {
             throw new LoginExceptions.userExistException();
         } else { //TODO reorganizar codigo
             user.setPassword(bcryptEncoder.encode(user.getPassword()));
-            UserApp new_user = new UserAppBuilder(user).getUserApp();
-            UserProfile profile = new UserProfile(new_user);
-            new_user.setProfile(profile);
-            UserApp save_user = userRepository.save(new_user);
-            User_Role role_user =  new User_RoleBuilder(save_user).getUser_role();
+            UserApp _user = new UserAppBuilder(user).getUserApp();
+            UserProfile profile = new UserProfile(_user);
+            _user.setProfile(profile);
+            UserApp user_save = userRepository.save(_user);
+            User_Role role_user =  new User_RoleBuilder(user_save).getUser_role();
             user_roleRepository.save(role_user);
-            return save_user;
+            return user_save;
         }
     }
 
@@ -102,6 +102,11 @@ public class JwtUserDetailsService implements UserDetailsService {
 
     public long getIdByUsername(String username) {
         return userAppDao.findByUsername(username).getId();
+    }
+
+    public long getIdByToken(String token) {
+        String _token = token.replace("Bearer ", "");
+        return this.getIdByUsername(tokenUtil.getUsernameFromToken(_token));
     }
 
 

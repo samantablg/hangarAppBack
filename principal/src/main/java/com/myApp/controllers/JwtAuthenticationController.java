@@ -1,19 +1,11 @@
 package com.myApp.controllers;
 
 import com.myApp.exceptions.ControllerException;
-import com.myApp.model.UserProfile;
-import com.myApp.profile.builder.ProfileBuilder;
-import com.myApp.profile.builder.ProfileDtoBuilder;
-import com.myApp.profile.dto.ProfileDto;
-import com.myApp.profile.service.ProfileService;
-
-
 import com.myApp.model.UserApp;
 import com.myApp.security.config.JwtTokenUtil;
 import com.myApp.security.dto.UserAppDto;
 import com.myApp.security.model.UserAppResponse;
 import com.myApp.security.service.JwtUserDetailsService;
-import com.myApp.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,12 +29,6 @@ public class JwtAuthenticationController {
     @Autowired
     private JwtUserDetailsService userDetailsService;
 
-    @Autowired
-    private ProfileService profileService;
-
-    @Autowired
-    private SecurityUtils securityUtils;
-
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody UserApp authenticationRequest) throws Exception {
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
@@ -60,7 +46,6 @@ public class JwtAuthenticationController {
         if(!user.getUsername().isEmpty() && !user.getPassword().isEmpty()) {
             return new ResponseEntity<>(userDetailsService.save(user), HttpStatus.OK);
         } throw new Exception("INVALID_CREDENTIALS");
-
     }
 
     private void authenticate(String username, String password) throws Exception {
@@ -73,7 +58,7 @@ public class JwtAuthenticationController {
         }
     }
 
-    //TODO esto solo debe permitirse para un administrador, y tiene que mostrarse la contraseña sin cifrar
+    //TODO esto solo debe permitirse para un administrador
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     public ResponseEntity<?> listUsers() throws Exception {
         return new ResponseEntity<>(
@@ -84,28 +69,6 @@ public class JwtAuthenticationController {
 
     @RequestMapping(value ="/register/{username}", method = RequestMethod.GET)
     public ResponseEntity<Boolean> findByUsername(@PathVariable String username) throws Exception {
-        boolean user = userDetailsService.existsByUsername(username);
-        if(user) {
-            return new ResponseEntity<>(true, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(false, HttpStatus.OK);
-    }
-
-
-    @PutMapping("/update")
-    public ResponseEntity<ProfileDto> updateProfile(@RequestHeader(value = "Authorization") String token, @RequestBody ProfileDto profileDto) throws Exception {
-
-        if(profileDto.getId()<=0) {
-            throw new ControllerException.idNotAllowed(profileDto.getId());
-        }
-
-        if( securityUtils.getIdByToken(token) == profileDto.getId() ) {
-            UserProfile profile = new ProfileBuilder(profileDto).getProfile();
-            return new ResponseEntity<>(
-                    new ProfileDtoBuilder(profileService.updateProfile(profile)).getProfileDto(),
-                    HttpStatus.OK
-            );
-        } throw new ControllerException.profileUpdateNotAllowed();
-
+        return new ResponseEntity<Boolean>(userDetailsService.existsByUsername(username), HttpStatus.OK);
     }
 }
