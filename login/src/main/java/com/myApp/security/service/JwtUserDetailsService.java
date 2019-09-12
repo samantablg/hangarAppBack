@@ -92,8 +92,7 @@ public class JwtUserDetailsService implements UserDetailsService {
     }
 
     public boolean existsByUsername(String username) {
-        UserApp user = userRepository.findByUsername(username);
-        return (user != null);
+        return (userRepository.findByUsername(username) != null);
     }
 
     public String getUsernameByToken(String token) {
@@ -107,6 +106,10 @@ public class JwtUserDetailsService implements UserDetailsService {
     public long getIdByToken(String token) {
         String _token = token.replace("Bearer ", "");
         return this.getIdByUsername(tokenUtil.getUsernameFromToken(_token));
+    }
+
+    public String generateToken(UserDetails userDetails) {
+        return tokenUtil.generateToken(userDetails);
     }
 
 
