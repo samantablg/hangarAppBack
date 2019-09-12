@@ -1,8 +1,7 @@
 package com.myApp.product.service;
 
-// import com.myApp.price.service.PriceServiceImpl;
+import com.myApp.exception.GeneralException;
 import com.myApp.product.dao.ProductDao;
-import com.myApp.product.exceptions.ProductException;
 import com.myApp.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,20 +15,16 @@ public class ProductServiceImpl implements ProductService {
 	@Autowired
     private ProductDao productDAO;
 
-	/*@Autowired
-    private PriceServiceImpl priceService;
-    */
-
 	@Override
 	public List<Product> getAllProducts() {
 
 		List<Product> products = productDAO.getAllProducts();
 		if(!products.isEmpty())
 			return products;
-		throw new ProductException.NotFound();
+		throw new GeneralException.NotFound();
 	}
 
-	@Override
+	@Override //TODO recoger con una query desde el repositorio
 	public List<Product> getAllActiveProducts() {
 
 		List<Product> products = productDAO.getAllProducts();
@@ -41,7 +36,7 @@ public class ProductServiceImpl implements ProductService {
 					result.add(p);
 			return result;
 		}
-		throw new ProductException.NotFound();
+		throw new GeneralException.NotFound();
 	}
 
     @Override
@@ -50,33 +45,28 @@ public class ProductServiceImpl implements ProductService {
         List<Product> result = productDAO.findProductsByName(name);
         if (!result.isEmpty())
             return result;
-        throw new ProductException.NotFound();
+        throw new GeneralException.NotFound();
     }
 
 	@Override
 	public Product getProduct(long id) {
 		if(productDAO.existProduct(id))
 			return productDAO.getProduct(id);
-		throw new ProductException.NotFound(id);
+		throw new GeneralException.NotFound(id);
 	}
 
     @Override
     public Product create(Product product) {
 	    if(!productDAO.existProductByName(product.getName()))
 	        return productDAO.createProduct(product);
-	    throw new ProductException.ProductExistException();
+	    throw new GeneralException.ProductExistException();
     }
 
 	public void deleteProduct(long id) {
 		if (productDAO.existProduct(id))
 			 productDAO.deleteProduct(id);
-		throw new ProductException.NotFound(id);
+		throw new GeneralException.NotFound(id);
 	}
-
-   /* @Override
-    public ProductExtendedDto getProductWithCurrentPrice() {
-        return null;
-    }*/
 
     @Override
 	public Product updateState(long id) {
@@ -85,7 +75,7 @@ public class ProductServiceImpl implements ProductService {
 			product.setState(!product.isState());
 			return productDAO.updateProduct(product);
 		}
-		throw new ProductException.NotFound(id);
+		throw new GeneralException.NotFound(id);
 	}
 
     @Override

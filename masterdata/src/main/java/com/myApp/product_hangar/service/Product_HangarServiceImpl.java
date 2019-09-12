@@ -1,8 +1,7 @@
 package com.myApp.product_hangar.service;
 
-import com.myApp.hangar.exceptions.HangarException;
+import com.myApp.exception.GeneralException;
 import com.myApp.hangar.service.HangarServiceImpl;
-import com.myApp.product.exceptions.ProductException;
 import com.myApp.model.Product;
 import com.myApp.product.service.ProductServiceImpl;
 import com.myApp.product_hangar.builder.ProductName_HangarDtoBuilder;
@@ -54,7 +53,7 @@ public class Product_HangarServiceImpl implements Product_HangarService {
                 return productsOfHangar;
             throw new Product_HangarException.HangarNotAssociatedException(id);
         }
-        throw new HangarException.HangarNotFoundException(id);
+        throw new GeneralException.HangarNotFoundException(id);
     }
 
     @Override
@@ -67,7 +66,7 @@ public class Product_HangarServiceImpl implements Product_HangarService {
             }
             throw new Product_HangarException.HangarNotAssociatedException(id);
         }
-        throw new HangarException.HangarNotFoundException(id);
+        throw new GeneralException.HangarNotFoundException(id);
     }
 
     private List<String> getNameOfProducts(List<Product_Hangar> products_hangar) {
@@ -94,7 +93,7 @@ public class Product_HangarServiceImpl implements Product_HangarService {
                 return result;
             throw new Product_HangarException.ProductNotAssociatedException(id);
         }
-        throw new ProductException.NotFound(id);
+        throw new GeneralException.NotFound(id);
     }
 
     @Override
@@ -125,7 +124,7 @@ public class Product_HangarServiceImpl implements Product_HangarService {
             }
             return product_hangarDAO.isProductLinkToHangar(idProduct);
         }
-        throw new ProductException.ProductExistException();
+        throw new GeneralException.ProductExistException();
     }
 
     // Logic delete

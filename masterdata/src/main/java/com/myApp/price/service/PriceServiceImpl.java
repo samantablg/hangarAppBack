@@ -1,9 +1,9 @@
 package com.myApp.price.service;
 
+import com.myApp.exception.GeneralException;
 import com.myApp.price.dao.PriceDAO;
 import com.myApp.price.exceptions.PriceException;
 import com.myApp.price.model.Price;
-import com.myApp.product.exceptions.ProductException;
 import com.myApp.model.Product;
 import com.myApp.product.service.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class PriceServiceImpl implements PriceService {
     public List<Price> getAllPrices() {
 
         List<Price> prices = priceDAO.getAllPrices();
-        if(prices != null)
+        if(!prices.isEmpty())
             return prices;
         throw new PriceException.PriceNotFoundException();
     }
@@ -36,12 +36,11 @@ public class PriceServiceImpl implements PriceService {
         //TODO cambiar el código y la forma de meter la fecha
         if(productService.existProduct(id)) {
             Product product = productService.getProduct(id);
-            Price newPrice = new Price();
-            newPrice.setPrice(price);
-            newPrice.setProduct(product);
-            Date now = new Date();
-            newPrice.setDate(now);
-            return priceDAO.createEntryPrice(newPrice);
+            Price _price = new Price();
+            _price.setPrice(price);
+            _price.setProduct(product);
+            _price.setDate(new Date());
+            return priceDAO.createEntryPrice(_price);
         }
         throw new PriceException.PriceNotFoundException();
     }
@@ -53,13 +52,13 @@ public class PriceServiceImpl implements PriceService {
             Product product = productService.getProduct(id);
             return priceDAO.getAllPricesOfProduct(product);
         }
-        throw new ProductException.ProductExistException();
+        throw new GeneralException.ProductExistException();
     }
 
     @Override
     public Price getCurrentPriceOfProduct(long id) {
         if(productService.existProduct(id))
             return priceDAO.getLastPriceOfProduct(id);
-        throw new ProductException.ProductExistException();
+        throw new GeneralException.ProductExistException();
     }
 }

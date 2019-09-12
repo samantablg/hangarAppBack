@@ -1,6 +1,6 @@
 package com.myApp.hangar.service;
 
-import com.myApp.hangar.exceptions.HangarException;
+import com.myApp.exception.GeneralException;
 import com.myApp.model.Hangar;
 import com.myApp.hangar.dao.HangarDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ public class HangarServiceImpl implements HangarService {
 		List<Hangar> hangars = hangarDAO.getAllHangars();
 		if(hangars != null)
 			return hangars;
-		throw new HangarException.HangarNotFoundException();
+		throw new GeneralException.HangarNotFoundException();
 	}
 
     @Override
@@ -28,7 +28,7 @@ public class HangarServiceImpl implements HangarService {
 	    List<Hangar> result = hangarDAO.findHangarsByName(name);
         if (result.size() > 0 )
             return result;
-        throw new HangarException.HangarNotFoundException();
+        throw new GeneralException.HangarNotFoundException();
     }
 
     @Override
@@ -45,16 +45,14 @@ public class HangarServiceImpl implements HangarService {
 	public Hangar getHangar(long id) {
 		if(hangarDAO.existHangar(id))
 			return hangarDAO.getHangar(id);
-		throw new HangarException.HangarNotFoundException(id);
+		throw new GeneralException.HangarNotFoundException(id);
 	}
 
 	@Override
 	public Hangar createHangar(Hangar hangar) {
-
-		Hangar newHangar = hangarDAO.createHangar(hangar);
-		if (newHangar != null)
-			return newHangar;
-		throw new HangarException.HangarExistException();
+		if (!hangarDAO.existHangarByName(hangar.getName()))
+			return hangarDAO.createHangar(hangar);
+		throw new GeneralException.HangarExistException();
 	}
 
 	/*public Hangar deleteHangar(long id) {
@@ -69,10 +67,10 @@ public class HangarServiceImpl implements HangarService {
 	}
 
     public Hangar modifyHangar(Hangar update) {
-        if (update != null) {
+        if (hangarDAO.existHangar(update.getId())) {
             return hangarDAO.updateHangar(update);
         }
-        throw new HangarException.HangarExistException();
+        throw new GeneralException.HangarExistException();
     }
 
     @Override
@@ -80,26 +78,10 @@ public class HangarServiceImpl implements HangarService {
 
         if(hangarDAO.existHangar(id)) {
             Hangar hangar = hangarDAO.getHangar(id);
-            if(hangar.isState()) {
-                hangar.setState(false);
-            } else {
-                hangar.setState(true);
-            }
+            hangar.setState(!hangar.isState());
             return hangarDAO.updateHangar(hangar);
         }
-        throw new HangarException.HangarNotFoundException(id);
+        throw new GeneralException.HangarNotFoundException(id);
     }
-
-  /*  private long MaxValueId() {
-		
-		List<Hangar> hangars = hangarDAO.getAllHangars();
-		
-		long max = 0;
-		for (Hangar h: hangars) {
-			if(h.getId() > max)
-				max = h.getId();
-		}
-		return max;
-	}*/
 
 }
