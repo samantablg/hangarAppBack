@@ -23,7 +23,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order saveOrder(Order order) {
 
-        try {
+        try { //TODO cambiar relación en las entidades para que se guarde solo product_order
             List<Product_Order> products_order = order.getProducts_orders().stream().map(
                     product_order -> product_orderService.save(product_order)
               ).collect(Collectors.toList());

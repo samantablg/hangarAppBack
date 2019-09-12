@@ -40,6 +40,7 @@ public class UserProfile {
     private UserApp userApp;
 
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Order> orders = new ArrayList<>();
 
     public UserProfile() {}

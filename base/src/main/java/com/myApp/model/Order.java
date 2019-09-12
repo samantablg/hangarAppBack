@@ -11,7 +11,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "APP_ORDER")
 @Getter @Setter
-public class Order implements Serializable {
+public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -34,17 +34,5 @@ public class Order implements Serializable {
     @Column(name="total_products")
     private long total_products;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Order order = (Order) o;
-        return Objects.equals(profile, order.profile);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(profile);
-    }
 }
 
