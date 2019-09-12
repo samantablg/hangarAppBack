@@ -37,4 +37,12 @@ public class Product_HangarException {
         }
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public static class StockException extends RuntimeException {
+
+        public StockException() {
+            super("Not enough stock");
+        }
+    }
+
 }

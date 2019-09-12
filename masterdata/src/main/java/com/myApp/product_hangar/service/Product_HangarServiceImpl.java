@@ -29,6 +29,8 @@ public class Product_HangarServiceImpl implements Product_HangarService {
     @Autowired
     private HangarServiceImpl hangarService;
 
+    //TODO Las excepciones que lanzo desde aquí de hangares o productos moverlas a generic exceptions
+
     @Override
     public Product_Hangar associateProductToHangar(Product_Hangar product_hangar) {
         if(hangarService.hangarExistById(product_hangar.getHangar()) && productService.existProduct(product_hangar.getProduct()))
@@ -131,7 +133,7 @@ public class Product_HangarServiceImpl implements Product_HangarService {
         productService.updateState(idProduct);
     }
 
-    @Override
+    @Override //TODO Repensar este código
     public List<Product> getProductsUnlinkOfHangar(long idHangar) {
         List<Product> products = productService.getAllActiveProducts();
         try {
@@ -149,4 +151,13 @@ public class Product_HangarServiceImpl implements Product_HangarService {
         return products;
     }
 
+    @Override
+    public Product_Hangar updateAmountAfterOrder(long product, long hangar, long amount) {
+        Product_Hangar p_h = product_hangarDAO.getRelationship(product, hangar);
+        long _amount = p_h.getAmount() - amount;
+        if (p_h.getAmount() >= amount && _amount >= 0) {
+            p_h.setAmount(_amount);
+            return product_hangarDAO.updateAmount(p_h);
+        } throw new Product_HangarException.StockException();
+    }
 }

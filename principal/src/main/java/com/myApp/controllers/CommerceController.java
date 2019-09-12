@@ -38,9 +38,6 @@ public class CommerceController {
     @PostMapping("/order")
     public ResponseEntity<OrderDto> saveOrder(@RequestHeader(value = "Authorization") String token, @RequestBody OrderDto orderDto) throws Exception {
 
-        if(orderDto.getId()<=0) {
-            throw new ControllerException.idNotAllowed(orderDto.getId());
-        }
         if(userDetailsService.getIdByToken(token) == orderDto.getProfile().getId()) {
             Order order = new OrderBuilder(orderDto).getOrder();
             return new ResponseEntity<>(

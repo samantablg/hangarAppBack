@@ -12,10 +12,15 @@
     <artifactId>commerce</artifactId>
 
     <dependencies>
-
         <dependency>
             <groupId>com.myApp</groupId>
             <artifactId>base</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.myApp</groupId>
+            <artifactId>masterdata</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
