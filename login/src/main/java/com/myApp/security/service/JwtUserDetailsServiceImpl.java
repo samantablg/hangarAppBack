@@ -35,15 +35,9 @@ public class JwtUserDetailsServiceImpl implements UserDetailsService {
     @Override //TODO cuidado! un usuario puede tener dos roles -> implementar la funcionalidad para ello
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
         if (userAppDao.existsByUsername(username)) {
             UserApp user = userAppDao.findByUsername(username);
-            User_Role user_role = userAppDao.findRoleByUserId(user.getId());
-            Role role =  userAppDao.getRoleById(user_role.getRole());
-
-            List<GrantedAuthority> roles = new ArrayList<>();
-            roles.add(new SimpleGrantedAuthority(role.getRole()));
-
+            List<GrantedAuthority> roles = getRoleOfUser(user);
             return new User(user.getUsername(), user.getPassword(), roles);
         } else {
             throw new UsernameNotFoundException("User not found with username: " + username);
@@ -63,6 +57,14 @@ public class JwtUserDetailsServiceImpl implements UserDetailsService {
 
     public String generateToken(UserDetails userDetails) {
         return tokenUtil.generateToken(userDetails);
+    }
+
+    private List<GrantedAuthority> getRoleOfUser(UserApp user) {
+        User_Role user_role = userAppDao.findRoleByUserId(user.getId());
+        Role role =  userAppDao.getRoleById(user_role.getRole());
+        List<GrantedAuthority> roles = new ArrayList<>();
+        roles.add(new SimpleGrantedAuthority(role.getRole()));
+        return roles;
     }
 
     private void assignProfile(UserApp user) {
