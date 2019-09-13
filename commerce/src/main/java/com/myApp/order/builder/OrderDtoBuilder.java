@@ -1,7 +1,7 @@
 package com.myApp.order.builder;
 
-import com.myApp.order.model.Order;
 import com.myApp.order.dto.OrderDto;
+import com.myApp.order.model.Order;
 
 public class OrderDtoBuilder {
 
@@ -17,5 +17,7 @@ public class OrderDtoBuilder {
         this.orderDto.setProducts_orders(order.getProducts_orders());
     }
 
-    public OrderDto getOrderDto() { return orderDto; }
+    public OrderDto getOrderDto() {
+        return orderDto;
+    }
 }

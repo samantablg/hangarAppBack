@@ -41,7 +41,7 @@ public class Product_HangarDAOImpl implements Product_HangarDAO {
 
     @Override
     public Product_Hangar updateAmount(Product_Hangar update) {
-        return product_hangarRepository.saveAndFlush(update);
+        return product_hangarRepository.save(update);
     }
 
     @Override

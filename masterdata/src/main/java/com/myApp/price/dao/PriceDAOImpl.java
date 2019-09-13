@@ -35,12 +35,17 @@ public class PriceDAOImpl implements PriceDAO {
     }
     
     @Override
-    public Price getLastPriceOfProduct(long id) {
-        return priceRepository.getLastPriceOfProduct(id);
+    public Price getLastPriceOfProduct(long product_id) {
+        return priceRepository.getLastPriceOfProduct(product_id);
     }
 
     @Override
     public List<Price> getAllPricesOfProduct(Product product) {
         return priceRepository.findPricesByProduct(product);
+    }
+
+    @Override
+    public Boolean isProductWithPrice(long product_id) {
+        return priceRepository.existsPriceByProduct(product_id);
     }
 }

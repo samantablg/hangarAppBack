@@ -14,7 +14,7 @@ public class PriceDto {
     private long id;
     private Date date;
     @NotNull
-    private float price;
+    private double price;
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @NotNull
     private Product product;

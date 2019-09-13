@@ -1,7 +1,7 @@
 package com.myApp.product_order.builder;
 
-import com.myApp.product_order.model.Product_Order;
 import com.myApp.product_order.dto.Product_OrderDto;
+import com.myApp.product_order.model.Product_Order;
 
 public class Product_OrderDtoBuilder {
 
@@ -16,5 +16,7 @@ public class Product_OrderDtoBuilder {
         this.product_orderDto.setQuantity(product_order.getQuantity());
     }
 
-    public Product_OrderDto getProduct_orderDto() { return product_orderDto; }
+    public Product_OrderDto getProduct_orderDto() {
+        return product_orderDto;
+    }
 }

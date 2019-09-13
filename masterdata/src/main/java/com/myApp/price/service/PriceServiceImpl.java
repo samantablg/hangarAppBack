@@ -23,7 +23,6 @@ public class PriceServiceImpl implements PriceService {
 
     @Override
     public List<Price> getAllPrices() {
-
         List<Price> prices = priceDAO.getAllPrices();
         if(!prices.isEmpty())
             return prices;

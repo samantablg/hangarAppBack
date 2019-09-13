@@ -1,7 +1,7 @@
 package com.myApp.order.model;
 
-import com.myApp.product_order.model.Product_Order;
 import com.myApp.model.UserProfile;
+import com.myApp.product_order.model.Product_Order;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,7 +10,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "APP_ORDER")
-@Getter @Setter
+@Getter
+@Setter
 public class Order {
 
     @Id
@@ -22,16 +23,16 @@ public class Order {
     private UserProfile profile;
 
     @OneToMany
-    @Column(name="products")
+    @Column(name = "products")
     private List<Product_Order> products_orders;
 
     /*@Column(name="date")
     private Date date;*/
 
-    @Column(name="total_price")
-    private float total_price;
+    @Column(name = "total_price")
+    private double total_price;
 
-    @Column(name="total_products")
+    @Column(name = "total_products")
     private long total_products;
 
 }

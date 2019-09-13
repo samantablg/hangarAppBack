@@ -39,8 +39,9 @@ public class CommerceController {
 
         if(userAppService.getIdByToken(token) == orderDto.getProfile().getId()) {
             Order order = new OrderBuilder(orderDto).getOrder();
+            Order _order = orderService.saveOrder(order);
             return new ResponseEntity<>(
-                    new OrderDtoBuilder(orderService.saveOrder(order)).getOrderDto(),
+                    new OrderDtoBuilder(_order).getOrderDto(),
                     HttpStatus.OK
             );
         } throw new ControllerException.methodNotAllowed();

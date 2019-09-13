@@ -22,7 +22,7 @@ public class Price {
     private Date date;
 
     @Column(name="price")
-    private float price;
+    private double price;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="product")

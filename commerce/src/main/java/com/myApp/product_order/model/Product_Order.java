@@ -1,6 +1,5 @@
 package com.myApp.product_order.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,17 +7,18 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "PRODUCT_ORDER")
-@Getter @Setter
+@Getter
+@Setter
 public class Product_Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private long id;
-    @Column(name="hangar_id")
+    @Column(name = "hangar_id")
     private long hangar_id;
-    @Column(name="product_id")
+    @Column(name = "product_id")
     private long product_id;
-    @Column(name="quantity")
+    @Column(name = "quantity")
     private long quantity;
 }

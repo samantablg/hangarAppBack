@@ -151,12 +151,12 @@ public class Product_HangarServiceImpl implements Product_HangarService {
     }
 
     @Override
-    public void updateAmountAfterOrder(long product, long hangar, long amount) {
+    public Product_Hangar updateAmountAfterOrder(long product, long hangar, long amount) {
         Product_Hangar product_hangar = product_hangarDAO.getRelationship(product, hangar);
         long _amount = product_hangar.getAmount() - amount;
-        if (product_hangar.getAmount() >= amount && _amount >= 0) {
+        if (_amount >= 0) {
             product_hangar.setAmount(_amount);
-            product_hangarDAO.updateAmount(product_hangar);
+            return product_hangarDAO.updateAmount(product_hangar);
         } throw new Product_HangarException.StockException();
     }
 }
