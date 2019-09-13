@@ -20,5 +20,6 @@ public class User_Role implements Serializable {
 
     @Id
     @Column(name="role_id")
-    private long role;
+    private long role = 2;
+
 }

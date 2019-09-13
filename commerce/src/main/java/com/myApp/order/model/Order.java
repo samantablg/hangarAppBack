@@ -1,12 +1,12 @@
-package com.myApp.model;
+package com.myApp.order.model;
 
+import com.myApp.product_order.model.Product_Order;
+import com.myApp.model.UserProfile;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Table(name = "APP_ORDER")

@@ -1,18 +1,17 @@
 package com.myApp.controllers;
 
 import com.myApp.exceptions.ControllerException;
-import com.myApp.model.Order;
+import com.myApp.order.model.Order;
 import com.myApp.model.UserProfile;
 import com.myApp.order.builder.OrderBuilder;
 import com.myApp.order.builder.OrderDtoBuilder;
 import com.myApp.order.dto.OrderDto;
 import com.myApp.order.service.OrderService;
-import com.myApp.product_order.service.Product_OrderService;
 import com.myApp.profile.builder.ProfileBuilder;
 import com.myApp.profile.builder.ProfileDtoBuilder;
 import com.myApp.profile.dto.ProfileDto;
 import com.myApp.profile.service.ProfileService;
-import com.myApp.security.service.JwtUserDetailsService;
+import com.myApp.security.service.UserAppService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,12 +32,12 @@ public class CommerceController {
     private ProfileService profileService;
 
    @Autowired
-   private JwtUserDetailsService userDetailsService;
+   private UserAppService userAppService;
 
     @PostMapping("/order")
     public ResponseEntity<OrderDto> saveOrder(@RequestHeader(value = "Authorization") String token, @RequestBody OrderDto orderDto) throws Exception {
 
-        if(userDetailsService.getIdByToken(token) == orderDto.getProfile().getId()) {
+        if(userAppService.getIdByToken(token) == orderDto.getProfile().getId()) {
             Order order = new OrderBuilder(orderDto).getOrder();
             return new ResponseEntity<>(
                     new OrderDtoBuilder(orderService.saveOrder(order)).getOrderDto(),
@@ -53,7 +52,7 @@ public class CommerceController {
         if(profileDto.getId()<=0) {
             throw new ControllerException.idNotAllowed(profileDto.getId());
         }
-        if(userDetailsService.getIdByToken(token) == profileDto.getId()) {
+        if(userAppService.getIdByToken(token) == profileDto.getId()) {
             UserProfile profile = new ProfileBuilder(profileDto).getProfile();
             return new ResponseEntity<>(
                     new ProfileDtoBuilder(profileService.save(profile)).getProfileDto(),

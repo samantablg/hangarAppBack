@@ -1,6 +1,10 @@
 package com.myApp.security.dao;
 
 import com.myApp.model.UserApp;
+import com.myApp.security.model.Role;
+import com.myApp.security.model.User_Role;
+
+import java.util.List;
 
 public interface UserAppDao {
 
@@ -8,5 +12,14 @@ public interface UserAppDao {
 
     Boolean existsByUsername(String username);
 
-    UserApp createUser(UserApp userApp);
+    UserApp saveUser(UserApp userApp);
+
+    List<UserApp> getUsers();
+
+    void assignRoleToUser(User_Role user_role);
+
+    User_Role findRoleByUserId(long user);
+
+    Role getRoleById(long role);
+
 }

@@ -1,5 +1,6 @@
 package com.myApp.hangar.service;
 
+import com.myApp.exception.EntityNotFound;
 import com.myApp.exception.GeneralException;
 import com.myApp.model.Hangar;
 import com.myApp.hangar.dao.HangarDao;

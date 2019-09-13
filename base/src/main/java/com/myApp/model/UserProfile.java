@@ -39,27 +39,11 @@ public class UserProfile {
     @JsonIgnore
     private UserApp userApp;
 
-    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
-    private List<Order> orders = new ArrayList<>();
-
     public UserProfile() {}
 
     public UserProfile(UserApp userApp) {
         this.userApp = userApp;
         userApp.setProfile(this);
-    }
-
-    // Helpers
-
-    public void addOrder(Order order) {
-        orders.add(order);
-        order.setProfile(this);
-    }
-
-    public void removePhone(Order order) {
-        orders.remove(order);
-        order.setProfile(null);
     }
 
 }

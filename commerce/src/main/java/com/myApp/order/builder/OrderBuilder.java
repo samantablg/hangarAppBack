@@ -1,6 +1,6 @@
 package com.myApp.order.builder;
 
-import com.myApp.model.Order;
+import com.myApp.order.model.Order;
 import com.myApp.order.dto.OrderDto;
 
 public class OrderBuilder {

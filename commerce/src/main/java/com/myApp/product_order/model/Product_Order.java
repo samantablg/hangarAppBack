@@ -1,4 +1,4 @@
-package com.myApp.model;
+package com.myApp.product_order.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;

@@ -1,7 +1,8 @@
 package com.myApp.order.service;
 
-import com.myApp.model.Order;
-import com.myApp.model.Product_Order;
+import com.myApp.order.exceptions.OrderExceptions;
+import com.myApp.order.model.Order;
+import com.myApp.product_order.model.Product_Order;
 import com.myApp.order.dao.OrderDaoImpl;
 
 import com.myApp.product_hangar.service.Product_HangarService;
@@ -27,10 +28,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order saveOrder(Order order) {
 
-        try { //TODO cambiar relación en las entidades para que se guarde product_order solo
+        try { //TODO cambiar relación en las entidades para que se guarde product_order solo y mejorar código
             List<Product_Order> products_order = order.getProducts_orders().stream().map(
                     product_order -> {
-                        product_hangarService.updateAmountAfterOrder(product_order.getProduct_id(),product_order.getHangar_id(),product_order.getQuantity());
+                        updateStockAfterOrder(product_order);
                         return product_orderService.save(product_order);
                     }
               ).collect(Collectors.toList());
@@ -40,5 +41,38 @@ public class OrderServiceImpl implements OrderService {
             System.out.println(e.getMessage());
             return null;
         }
+    }
+
+    @Override
+    public void deleteOrder(long id) {
+        if (orderDao.existOrderById(id))
+            orderDao.deleteOrder(id);
+        throw new OrderExceptions.orderNotFound();
+    }
+
+    @Override
+    public Order updateOrder(long id) {
+        return null;
+    }
+
+    @Override
+    public Order deleteProduct_Order(long id, Product_Order product_order) {
+        /*if (orderDao.existOrderById(id)) {
+
+        } throw new OrderExceptions.orderNotFound();*/
+        return null;
+    }
+
+    private List<Product_Order> saveProduct_Order(Order order) {
+        return order.getProducts_orders().stream().map(
+                product_order -> {
+                    updateStockAfterOrder(product_order);
+                    return product_orderService.save(product_order);
+                }
+        ).collect(Collectors.toList());
+    }
+
+    private void updateStockAfterOrder(Product_Order product_order) {
+         product_hangarService.updateAmountAfterOrder(product_order.getProduct_id(), product_order.getHangar_id(), product_order.getQuantity());
     }
 }

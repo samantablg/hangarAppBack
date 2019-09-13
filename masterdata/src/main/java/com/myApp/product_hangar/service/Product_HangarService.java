@@ -26,6 +26,6 @@ public interface Product_HangarService {
 
     List<Product> getProductsUnlinkOfHangar(long idHangar);
 
-    Product_Hangar updateAmountAfterOrder(long product, long hangar, long amount);
+    void updateAmountAfterOrder(long product, long hangar, long amount);
 
 }

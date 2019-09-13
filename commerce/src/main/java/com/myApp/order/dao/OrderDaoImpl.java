@@ -1,6 +1,6 @@
 package com.myApp.order.dao;
 
-import com.myApp.model.Order;
+import com.myApp.order.model.Order;
 import com.myApp.order.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -13,11 +13,21 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public Order saveOrder(Order order) {
-        try {
-            orderRepository.saveAndFlush(order);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        return order;
+        return orderRepository.save(order);
+    }
+
+    @Override
+    public void deleteOrder(long id) {
+        orderRepository.deleteById(id);
+    }
+
+    @Override
+    public Boolean existOrderById(long id) {
+        return orderRepository.existsById(id);
+    }
+
+    @Override
+    public Order getOrderById(long id) {
+        return orderRepository.getOne(id);
     }
 }

@@ -1,6 +1,6 @@
 package com.myApp.product_order.service;
 
-import com.myApp.model.Product_Order;
+import com.myApp.product_order.model.Product_Order;
 
 public interface Product_OrderService {
 
