@@ -12,8 +12,9 @@ public class ApplicationException extends RuntimeException {
     private HttpStatus httpStatus;
     private String message;
 
-    public ApplicationException() {
-
+    public ApplicationException(ApplicationExceptionCause cause) {
+        this.httpStatus = cause.getHttpStatus();
+        this.message = cause.getCode();
     }
 
 }

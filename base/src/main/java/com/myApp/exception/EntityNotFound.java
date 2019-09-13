@@ -7,7 +7,7 @@ public class EntityNotFound extends RuntimeException {
     private static final long serialVersionUID = 5067100674895732114L;
 
     public EntityNotFound(Class clazz) {
-        super(clazz.getName() + " was not found");
+        super(clazz.getSimpleName() + " was not found");
     }
 
 

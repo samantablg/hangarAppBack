@@ -1,5 +1,7 @@
 package com.myApp.hangar.service;
 
+import com.myApp.exception.ApplicationException;
+import com.myApp.exception.ApplicationExceptionCause;
 import com.myApp.exception.EntityNotFound;
 import com.myApp.exception.GeneralException;
 import com.myApp.model.Hangar;
@@ -46,7 +48,8 @@ public class HangarServiceImpl implements HangarService {
 	public Hangar getHangar(long id) {
 		if(hangarDAO.existHangar(id))
 			return hangarDAO.getHangar(id);
-		throw new GeneralException.HangarNotFoundException(id);
+		throw new ApplicationException(ApplicationExceptionCause.NOT_FOUND);
+		// throw new GeneralException.HangarNotFoundException(id);
 	}
 
 	@Override

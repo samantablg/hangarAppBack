@@ -19,7 +19,7 @@ public class ApiError {
     private String debugMessage;
     private List<ApiSubError> subErrors;
 
-    private ApiError() {
+    ApiError() {
         this.timestamp = LocalDateTime.now();
     }
 

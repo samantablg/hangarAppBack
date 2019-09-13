@@ -32,12 +32,11 @@ public class JwtUserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private JwtTokenUtil tokenUtil;
 
-    @Override //TODO cuidado! un usuario puede tener dos roles -> implementar la funcionalidad para ello
-
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         if (userAppDao.existsByUsername(username)) {
             UserApp user = userAppDao.findByUsername(username);
-            List<GrantedAuthority> roles = getRoleOfUser(user);
+            List<GrantedAuthority> roles = getRoleOfUser(user); //TODO ¿Qué ocurre si un usuario tiene dos roles en base de datos?
             return new User(user.getUsername(), user.getPassword(), roles);
         } else {
             throw new UsernameNotFoundException("User not found with username: " + username);

@@ -61,6 +61,7 @@ public class HangarController {
                 );
     }
 
+    @GetMapping("/hangar/{id}")
     public ResponseEntity<HangarDto> getHangarById(@PathVariable long id) {
         if(id<=0)
             throw new ControllerException.idNotAllowed(id);
