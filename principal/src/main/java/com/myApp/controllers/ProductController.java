@@ -149,7 +149,7 @@ public class ProductController {
     }
 
     @PostMapping("price/product/{id}")
-    public ResponseEntity<PriceDto> priceToProduct(@PathVariable long id, @RequestBody float price) {
+    public ResponseEntity<PriceDto> priceToProduct(@PathVariable long id, @RequestBody double price) {
         Price _price =  priceService.createEntryPriceToProduct(id, price);
         return new ResponseEntity<>(
                 new PriceDtoBuilder(_price).getPriceDto(),

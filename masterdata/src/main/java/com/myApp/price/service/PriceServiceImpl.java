@@ -1,8 +1,9 @@
 package com.myApp.price.service;
 
+import com.myApp.exception.ApplicationException;
+import com.myApp.exception.ApplicationExceptionCause;
 import com.myApp.exception.GeneralException;
 import com.myApp.price.dao.PriceDAO;
-import com.myApp.price.exceptions.PriceException;
 import com.myApp.price.model.Price;
 import com.myApp.model.Product;
 import com.myApp.product.service.ProductServiceImpl;
@@ -26,22 +27,18 @@ public class PriceServiceImpl implements PriceService {
         List<Price> prices = priceDAO.getAllPrices();
         if(!prices.isEmpty())
             return prices;
-        throw new PriceException.PriceNotFoundException();
+        throw new ApplicationException(ApplicationExceptionCause.NOT_FOUND);
     }
 
     @Override
-    public Price createEntryPriceToProduct(long id, float price) {
+    public Price createEntryPriceToProduct(long id, double price) {
 
-        //TODO cambiar el código y la forma de meter la fecha
         if(productService.existProduct(id)) {
             Product product = productService.getProduct(id);
-            Price _price = new Price();
-            _price.setPrice(price);
-            _price.setProduct(product);
-            _price.setDate(new Date());
+            Price _price = shapePrice(product, price);
             return priceDAO.createEntryPrice(_price);
         }
-        throw new PriceException.PriceNotFoundException();
+        throw new ApplicationException(ApplicationExceptionCause.NOT_FOUND);
     }
 
     @Override
@@ -51,13 +48,27 @@ public class PriceServiceImpl implements PriceService {
             Product product = productService.getProduct(id);
             return priceDAO.getAllPricesOfProduct(product);
         }
-        throw new GeneralException.ProductExistException();
+        throw new  ApplicationException(ApplicationExceptionCause.PRODUCT_CONFLICT);
     }
 
     @Override
     public Price getCurrentPriceOfProduct(long id) {
         if(productService.existProduct(id))
             return priceDAO.getLastPriceOfProduct(id);
-        throw new GeneralException.ProductExistException();
+        throw new ApplicationException(ApplicationExceptionCause.PRODUCT_CONFLICT);
+    }
+
+    private Price shapePrice(Product product, double price) {
+        Price _price = new Price();
+        _price.setProduct(product);
+        _price.setPrice(price);
+        _price.setDate(new Date());
+        return _price;
+    }
+
+    private void isCurrentPrice(Price price) {
+        Price _price = priceDAO.getLastPriceOfProduct(price.getProduct().getId());
+        if (price.getPrice() == _price.getPrice())
+            throw new ApplicationException(ApplicationExceptionCause.PRICE_CURRENT);
     }
 }

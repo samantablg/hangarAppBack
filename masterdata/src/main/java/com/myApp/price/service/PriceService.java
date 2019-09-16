@@ -8,7 +8,7 @@ public interface PriceService {
 
     List<Price> getAllPrices();
 
-    Price createEntryPriceToProduct(long id, float price);
+    Price createEntryPriceToProduct(long id, double price);
 
     List<Price> getAllPricesOfProduct(long id);
 

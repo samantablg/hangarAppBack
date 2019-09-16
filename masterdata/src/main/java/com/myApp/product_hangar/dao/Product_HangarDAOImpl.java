@@ -15,16 +15,6 @@ public class Product_HangarDAOImpl implements Product_HangarDAO {
     private Product_HangarRepository product_hangarRepository;
 
     @Override
-    public Product_Hangar addProductToHangar(Product_Hangar product_hangar) {
-        return product_hangarRepository.save(product_hangar);
-    }
-
-    @Override
-    public Product_Hangar getRelationship(long product, long hangar) {
-        return product_hangarRepository.findByProductAndHangar(product, hangar);
-    }
-
-    @Override
     public List<Product_Hangar> getAll() {
         return product_hangarRepository.findAll();
     }
@@ -40,19 +30,37 @@ public class Product_HangarDAOImpl implements Product_HangarDAO {
     }
 
     @Override
+    public List<Product_Hangar> getAllNotContentInHangar(long hangar) {
+        return product_hangarRepository.findProduct_HangarsByHangarIsNotLike(hangar);
+    }
+
+    @Override
+    public Product_Hangar addProductToHangar(Product_Hangar product_hangar) {
+        return product_hangarRepository.save(product_hangar);
+    }
+
+    @Override
+    public Product_Hangar getRelationship(long product, long hangar) {
+        return product_hangarRepository.findByProductAndHangar(product, hangar);
+    }
+
+    @Override
     public Product_Hangar updateAmount(Product_Hangar update) {
         return product_hangarRepository.save(update);
     }
 
     @Override
-    public Boolean deleteRelationship(Product_Hangar product_hangar) {
+    public void deleteRelationship(Product_Hangar product_hangar) {
         product_hangarRepository.delete(product_hangar);
-        return (product_hangarRepository.findByProductAndHangar(product_hangar.getProduct(), product_hangar.getHangar()) == null);
     };
 
     @Override
-    public Boolean isProductLinkToHangar(long idProduct) {
-        List<Product_Hangar> hangarsWithProduct = product_hangarRepository.findAllByProduct(idProduct);
-        return !hangarsWithProduct.isEmpty();
+    public Boolean isProductLinkToAnyHangar(long id_product) {
+        return product_hangarRepository.existsProduct_HangarByProduct(id_product);
+    }
+
+    @Override
+    public Boolean isProductLinkToHangar(long product, long hangar) {
+        return product_hangarRepository.existsProduct_HangarByHangarAndProduct(product, hangar);
     }
 }

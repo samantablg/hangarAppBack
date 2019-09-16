@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter @Setter
 public class ProductExtendedDto extends ProductDto {
 
-    private float price;
+    private double price;
 
 }
 

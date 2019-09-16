@@ -5,7 +5,6 @@ import com.myApp.exception.ApplicationExceptionCause;
 import com.myApp.model.UserProfile;
 import com.myApp.security.config.JwtTokenUtil;
 import com.myApp.security.dao.UserAppDao;
-import com.myApp.security.exceptions.LoginExceptions;
 import com.myApp.security.model.Role;
 import com.myApp.model.UserApp;
 import com.myApp.security.model.User_Role;

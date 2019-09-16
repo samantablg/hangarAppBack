@@ -15,19 +15,7 @@ public class PriceDAOImpl implements PriceDAO {
     private PriceRepository priceRepository;
 
     @Override
-    public Price createEntryPrice(Price price) {
-        /*TODO crear una query para filtrar por producto, precio y fecha
-          -> no quiero crear una entrada de precio con el mismo precio que hay actualmente pero si puede volver a tener un precio anterior
-          -> se puede actualizar una vez cada día ¿?
-        */
-       /* List<Price> prices = priceRepository.findByProductOrderByDateDesc(price.getProduct());
-        Price lastPrice = prices.get(prices.size()-1);*/
-        /*if(lastPrice.getProduct() != price.getProduct() &&  lastPrice.getPrice() != price.getPrice()) {
-            return priceRepository.save(price);
-        }
-        return null;*/
-        return priceRepository.save(price);
-    }
+    public Price createEntryPrice(Price price) { return priceRepository.save(price); }
 
     @Override
     public List<Price> getAllPrices() {
@@ -48,4 +36,5 @@ public class PriceDAOImpl implements PriceDAO {
     public Boolean isProductWithPrice(long product_id) {
         return priceRepository.existsPriceByProduct(product_id);
     }
+
 }

@@ -20,9 +20,9 @@ public interface Product_HangarService {
 
     Product_Hangar updateAmount(long product, long hangar, long amount);
 
-    Boolean unlinkProductOfHangar(long product, long hangar);
+    boolean unlinkProductOfHangar(long product, long hangar);
 
-    Boolean isProductLinkToHangar(long idProduct);
+    boolean isProductLinkToHangar(long idProduct);
 
     List<Product> getProductsUnlinkOfHangar(long idHangar);
 
