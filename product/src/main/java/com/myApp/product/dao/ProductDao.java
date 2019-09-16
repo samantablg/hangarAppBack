@@ -7,22 +7,26 @@ import com.myApp.model.Product;
 public interface ProductDao {
 	
 	List<Product> getAllProducts();
-	
-	Product getProduct(Long id);
 
-    List<Product> findProductsByName(String name);
+    List<Product> getProductsByName(String name);
+
+    List<Product> getProductsActive();
+
+	Product getProduct(Long id);
 	
 	Product createProduct(Product product);
 
 	Product editProduct(Product product);
-	
-	Boolean deleteProduct(long id);
-
-	boolean existProduct(long id);
 
 	Product updateProduct(Product product);
 
+	void deleteProduct(long id);
+
+	boolean existProduct(long id);
+
 	boolean existProductByName(String name);
+
+	boolean existProductByNameAndDescription(String name, String description);
 
 	String getNameOfProductById(long id);
 

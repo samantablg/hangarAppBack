@@ -23,20 +23,19 @@ public class HangarDaoImpl implements HangarDao {
 
     @Override
     public Boolean existHangarByName(String name) {
-        return hangarRepository.findHangarByName(name)!=null;
+        return hangarRepository.existHangarByName(name);
     }
 
-    @Override
+	@Override
+	public Boolean existHangarByNameAndAddress(String name, String address) { return hangarRepository.existsHangarByNameAndAddress(name, address); }
+
+	@Override
 	public Hangar getHangar(Long id) {
 		return hangarRepository.getOne(id);
 	}
 
 	@Override
-	public Hangar createHangar(Hangar hangar) {
-		if(hangarRepository.findHangarByNameAndAddress(hangar.getName(), hangar.getAddress()) == null)
-			return hangarRepository.save(hangar);
-		return null;
-	}
+	public Hangar createHangar(Hangar hangar) { return hangarRepository.save(hangar); }
 
 	/*@Override
 	public Hangar deleteHangar(Long id) {

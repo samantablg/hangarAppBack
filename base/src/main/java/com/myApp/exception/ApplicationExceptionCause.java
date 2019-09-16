@@ -10,7 +10,8 @@ import java.io.Serializable;
 public enum ApplicationExceptionCause implements Serializable {
 
     NOT_FOUND( "not found" , HttpStatus.BAD_REQUEST),
-    PRICE_CONFLICT("Conflict with price",HttpStatus.BAD_REQUEST);
+    PRICE_CONFLICT("Conflict with price",HttpStatus.BAD_REQUEST),
+    USER_CONFLICT("User already exists", HttpStatus.CONFLICT);
 
     private String code;
     private HttpStatus httpStatus;

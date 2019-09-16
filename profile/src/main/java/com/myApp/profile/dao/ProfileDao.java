@@ -8,7 +8,9 @@ public interface ProfileDao {
 
     UserProfile save(UserProfile profile);
 
-    Boolean existById(UserProfile profile);
+    Boolean existById(long id);
+
+    Boolean existByName(String name);
 
     UserProfile getProfileById(long id);
 

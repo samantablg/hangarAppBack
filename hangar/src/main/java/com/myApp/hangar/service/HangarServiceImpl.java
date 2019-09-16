@@ -2,7 +2,6 @@ package com.myApp.hangar.service;
 
 import com.myApp.exception.ApplicationException;
 import com.myApp.exception.ApplicationExceptionCause;
-import com.myApp.exception.EntityNotFound;
 import com.myApp.exception.GeneralException;
 import com.myApp.model.Hangar;
 import com.myApp.hangar.dao.HangarDao;
@@ -20,7 +19,7 @@ public class HangarServiceImpl implements HangarService {
 	public List<Hangar> getAllHangars() {
 	
 		List<Hangar> hangars = hangarDAO.getAllHangars();
-		if(hangars != null)
+		if(!hangars.isEmpty())
 			return hangars;
 		throw new GeneralException.HangarNotFoundException();
 	}
@@ -28,14 +27,14 @@ public class HangarServiceImpl implements HangarService {
     @Override
     public List<Hangar> getAllHangarsWithName(String name) {
 
-	    List<Hangar> result = hangarDAO.findHangarsByName(name);
-        if (result.size() > 0 )
-            return result;
+	    List<Hangar> hangars = hangarDAO.findHangarsByName(name);
+        if (!hangars.isEmpty())
+            return hangars;
         throw new GeneralException.HangarNotFoundException();
     }
 
     @Override
-    public Boolean existHangarByName(String name) {
+    public boolean existHangarByName(String name) {
         return hangarDAO.existHangarByName(name);
     }
 
@@ -49,12 +48,11 @@ public class HangarServiceImpl implements HangarService {
 		if(hangarDAO.existHangar(id))
 			return hangarDAO.getHangar(id);
 		throw new ApplicationException(ApplicationExceptionCause.NOT_FOUND);
-		// throw new GeneralException.HangarNotFoundException(id);
 	}
 
 	@Override
 	public Hangar createHangar(Hangar hangar) {
-		if (!hangarDAO.existHangarByName(hangar.getName()))
+		if (!hangarDAO.existHangarByNameAndAddress(hangar.getName(), hangar.getAddress()))
 			return hangarDAO.createHangar(hangar);
 		throw new GeneralException.HangarExistException();
 	}
@@ -71,9 +69,8 @@ public class HangarServiceImpl implements HangarService {
 	}
 
     public Hangar modifyHangar(Hangar update) {
-        if (hangarDAO.existHangar(update.getId())) {
+        if (hangarDAO.existHangar(update.getId()))
             return hangarDAO.updateHangar(update);
-        }
         throw new GeneralException.HangarExistException();
     }
 

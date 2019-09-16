@@ -1,5 +1,7 @@
 package com.myApp.profile.service;
 
+import com.myApp.exception.ApplicationException;
+import com.myApp.exception.ApplicationExceptionCause;
 import com.myApp.model.UserProfile;
 import com.myApp.profile.dao.ProfileDaoImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,31 +23,36 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public UserProfile getUserProfileById(long id) {
-        return profileDao.getProfileById(id);
+        if (profileDao.existById(id))
+            return profileDao.getProfileById(id);
+        throw new ApplicationException(ApplicationExceptionCause.NOT_FOUND);
     }
 
     @Override
     public List<UserProfile> getAllUsers() {
-        return profileDao.getProfiles();
-    }
-
-    @Override //TODO mejorar código -> hacer el builder en el controlador cuando recibo el profileDto y mandarlo ya actualizado al servicio
-    public UserProfile updateProfile(UserProfile profile) {
-
-        if(profileDao.existById(profile)) {
-            UserProfile _profile = profileDao.getProfileById(profile.getId());
-            _profile.setName(profile.getName());
-            _profile.setSurname(profile.getSurname());
-            _profile.setAddress(profile.getAddress());
-            _profile.setMail(profile.getMail());
-            _profile.setPhone(profile.getPhone());
-            return profileDao.save(profile);
-        }
-        return null; //TODO lanzar excepcion
+        List<UserProfile> profiles = profileDao.getProfiles();
+        if (!profiles.isEmpty())
+            return profiles;
+        throw new ApplicationException(ApplicationExceptionCause.NOT_FOUND);
     }
 
     @Override
-    public long getIdByUsername(String username) {
-        return 5; //profileDao.ge;
+    public UserProfile updateProfile(UserProfile profile) {
+
+        if(profileDao.existById(profile.getId())) {
+            return this.manageUpdate(profile);
+        }
+        throw new ApplicationException(ApplicationExceptionCause.NOT_FOUND);
     }
+
+    private UserProfile manageUpdate(UserProfile profile) {
+        UserProfile _profile = profileDao.getProfileById(profile.getId());
+        _profile.setName(profile.getName());
+        _profile.setSurname(profile.getSurname());
+        _profile.setAddress(profile.getAddress());
+        _profile.setMail(profile.getMail());
+        _profile.setPhone(profile.getPhone());
+        return _profile;
+    }
+
 }

@@ -7,6 +7,7 @@ import com.myApp.order.builder.OrderBuilder;
 import com.myApp.order.builder.OrderDtoBuilder;
 import com.myApp.order.dto.OrderDto;
 import com.myApp.order.service.OrderService;
+import com.myApp.order.service.OrderServiceImpl;
 import com.myApp.profile.builder.ProfileBuilder;
 import com.myApp.profile.builder.ProfileDtoBuilder;
 import com.myApp.profile.dto.ProfileDto;
@@ -17,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,7 +28,7 @@ import java.util.stream.Collectors;
 public class CommerceController {
 
     @Autowired
-    private OrderService orderService;
+    private OrderServiceImpl orderService;
 
     @Autowired
     private ProfileService profileService;
@@ -37,7 +39,7 @@ public class CommerceController {
     @PostMapping("/order")
     public ResponseEntity<OrderDto> saveOrder(@RequestHeader(value = "Authorization") String token, @RequestBody OrderDto orderDto) throws Exception {
 
-        if(userAppService.getIdByToken(token) == orderDto.getProfile().getId()) {
+        if (userAppService.getIdByToken(token) == orderDto.getProfile().getId()) {
             Order order = new OrderBuilder(orderDto).getOrder();
             Order _order = orderService.saveOrder(order);
             return new ResponseEntity<>(
@@ -47,19 +49,29 @@ public class CommerceController {
         } throw new ControllerException.methodNotAllowed();
     }
 
-    @PostMapping("/profile/update")
+    @PostMapping("/profile")
     public ResponseEntity<ProfileDto> saveProfile(@RequestHeader(value = "Authorization") String token, @RequestBody ProfileDto profileDto) throws Exception {
 
-        if(profileDto.getId()<=0) {
+        if (profileDto.getId() <= 0) {
             throw new ControllerException.idNotAllowed(profileDto.getId());
         }
-        if(userAppService.getIdByToken(token) == profileDto.getId()) {
+        if (userAppService.getIdByToken(token) == profileDto.getId()) {
             UserProfile profile = new ProfileBuilder(profileDto).getProfile();
             return new ResponseEntity<>(
                     new ProfileDtoBuilder(profileService.save(profile)).getProfileDto(),
                     HttpStatus.CREATED
             );
         } throw new ControllerException.methodNotAllowed();
+    }
+
+    @RequestMapping(value = "/update", method = RequestMethod.PUT)
+    public ResponseEntity<ProfileDto> updateUser(@Valid @RequestBody ProfileDto profileDto) throws Exception {
+        UserProfile profile = new ProfileBuilder(profileDto).getProfile();
+        final UserProfile _profile = profileService.updateProfile(profile);
+        return new ResponseEntity<>(
+                new ProfileDtoBuilder(_profile).getProfileDto(),
+                HttpStatus.OK
+        );
     }
 
     @GetMapping("/profiles")

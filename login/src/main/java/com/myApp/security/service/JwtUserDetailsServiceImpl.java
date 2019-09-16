@@ -1,5 +1,7 @@
 package com.myApp.security.service;
 
+import com.myApp.exception.ApplicationException;
+import com.myApp.exception.ApplicationExceptionCause;
 import com.myApp.model.UserProfile;
 import com.myApp.security.config.JwtTokenUtil;
 import com.myApp.security.dao.UserAppDao;
@@ -44,9 +46,9 @@ public class JwtUserDetailsServiceImpl implements UserDetailsService {
     }
 
     public UserApp save(UserApp user) {
-        if (userAppDao.existsByUsername(user.getUsername())) {
-            throw new LoginExceptions.userExistException();
-        }
+        if (userAppDao.existsByUsername(user.getUsername()))
+            throw new ApplicationException(ApplicationExceptionCause.USER_CONFLICT);
+
         user.setPassword(bcryptEncoder.encode(user.getPassword()));
         assignProfile(user);
         UserApp _user = userAppDao.saveUser(user);

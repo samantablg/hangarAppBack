@@ -15,48 +15,28 @@ public class ProductDaoImpl implements ProductDao {
 	private ProductRepository productRepository;
 
 	@Override
-	public List<Product> getAllProducts() {
-		
-		List<Product> products = productRepository.findAll();
-		if(!products.isEmpty())
-			return products;
-		return null;
-	}
+	public List<Product> getAllProducts() { return productRepository.findAll();	}
 
     @Override
-    public List<Product> findProductsByName(String name) {
+    public List<Product> getProductsByName(String name) {
         return productRepository.findByNameWithTrueState(name);
     }
 
 	@Override
-	public Product getProduct(Long id) {
-		return productRepository.getOne(id);
+	public List<Product> getProductsActive() {
+		return productRepository.findAllWithTrueState();
 	}
+
+	@Override
+	public Product getProduct(Long id) { return productRepository.getOne(id); }
 	
 	@Override
-	public Product createProduct(Product product) {
-		if(productRepository.findProductByName(product.getName()) == null) {
-			return productRepository.save(product);
-		}
-		return null;
-	}
+	public Product createProduct(Product product) { return productRepository.save(product);	}
 
     @Override
-    public Product editProduct(Product product) {
-	    if(productRepository.findProductByNameAndDescription(product.getName(), product.getDescription()) == null) {
-	        return productRepository.save(product);
-        }
-        return null;
-    }
+    public Product editProduct(Product product) { return productRepository.save(product);  }
 
-    public Boolean deleteProduct(long id) {
-		if(productRepository.existsById(id)) {
-            productRepository.deleteById(id);
-            return true;
-        }
-        return false;
-	}
-
+    public void deleteProduct(long id) { productRepository.deleteById(id);}
 
 	@Override
 	public boolean existProduct(long id) {
@@ -64,17 +44,21 @@ public class ProductDaoImpl implements ProductDao {
 	}
 
 	@Override
+	public boolean existProductByNameAndDescription(String name, String description) { return productRepository.existsProductByNameAndDescription(name, description); }
+
+	@Override
 	public Product updateProduct(Product product) {
 		return productRepository.saveAndFlush(product);
 	}
 
     @Override
-    public String getNameOfProductById(long id) {
-        return productRepository.getNameOfProduct(id);
+    public boolean existProductByName(String name) {
+        return (productRepository.existsProductByName(name));
     }
 
-    @Override
-    public boolean existProductByName(String name) {
-        return (productRepository.findProductByName(name) != null);
-    }
+	@Override
+	public String getNameOfProductById(long id) {
+		return productRepository.getNameOfProduct(id);
+	}
+
 }

@@ -17,32 +17,25 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public List<Product> getAllProducts() {
-
 		List<Product> products = productDAO.getAllProducts();
 		if(!products.isEmpty())
 			return products;
 		throw new GeneralException.NotFound();
 	}
 
-	@Override //TODO recoger con una query desde el repositorio
+	@Override
 	public List<Product> getAllActiveProducts() {
 
-		List<Product> products = productDAO.getAllProducts();
-		List<Product> result = new ArrayList<>();
-
-		if(!products.isEmpty()) {
-			for(Product p: products)
-				if(p.isState())
-					result.add(p);
-			return result;
-		}
+		List<Product> products = productDAO.getProductsActive();
+		if(!products.isEmpty())
+			return products;
 		throw new GeneralException.NotFound();
 	}
 
     @Override
     public List<Product> getAllProductsWithName(String name) {
 
-        List<Product> result = productDAO.findProductsByName(name);
+        List<Product> result = productDAO.getProductsByName(name);
         if (!result.isEmpty())
             return result;
         throw new GeneralException.NotFound();
@@ -57,7 +50,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product create(Product product) {
-	    if(!productDAO.existProductByName(product.getName()))
+	    if(!productDAO.existProductByNameAndDescription(product.getName(), product.getDescription()))
 	        return productDAO.createProduct(product);
 	    throw new GeneralException.ProductExistException();
     }
@@ -80,16 +73,33 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product modifyProduct(Product update) {
-	    Product product = productDAO.getProduct(update.getId());
-	    product.setName(update.getName());
-	    product.setDescription(update.getDescription());
-        return productDAO.editProduct(product);
+		if(productDAO.existProduct(update.getId())) {
+			Product product = this.manageUpdate(update);
+			return productDAO.editProduct(product);
+		}
+	    throw new GeneralException.NotFound();
     }
-
 
 	@Override
 	public boolean existProduct(long id) {
 		return productDAO.existProduct(id);
+	}
+
+    @Override
+    public String getNameOfProductById(long id) {
+        return productDAO.getNameOfProductById(id);
+    }
+
+    @Override
+    public boolean existProductByName(String name) {
+        return productDAO.existProductByName(name);
+    }
+
+    private Product manageUpdate(Product update) {
+    	Product product = productDAO.getProduct(update.getId());
+		product.setName(update.getName());
+		product.setDescription(update.getDescription());
+		return product;
 	}
 
 	/*Ejercicio java 8
@@ -121,14 +131,4 @@ public class ProductServiceImpl implements ProductService {
 		return filterProductByLength(listUpper);
 	}
 	*/
-
-    @Override
-    public String getNameOfProductById(long id) {
-        return productDAO.getNameOfProductById(id);
-    }
-
-    @Override
-    public boolean existProductByName(String name) {
-        return productDAO.existProductByName(name);
-    }
 }

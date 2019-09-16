@@ -17,22 +17,6 @@ import javax.persistence.EntityNotFoundException;
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(EntityNotFoundException.class)
-    protected ResponseEntity<Object> handleEntityNotFound(
-            EntityNotFoundException exception) {
-        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND);
-        apiError.setMessage(exception.getMessage());
-        return buildResponseEntity(apiError);
-    }
-
-    @ExceptionHandler(PriceConflict.class)
-    protected ResponseEntity<Object> handlePriceConflict(
-            EntityNotFoundException exception) {
-        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST);
-        apiError.setMessage(exception.getMessage());
-        return buildResponseEntity(apiError);
-    }
-
     @ExceptionHandler(ApplicationException.class)
     protected ResponseEntity<Object> handleApplicationException(ApplicationException exception) {
         ApiError apiError = new ApiError();

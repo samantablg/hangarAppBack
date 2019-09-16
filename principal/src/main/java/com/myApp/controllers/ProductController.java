@@ -1,6 +1,10 @@
 package com.myApp.controllers;
 
 import com.myApp.exceptions.ControllerException;
+import com.myApp.price.builder.PriceDtoBuilder;
+import com.myApp.price.dto.PriceDto;
+import com.myApp.price.model.Price;
+import com.myApp.price.service.PriceService;
 import com.myApp.product.builder.DtoBuilder;
 import com.myApp.product.builder.ProductBuilder;
 import com.myApp.product.dto.ProductDto;
@@ -32,10 +36,12 @@ public class ProductController {
 	@Autowired
 	private ProductService productService;
 
+	@Autowired
+    private PriceService priceService;
+
 	@GetMapping("/products")
 	public ResponseEntity<List<ProductDto>> getAllActiveProducts() {
-	    List<Product> products = productService.getAllActiveProducts();
-
+	    final List<Product> products = productService.getAllActiveProducts();
 	    return new ResponseEntity<>(
 	            products.stream().map(
 	                    product -> new DtoBuilder(product).getProductDto()).collect(Collectors.toList()),
@@ -45,8 +51,7 @@ public class ProductController {
 
 	@GetMapping("/allProducts")
 	public ResponseEntity<List<ProductDto>> getAllProducts() {
-        List<Product> products = productService.getAllProducts();
-
+        final List<Product> products = productService.getAllProducts();
         return new ResponseEntity<>(
                 products.stream().map(
                         product -> new DtoBuilder(product).getProductDto()).collect(Collectors.toList()),
@@ -54,8 +59,7 @@ public class ProductController {
         );
     }
 
-    //TODO implementar a lo largo de todas las capas
-    @GetMapping("/products/{page}/{items}")
+    @GetMapping("/products/{page}/{items}")  //TODO implementar a lo largo de todas las capas
     public ResponseEntity<Page<Product>> productList(@PathVariable("page") int page, @PathVariable("items") int items) {
 
         Pageable itemsToPage = PageRequest.of(page, items);
@@ -84,18 +88,96 @@ public class ProductController {
 	}
 
 	@PostMapping("/product")
-	public ResponseEntity<ProductDto> createProduct(@Valid @RequestBody ProductDto productReq) {
-
-	    if(!productReq.getName().isEmpty() && !productReq.getDescription().isEmpty()) {
-	        Product product = new ProductBuilder(productReq).getProduct();
-	        return new ResponseEntity<>(
+	public ResponseEntity<ProductDto> createProduct(@Valid @RequestBody ProductDto productDto) {
+	    final Product product = new ProductBuilder(productDto).getProduct();
+	    return new ResponseEntity<>(
 	                new DtoBuilder(productService.create(product)).getProductDto(),
-                    HttpStatus.OK);
-        }
-        throw new ControllerException.productEmptyException();
+                    HttpStatus.OK
+        );
 	}
 
-	//Este método ya no se usa, se utiliza el estado activo o inactivo
+	@PutMapping("/product")
+    public ResponseEntity<ProductDto> updateProduct(@Valid @RequestBody ProductDto productDto) {
+	    Product product = new ProductBuilder(productDto).getProduct();
+	    Product _product = productService.modifyProduct(product);
+	    return new ResponseEntity<> (
+	            new DtoBuilder(_product).getProductDto(),
+                HttpStatus.OK
+        );
+    }
+
+    @PutMapping("/product/{id}") //Logic Delete
+    public ResponseEntity<Product> updateState(@PathVariable Long id) {
+        if(id<=0)
+            throw new ControllerException.idNotAllowed(id);
+        return new ResponseEntity<>(
+                productService.updateState(id),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping("search/product")
+    public ResponseEntity<List<ProductDto>> findProductByName(@RequestParam String name) {
+        if (name.length() > 0) {
+            final List<Product> products = productService.getAllProductsWithName(name);
+            return new ResponseEntity<>(
+                    products.stream().map(
+                            product -> new DtoBuilder(product).getProductDto()).collect(Collectors.toList()),
+                    HttpStatus.OK);
+        }
+        throw new ControllerException.searchProductException();
+    }
+
+    @RequestMapping(value ="product/exist/{name}", method = RequestMethod.GET)
+    public ResponseEntity<Boolean> existProductByName(@PathVariable String name) {
+        final boolean isProductExist = productService.existProductByName(name);
+        if (!isProductExist) {
+            return new ResponseEntity<>(true, HttpStatus.OK);
+        }
+        throw new ControllerException.productExistException();
+    }
+
+    @GetMapping("/prices/")
+    public ResponseEntity<List<PriceDto>> getPrices() {
+        List<Price> prices = priceService.getAllPrices();
+
+        return new ResponseEntity<>(
+                prices.stream().map(
+                        price -> new PriceDtoBuilder(price).getPriceDto()).collect(Collectors.toList()),
+                HttpStatus.OK
+        );
+    }
+
+    @PostMapping("price/product/{id}")
+    public ResponseEntity<PriceDto> priceToProduct(@PathVariable long id, @RequestBody float price) {
+        Price _price =  priceService.createEntryPriceToProduct(id, price);
+        return new ResponseEntity<>(
+                new PriceDtoBuilder(_price).getPriceDto(),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/price/product/{id}")
+    public ResponseEntity<List<PriceDto>> getPricesOfProduct(@PathVariable long id) {
+        List<Price> prices = priceService.getAllPricesOfProduct(id);
+        return new ResponseEntity<>(
+                prices.stream().map(
+                        price -> new PriceDtoBuilder(price).getPriceDto()).collect(Collectors.toList()),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping("price/last/{id}")
+    public ResponseEntity<Price> getLastPriceOfProduct(@PathVariable long id) {
+        if(id<=0)
+            throw new ControllerException.idNotAllowed(id);
+        return new ResponseEntity<>(
+                priceService.getCurrentPriceOfProduct(id),
+                HttpStatus.OK
+        );
+    }
+
+    //Este método ya no se usa, se utiliza el estado activo o inactivo
 	/*@DeleteMapping("/product/{id}")
 	public Product deleteProduct(@PathVariable Long id) {
 		if(id<=0)
@@ -109,44 +191,5 @@ public class ProductController {
 	    Product filterProduct = productService.filterName(letter);
 		return new Product(filterProduct.getName(), filterProduct.getHangar());
 	}*/
-
-	@PutMapping("/product")
-    public ResponseEntity<ProductDto> updateProduct(@RequestBody ProductDto update) {
-        if(!update.getName().isEmpty() && !update.getDescription().isEmpty()) {
-            Product product = new ProductBuilder(update).getProduct();
-            Product modify = productService.modifyProduct(product);
-            return new ResponseEntity<> (new DtoBuilder(modify).getProductDto(), HttpStatus.OK);
-        }
-	    throw new ControllerException.productEmptyException();
-    }
-
-    //Logic Delete
-    @PutMapping("/product/{id}")
-    public ResponseEntity<Product> updateState(@PathVariable Long id) {
-        if(id<=0)
-            throw new ControllerException.idNotAllowed(id);
-        return new ResponseEntity<>(productService.updateState(id), HttpStatus.OK);
-    }
-
-    @GetMapping("search/product")
-    public ResponseEntity<List<ProductDto>> findProductByName(@RequestParam String p_name) {
-        if (p_name.length()>0) {
-            List<Product> result = productService.getAllProductsWithName(p_name);
-            return new ResponseEntity<>(
-                    result.stream().map(
-                            product -> new DtoBuilder(product).getProductDto()).collect(Collectors.toList()),
-                    HttpStatus.OK);
-        }
-        throw new ControllerException.searchProductException();
-    }
-
-    @RequestMapping(value ="product/exist/{name}", method = RequestMethod.GET)
-    public ResponseEntity<Boolean> existProductByName(@PathVariable String name) {
-        boolean isProductExist = productService.existProductByName(name);
-        if (!isProductExist) {
-            return new ResponseEntity<>(true, HttpStatus.OK);
-        }
-        throw new ControllerException.productExistException();
-    }
 
 }

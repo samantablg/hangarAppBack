@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,7 +37,7 @@ public class HangarController {
 
     @GetMapping("/hangars")
 	public ResponseEntity<List<HangarDto>> getAllHangars() {
-		 List<Hangar> hangars = hangarService.getAllHangars();
+        final List<Hangar> hangars = hangarService.getAllHangars();
 
         return new ResponseEntity<>(
                 hangars.stream().map(
@@ -45,8 +46,7 @@ public class HangarController {
         );
 	}
 
-	//TODO implementar a lo largo de todas las capas
-    @GetMapping("/hangars/{page}/{items}")
+    @GetMapping("/hangars/{page}/{items}") //TODO implementar a lo largo de todas las capas
     public ResponseEntity<Page<Hangar>> hangarList(@PathVariable("page") int page, @PathVariable("items") int items) {
 
         Pageable itemsToPage = PageRequest.of(page, items);
@@ -58,7 +58,7 @@ public class HangarController {
                         itemsToPage,
                         hangars.getTotalElements()),
                 HttpStatus.OK
-                );
+        );
     }
 
     @GetMapping("/hangar/{id}")
@@ -75,7 +75,7 @@ public class HangarController {
 
     @GetMapping("/basicDataHangars")
     public ResponseEntity<List<BasicDataHangarDto>> getBasicDataOfHangars() {
-        List<Hangar> hangars = hangarService.getAllHangars();
+        final List<Hangar> hangars = hangarService.getAllHangars();
 
         return new ResponseEntity<>(hangars.stream()
                 .map(hangar ->
@@ -85,16 +85,13 @@ public class HangarController {
 	}
 
 	@PostMapping("/hangar")
-	public ResponseEntity<HangarDto> createHangar(@RequestBody HangarDto hdto) {
-	    if(!hdto.getName().equals("") && !hdto.getAddress().equals("")) {
-            Hangar hangar = new HangarBuilder(hdto).getHangar();
-            Hangar newHangar =  hangarService.createHangar(hangar);
-            return new ResponseEntity<>(
-                    new DtoBuilder(newHangar).getHangarDto(),
-                    HttpStatus.OK);
-        }
-        throw new ControllerException.hangarEmptyException();
-
+	public ResponseEntity<HangarDto> createHangar(@Valid @RequestBody HangarDto hangarDto) {
+        Hangar hangar = new HangarBuilder(hangarDto).getHangar();
+        final Hangar _hangar =  hangarService.createHangar(hangar);
+        return new ResponseEntity<>(
+                new DtoBuilder(_hangar).getHangarDto(),
+                HttpStatus.OK
+        );
 	}
 
 	/*Este método ya no se usa, se cambia el estado de activo a inactivo
@@ -104,35 +101,32 @@ public class HangarController {
 	}*/
 
 	@PutMapping("/hangar")
-    public ResponseEntity<HangarDto> updateHangar(@RequestBody HangarDto update) {
-	    if(!update.getName().equals("") && !update.getAddress().equals("") && !update.getOwner().equals("")) {
-            Hangar hangar = new HangarBuilder(update).getHangar();
-            Hangar modifyHangar = hangarService.modifyHangar(hangar);
-            return new ResponseEntity<>(
-                    new DtoBuilder(modifyHangar).getHangarDto(),
-                    HttpStatus.OK);
-        }
-	    throw new ControllerException.hangarEmptyException();
+    public ResponseEntity<HangarDto> updateHangar(@Valid @RequestBody HangarDto hangarDto) {
+	    Hangar hangar = new HangarBuilder(hangarDto).getHangar();
+	    final Hangar _hangar = hangarService.modifyHangar(hangar);
+	    return new ResponseEntity<>(
+	            new DtoBuilder(_hangar).getHangarDto(),
+                HttpStatus.OK
+        );
     }
 
-    //Logic Delete
-    @PutMapping("/hangar/{id}")
+    @PutMapping("/hangar/{id}") //Logic Delete
     public ResponseEntity<HangarDto> updateState(@PathVariable Long id) {
         if(id<=0) {
             throw new ControllerException.idNotAllowed(id);
         }
-        Hangar updateHangar = hangarService.updateState(id);
+        final Hangar hangar = hangarService.updateState(id);
         return new ResponseEntity<>(
-                new DtoBuilder(updateHangar).getHangarDto(),
+                new DtoBuilder(hangar).getHangarDto(),
                 HttpStatus.OK);
     }
 
     @GetMapping("search")
-    public ResponseEntity<List<HangarDto>> findHangarLikeName(@RequestParam String hangarName) {
-	    if (hangarName.length()>0) {
-	        List<Hangar> result = hangarService.getAllHangarsWithName(hangarName);
+    public ResponseEntity<List<HangarDto>> findHangarLikeName(@RequestParam String name) {
+	    if (name.length() > 0) {
+	        final List<Hangar> hangars = hangarService.getAllHangarsWithName(name);
             return new ResponseEntity<>(
-                    result.stream().map(
+                    hangars.stream().map(
                             hangar -> new DtoBuilder(hangar).getHangarDto()).collect(Collectors.toList()),
                     HttpStatus.OK);
         }
@@ -141,8 +135,7 @@ public class HangarController {
 
     @RequestMapping(value ="hangar/exist/{name}", method = RequestMethod.GET)
     public ResponseEntity<?> findByHangarName(@PathVariable String name) {
-        boolean hangarExist = hangarService.existHangarByName(name);
-        if (!hangarExist) {
+        if (!hangarService.existHangarByName(name)) {
             return new ResponseEntity<>(true, HttpStatus.OK);
         }
         throw new ControllerException.hangarExistException();

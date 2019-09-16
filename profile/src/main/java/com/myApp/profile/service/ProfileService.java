@@ -14,6 +14,4 @@ public interface ProfileService {
 
     UserProfile updateProfile(UserProfile profile);
 
-    long getIdByUsername(String username);
-
 }

@@ -1,9 +1,13 @@
 package com.myApp.product.dto;
 
+import javax.validation.constraints.NotEmpty;
+
 public class ProductDto {
 
     private long id;
+    @NotEmpty
     private String name;
+    @NotEmpty
     private String description;
     private boolean state;
 

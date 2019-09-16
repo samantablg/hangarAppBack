@@ -17,6 +17,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.util.List;
+
 @RestController
 @CrossOrigin("http://localhost:4200")
 public class JwtAuthenticationController {
@@ -32,7 +35,7 @@ public class JwtAuthenticationController {
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody UserApp authenticationRequest) throws Exception {
-        authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+        this.authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
         final UserDetails userDetails = userDetailsService
                 .loadUserByUsername(authenticationRequest.getUsername());
@@ -43,11 +46,12 @@ public class JwtAuthenticationController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ResponseEntity<UserAppDto> saveUser(@RequestBody UserAppDto userDto) throws Exception {
-        if(!userDto.getUsername().isEmpty() && !userDto.getPassword().isEmpty()) {
-            UserApp user = userDetailsService.save(new UserAppBuilder(userDto).getUserApp());
-            return new ResponseEntity<>(new UserAppDtoBuilder(user).getUserAppDto(), HttpStatus.OK);
-        } throw new Exception("INVALID_CREDENTIALS");
+    public ResponseEntity<UserAppDto> saveUser(@Valid @RequestBody UserAppDto userDto) throws Exception {
+        UserApp user = userDetailsService.save(new UserAppBuilder(userDto).getUserApp());
+        return new ResponseEntity<>(
+                new UserAppDtoBuilder(user).getUserAppDto(),
+                HttpStatus.OK
+        );
     }
 
     private void authenticate(String username, String password) throws Exception {
@@ -60,9 +64,8 @@ public class JwtAuthenticationController {
         }
     }
 
-    //TODO esto solo debe permitirse para un administrador
-    @RequestMapping(value = "/users", method = RequestMethod.GET)
-    public ResponseEntity<?> listUsers() throws Exception {
+    @RequestMapping(value = "/users", method = RequestMethod.GET) //TODO esto solo debe permitirse para un administrador
+    public ResponseEntity<List<UserApp>> listUsers() throws Exception {
         return new ResponseEntity<>(
                 userAppService.listUsers(),
                 HttpStatus.OK
@@ -73,4 +76,5 @@ public class JwtAuthenticationController {
     public ResponseEntity<Boolean> findByUsername(@PathVariable String username) throws Exception {
         return new ResponseEntity<Boolean>(userAppService.existsByUsername(username), HttpStatus.OK);
     }
+
 }

@@ -20,9 +20,12 @@ public class ProfileDaoImpl implements ProfileDao {
     }
 
     @Override
-    public Boolean existById(UserProfile profile) {
-        return profileRepository.existsById(profile.getId());
+    public Boolean existById(long id) {
+        return profileRepository.existsById(id);
     }
+
+    @Override
+    public Boolean existByName(String name) { return profileRepository.existsByName(name); }
 
     @Override
     public UserProfile getProfileById(long id) {

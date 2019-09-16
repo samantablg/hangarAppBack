@@ -13,7 +13,7 @@ public interface HangarService {
 	
 	Hangar createHangar(Hangar hangar);
 
-	Boolean existHangarByName(String name);
+	boolean existHangarByName(String name);
 	
 	//Hangar deleteHangar(long id);
 
