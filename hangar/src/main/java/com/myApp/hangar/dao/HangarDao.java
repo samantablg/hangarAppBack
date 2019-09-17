@@ -1,6 +1,9 @@
 package com.myApp.hangar.dao;
 
 import com.myApp.model.Hangar;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 
 public interface HangarDao {
@@ -9,19 +12,19 @@ public interface HangarDao {
 
     List<Hangar> findHangarsByName(String name);
 
-    Boolean existHangarByName(String name);
-
-	Boolean existHangarByNameAndAddress(String name, String address);
-
-	Hangar getHangar(Long id);
-	
-	Hangar createHangar(Hangar reqHangar);
-	
-	//Hangar deleteHangar(Long id);
-
-	boolean existHangar(Long id);
+	Page<Hangar> findByStateTrue(Pageable pageable);
 
     Hangar updateHangar(Hangar hangar);
 
+	Hangar getHangar(Long id);
 
+	Hangar createHangar(Hangar reqHangar);
+
+	boolean isHangarByName(String name);
+
+	boolean isHangarByNameAndAddress(String name, String address);
+
+	boolean isHangarById(Long id);
+
+	//Hangar deleteHangar(Long id);
 }

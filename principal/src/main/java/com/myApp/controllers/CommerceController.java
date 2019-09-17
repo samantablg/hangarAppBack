@@ -42,7 +42,6 @@ public class CommerceController {
 
     @PostMapping("/order")
     public ResponseEntity<OrderDto> saveOrder(@RequestHeader(value = "Authorization") String token, @RequestBody OrderDto orderDto) throws Exception {
-
         if (userAppService.getIdByToken(token) == orderDto.getProfile().getId()) {
             Order order = new OrderBuilder(orderDto).getOrder();
             Order _order = orderService.saveOrder(order);
@@ -55,8 +54,8 @@ public class CommerceController {
 
     @PostMapping("/profile")
     public ResponseEntity<ProfileDto> saveProfile(@RequestHeader(value = "Authorization") String token, @RequestBody ProfileDto profileDto) throws Exception {
+        util.checkNumber(profileDto.getId());
 
-        util.checkId(profileDto.getId());
         if (userAppService.getIdByToken(token) == profileDto.getId()) {
             UserProfile profile = new ProfileBuilder(profileDto).getProfile();
             return new ResponseEntity<>(

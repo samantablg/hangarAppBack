@@ -2,7 +2,6 @@ package com.myApp.product_hangar.service;
 
 import com.myApp.exception.ApplicationException;
 import com.myApp.exception.ApplicationExceptionCause;
-import com.myApp.exception.GeneralException;
 import com.myApp.hangar.service.HangarServiceImpl;
 import com.myApp.model.Product;
 import com.myApp.product.service.ProductServiceImpl;
@@ -32,7 +31,7 @@ public class Product_HangarServiceImpl implements Product_HangarService {
 
     @Override
     public Product_Hangar associateProductToHangar(Product_Hangar product_hangar) {
-        if (hangarService.hangarExistById(product_hangar.getHangar()) && productService.existProduct(product_hangar.getProduct()))
+        if (hangarService.isHangarById(product_hangar.getHangar()) && productService.isProductById(product_hangar.getProduct()))
             return product_hangarDAO.addProductToHangar(product_hangar);
         throw new ApplicationException(ApplicationExceptionCause.NOT_FOUND);
     }
@@ -47,7 +46,7 @@ public class Product_HangarServiceImpl implements Product_HangarService {
 
     @Override
     public List<Product_Hangar> getProductsOfHangar(long id_hangar) {
-        if (hangarService.hangarExistById(id_hangar)) {
+        if (hangarService.isHangarById(id_hangar)) {
             List<Product_Hangar> products_hangar = product_hangarDAO.getProductsOfHangar(id_hangar);
             if (!products_hangar.isEmpty())
                 return products_hangar;
@@ -57,7 +56,7 @@ public class Product_HangarServiceImpl implements Product_HangarService {
 
     @Override
     public List<ProductName_HangarDto> getNameOfProductsOfHangar(long id_hangar) {
-        if (hangarService.hangarExistById(id_hangar)) {
+        if (hangarService.isHangarById(id_hangar)) {
             List<Product_Hangar> products_hangar = product_hangarDAO.getProductsOfHangar(id_hangar);
             if (!products_hangar.isEmpty()) {
                 List<String> name_products = getNameOfProducts(products_hangar);
@@ -69,7 +68,7 @@ public class Product_HangarServiceImpl implements Product_HangarService {
 
     @Override
     public List<Product_Hangar> getHangarsOfProduct(long id_product) {
-        if (productService.existProduct(id_product)) {
+        if (productService.isProductById(id_product)) {
             List<Product_Hangar> product_hangars = product_hangarDAO.getHangarsOfProduct(id_product);
             if (!product_hangars.isEmpty())
                 return product_hangars;
@@ -96,7 +95,7 @@ public class Product_HangarServiceImpl implements Product_HangarService {
 
     @Override
     public boolean isProductLinkToHangar(long id_product) { //TODO
-        if (productService.existProduct(id_product))
+        if (productService.isProductById(id_product))
             return product_hangarDAO.isProductLinkToAnyHangar(id_product);
         throw new ApplicationException(ApplicationExceptionCause.PROD_HANG_UNLINK);
     }

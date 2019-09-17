@@ -7,7 +7,6 @@ import com.myApp.hangar.builder.HangarBuilder;
 import com.myApp.hangar.dto.BasicDataHangarDto;
 import com.myApp.hangar.dto.HangarDto;
 import com.myApp.model.Hangar;
-import com.myApp.hangar.repository.HangarRepository;
 import com.myApp.hangar.service.HangarServiceImpl;
 import com.myApp.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +29,6 @@ import java.util.stream.Collectors;
 @RequestMapping("/api")
 public class HangarController {
 
-    @Autowired
-    private HangarRepository hangarRepository;
-
 	@Autowired
     private HangarServiceImpl hangarService;
 
@@ -49,11 +45,13 @@ public class HangarController {
         );
 	}
 
-    @GetMapping("/hangars/{page}/{items}") //TODO implementar a lo largo de todas las capas
+    @GetMapping("/hangars/{page}/{items}")
     public ResponseEntity<Page<Hangar>> hangarList(@PathVariable("page") int page, @PathVariable("items") int items) {
+        util.checkNumber(page);
+        util.checkNumber(items);
 
         Pageable itemsToPage = PageRequest.of(page, items);
-        Page<Hangar> hangars = hangarRepository.findByStateTrue(itemsToPage);
+        Page<Hangar> hangars = hangarService.findByStateTrue(itemsToPage);
 
         return new ResponseEntity<>(
                 new PageImpl<Hangar>(
@@ -66,7 +64,7 @@ public class HangarController {
 
     @GetMapping("/hangar/{id}")
     public ResponseEntity<HangarDto> getHangarById(@PathVariable long id) {
-        util.checkId(id);
+        util.checkNumber(id);
         final Hangar hangar = hangarService.getHangar(id);
         return new ResponseEntity<>(
                 new DtoBuilder(hangar).getHangarDto(),
@@ -94,12 +92,6 @@ public class HangarController {
         );
 	}
 
-	/*Este método ya no se usa, se cambia el estado de activo a inactivo
-	@DeleteMapping("/hangar/{id}")
-	public Hangar deleteHangar(@PathVariable Long id) {
-		return hangarService.deleteHangar(id);
-	}*/
-
 	@PutMapping("/hangar")
     public ResponseEntity<HangarDto> updateHangar(@Valid @RequestBody HangarDto hangarDto) {
 	    Hangar hangar = new HangarBuilder(hangarDto).getHangar();
@@ -112,7 +104,7 @@ public class HangarController {
 
     @PutMapping("/hangar/{id}") //Logic Delete
     public ResponseEntity<HangarDto> updateState(@PathVariable Long id) {
-        util.checkId(id);
+        util.checkNumber(id);
         final Hangar hangar = hangarService.updateState(id);
         return new ResponseEntity<>(
                 new DtoBuilder(hangar).getHangarDto(),
@@ -132,9 +124,15 @@ public class HangarController {
 
     @RequestMapping(value ="hangar/exist/{name}", method = RequestMethod.GET)
     public ResponseEntity<?> findByHangarName(@PathVariable String name) {
-        if (!hangarService.existHangarByName(name)) {
+        if (!hangarService.isHangarByName(name)) {
             return new ResponseEntity<>(true, HttpStatus.OK);
         } throw new ControllerException.hangarExistException();
     }
+
+    /*Este método ya no se usa, se cambia el estado de activo a inactivo
+	@DeleteMapping("/hangar/{id}")
+	public Hangar deleteHangar(@PathVariable Long id) {
+		return hangarService.deleteHangar(id);
+	}*/
 
 }

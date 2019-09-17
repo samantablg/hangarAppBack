@@ -10,7 +10,6 @@ import com.myApp.product.builder.DtoBuilder;
 import com.myApp.product.builder.ProductBuilder;
 import com.myApp.product.dto.ProductDto;
 import com.myApp.model.Product;
-import com.myApp.product.repository.ProductRepository;
 import com.myApp.product.service.ProductService;
 import com.myApp.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +30,6 @@ import java.util.stream.Collectors;
 @CrossOrigin("http://localhost:4200")
 @RequestMapping("/api")
 public class ProductController {
-
-    @Autowired
-    private ProductRepository productRepository;
 
 	@Autowired
 	private ProductService productService;
@@ -73,11 +69,13 @@ public class ProductController {
         );
     }
 
-    @GetMapping("/products/{page}/{items}")  //TODO implementar a lo largo de todas las capas
+    @GetMapping("/products/{page}/{items}")
     public ResponseEntity<Page<Product>> productList(@PathVariable("page") int page, @PathVariable("items") int items) {
+	    util.checkNumber(page);
+	    util.checkNumber(items);
 
         Pageable itemsToPage = PageRequest.of(page, items);
-        Page<Product> allProducts = productRepository.findByStateTrue(itemsToPage);
+        Page<Product> allProducts = productService.findByStateTrue(itemsToPage);
 
         Page<Product> result = new PageImpl<>(
                 new ArrayList<>(allProducts.getContent()),
@@ -92,7 +90,7 @@ public class ProductController {
 
 	@GetMapping("/product/{id}")
 	public ResponseEntity<ProductDto> getProductById(@PathVariable long id) {
-        util.checkId(id);
+        util.checkNumber(id);
 		final Product product = productService.getProduct(id);
 		return new ResponseEntity<>(
 				new DtoBuilder(product).getProductDto(),
@@ -121,7 +119,7 @@ public class ProductController {
 
     @PutMapping("/product/{id}") //Logic Delete
     public ResponseEntity<Product> updateState(@PathVariable Long id) {
-        util.checkId(id);
+        util.checkNumber(id);
         return new ResponseEntity<>(
                 productService.updateState(id),
                 HttpStatus.OK
@@ -131,7 +129,7 @@ public class ProductController {
     @GetMapping("search/product")
     public ResponseEntity<List<ProductDto>> findProductByName(@RequestParam String name) {
         if (name.length() > 0) {
-            final List<Product> products = productService.getAllProductsWithName(name);
+            final List<Product> products = productService.getAllProductsWithNameLike(name);
             return new ResponseEntity<>(
                     products.stream().map(
                             product -> new DtoBuilder(product).getProductDto()).collect(Collectors.toList()),
@@ -142,7 +140,7 @@ public class ProductController {
 
     @RequestMapping(value ="product/exist/{name}", method = RequestMethod.GET)
     public ResponseEntity<Boolean> existProductByName(@PathVariable String name) {
-        final boolean isProductExist = productService.existProductByName(name);
+        final boolean isProductExist = productService.isProductByName(name);
         if (!isProductExist) {
             return new ResponseEntity<>(true, HttpStatus.OK);
         }
@@ -152,7 +150,6 @@ public class ProductController {
     @GetMapping("/prices/")
     public ResponseEntity<List<PriceDto>> getPrices() {
         List<Price> prices = priceService.getAllPrices();
-
         return new ResponseEntity<>(
                 prices.stream().map(
                         price -> new PriceDtoBuilder(price).getPriceDto()).collect(Collectors.toList()),
@@ -181,7 +178,7 @@ public class ProductController {
 
     @GetMapping("price/last/{id}")
     public ResponseEntity<Price> getLastPriceOfProduct(@PathVariable long id) {
-        util.checkId(id);
+        util.checkNumber(id);
         return new ResponseEntity<>(
                 priceService.getCurrentPriceOfProduct(id),
                 HttpStatus.OK

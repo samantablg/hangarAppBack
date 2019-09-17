@@ -3,6 +3,8 @@ package com.myApp.product.dao;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import com.myApp.product.repository.ProductRepository;
@@ -28,6 +30,11 @@ public class ProductDaoImpl implements ProductDao {
 	}
 
 	@Override
+	public Page<Product> findByStateTrue(Pageable pageable) {
+		return productRepository.findAll(pageable);
+	}
+
+	@Override
 	public Product getProduct(Long id) { return productRepository.getOne(id); }
 	
 	@Override
@@ -38,21 +45,22 @@ public class ProductDaoImpl implements ProductDao {
 
     public void deleteProduct(long id) { productRepository.deleteById(id);}
 
-	@Override
-	public boolean existProduct(long id) {
-		return productRepository.existsById(id);
-	}
-
-	@Override
-	public boolean existProductByNameAndDescription(String name, String description) { return productRepository.existsProductByNameAndDescription(name, description); }
 
 	@Override
 	public Product updateProduct(Product product) {
 		return productRepository.saveAndFlush(product);
 	}
 
+	@Override
+	public boolean isProductById(long id) {
+		return productRepository.existsById(id);
+	}
+
+	@Override
+	public boolean isProductByNameAndDescription(String name, String description) { return productRepository.existsProductByNameAndDescription(name, description); }
+
     @Override
-    public boolean existProductByName(String name) {
+    public boolean isProductByName(String name) {
         return (productRepository.existsProductByName(name));
     }
 

@@ -3,6 +3,8 @@ package com.myApp.product.dao;
 import java.util.List;
 
 import com.myApp.model.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface ProductDao {
 	
@@ -11,6 +13,8 @@ public interface ProductDao {
     List<Product> getProductsByName(String name);
 
     List<Product> getProductsActive();
+
+	Page<Product> findByStateTrue(Pageable pageable);
 
 	Product getProduct(Long id);
 	
@@ -22,11 +26,11 @@ public interface ProductDao {
 
 	void deleteProduct(long id);
 
-	boolean existProduct(long id);
+	boolean isProductById(long id);
 
-	boolean existProductByName(String name);
+	boolean isProductByName(String name);
 
-	boolean existProductByNameAndDescription(String name, String description);
+	boolean isProductByNameAndDescription(String name, String description);
 
 	String getNameOfProductById(long id);
 

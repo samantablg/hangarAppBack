@@ -27,12 +27,21 @@ public class OrderServiceImpl implements OrderService {
     private Product_HangarService product_hangarService;
 
     @Override
+    public List<Order> getOrdersOfClient(long id) {
+        if (orderDao.isOrderOfClient(id))
+            return orderDao.getOrdersOfClient(id);
+        throw new ApplicationException(ApplicationExceptionCause.ORDER_NOT_FOUND);
+    }
+
+    @Override
     public Order saveOrder(Order order) {
         List<Product_Order> products_order = this.saveProduct_Order(order);
         order.setProducts_orders(products_order);
-        if (order.getTotal_price() == this.calculatePriceOfOrder(order) && order.getTotal_products() == this.getTotalProductsOrder(order))
-            return orderDao.saveOrder(order);
-        throw new ApplicationException(ApplicationExceptionCause.PRICE_CONFLICT); //change conflict
+        if (order.getTotal_price() == this.calculatePriceOfOrder(order)) {
+            if (order.getTotal_products() == this.getTotalProductsOrder(order))
+                return orderDao.saveOrder(order);
+            throw new ApplicationException(ApplicationExceptionCause.ITEMS_CONFLICT);
+        } throw new ApplicationException(ApplicationExceptionCause.PRICE_CONFLICT);
     }
 
     @Override
@@ -54,13 +63,6 @@ public class OrderServiceImpl implements OrderService {
             order.getProducts_orders().remove(product_order);
             return order;
         } throw new ApplicationException(ApplicationExceptionCause.ORDER_NOT_FOUND);
-    }
-
-    @Override
-    public List<Order> getOrdersOfClient(long id) {
-        if (orderDao.isOrderOfClient(id))
-            return orderDao.getOrdersOfClient(id);
-        throw new ApplicationException(ApplicationExceptionCause.ORDER_NOT_FOUND);
     }
 
     private double calculatePriceOfOrder(Order order) {

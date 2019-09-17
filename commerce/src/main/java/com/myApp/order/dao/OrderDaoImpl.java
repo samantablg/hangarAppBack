@@ -14,8 +14,18 @@ public class OrderDaoImpl implements OrderDao {
     private OrderRepository orderRepository;
 
     @Override
+    public List<Order> getOrdersOfClient(long id) {
+        return orderRepository.findAllByProfile(id);
+    }
+
+    @Override
     public Order saveOrder(Order order) {
         return orderRepository.save(order);
+    }
+
+    @Override
+    public Order getOrderById(long id) {
+        return orderRepository.getOne(id);
     }
 
     @Override
@@ -26,16 +36,6 @@ public class OrderDaoImpl implements OrderDao {
     @Override
     public boolean isOrderById(long id) {
         return orderRepository.existsById(id);
-    }
-
-    @Override
-    public Order getOrderById(long id) {
-        return orderRepository.getOne(id);
-    }
-
-    @Override
-    public List<Order> getOrdersOfClient(long id) {
-        return orderRepository.findAllByProfile(id);
     }
 
     @Override

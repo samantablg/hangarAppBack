@@ -2,7 +2,6 @@ package com.myApp.price.service;
 
 import com.myApp.exception.ApplicationException;
 import com.myApp.exception.ApplicationExceptionCause;
-import com.myApp.exception.GeneralException;
 import com.myApp.price.dao.PriceDAO;
 import com.myApp.price.dto.ProductExtended;
 import com.myApp.price.model.Price;
@@ -29,14 +28,14 @@ public class PriceServiceImpl implements PriceService {
     @Override
     public List<Price> getAllPrices() {
         List<Price> prices = priceDAO.getAllPrices();
-        if(!prices.isEmpty())
+        if (!prices.isEmpty())
             return prices;
         throw new ApplicationException(ApplicationExceptionCause.NOT_FOUND);
     }
 
     @Override
     public Price createEntryPriceToProduct(long id, double price) {
-        if(productService.existProduct(id)) {
+        if (productService.isProductById(id)) {
             Product product = productService.getProduct(id);
             Price _price = shapePrice(product, price);
             return priceDAO.createEntryPrice(_price);
@@ -45,7 +44,7 @@ public class PriceServiceImpl implements PriceService {
 
     @Override
     public List<Price> getAllPricesOfProduct(long id) {
-        if(productService.existProduct(id)) {
+        if (productService.isProductById(id)) {
             Product product = productService.getProduct(id);
             return priceDAO.getAllPricesOfProduct(product);
         } throw new  ApplicationException(ApplicationExceptionCause.PRODUCT_CONFLICT);
@@ -53,7 +52,7 @@ public class PriceServiceImpl implements PriceService {
 
     @Override
     public Price getCurrentPriceOfProduct(long id) {
-        if(productService.existProduct(id)) {
+        if (productService.isProductById(id)) {
             if (priceDAO.isProductWithPrice(id))
                 return priceDAO.getLastPriceOfProduct(id);
             throw new ApplicationException(ApplicationExceptionCause.PROD_PRICE);

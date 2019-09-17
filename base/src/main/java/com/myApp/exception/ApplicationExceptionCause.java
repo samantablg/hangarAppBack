@@ -9,8 +9,11 @@ import java.io.Serializable;
 public enum ApplicationExceptionCause implements Serializable {
 
     NOT_FOUND( "not found" , HttpStatus.BAD_REQUEST),
+    HANGAR_NOT_FOUND( "Hangar not found" , HttpStatus.NOT_FOUND),
+    PROD_NOT_FOUND( "Product not found" , HttpStatus.NOT_FOUND),
     ORDER_NOT_FOUND( "Order not found" , HttpStatus.NOT_FOUND),
     PRICE_CONFLICT("Conflict with price",HttpStatus.BAD_REQUEST),
+    ITEMS_CONFLICT("Conflict with the total of products",HttpStatus.BAD_REQUEST),
     PRICE_CURRENT("Current price of product", HttpStatus.CREATED),
     USER_CONFLICT("User already exists", HttpStatus.CONFLICT),
     HANGAR_CONFLICT("Hangar already exists", HttpStatus.CONFLICT),

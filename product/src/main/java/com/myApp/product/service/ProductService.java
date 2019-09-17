@@ -1,6 +1,8 @@
 package com.myApp.product.service;
 
 import com.myApp.model.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -10,7 +12,9 @@ public interface ProductService {
 
 	List<Product> getAllActiveProducts();
 
-    List<Product> getAllProductsWithName(String name);
+    List<Product> getAllProductsWithNameLike(String name);
+
+	Page<Product> findByStateTrue(Pageable pageable);
 
 	Product getProduct(long id);
 
@@ -24,9 +28,9 @@ public interface ProductService {
 
 	Product updateState(long id);
 
-	boolean existProduct(long id);
+	boolean isProductById(long id);
 
-    boolean existProductByName(String name);
+    boolean isProductByName(String name);
 
     Product modifyProduct(Product update);
 

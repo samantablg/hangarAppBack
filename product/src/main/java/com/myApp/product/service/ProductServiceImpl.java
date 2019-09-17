@@ -1,9 +1,12 @@
 package com.myApp.product.service;
 
-import com.myApp.exception.GeneralException;
+import com.myApp.exception.ApplicationException;
+import com.myApp.exception.ApplicationExceptionCause;
 import com.myApp.product.dao.ProductDao;
 import com.myApp.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,71 +21,75 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public List<Product> getAllProducts() {
 		List<Product> products = productDAO.getAllProducts();
-		if(!products.isEmpty())
+		if (!products.isEmpty())
 			return products;
-		throw new GeneralException.NotFound();
+		throw new ApplicationException(ApplicationExceptionCause.PROD_NOT_FOUND);
 	}
 
 	@Override
 	public List<Product> getAllActiveProducts() {
-
 		List<Product> products = productDAO.getProductsActive();
-		if(!products.isEmpty())
+		if (!products.isEmpty())
 			return products;
-		throw new GeneralException.NotFound();
+		throw new ApplicationException(ApplicationExceptionCause.PROD_NOT_FOUND);
 	}
 
     @Override
-    public List<Product> getAllProductsWithName(String name) {
-
+    public List<Product> getAllProductsWithNameLike(String name) {
         List<Product> result = productDAO.getProductsByName(name);
         if (!result.isEmpty())
             return result;
-        throw new GeneralException.NotFound();
+        throw new ApplicationException(ApplicationExceptionCause.PROD_NOT_FOUND);
     }
 
 	@Override
+	public Page<Product> findByStateTrue(Pageable pageable) {
+		Page<Product> items = productDAO.findByStateTrue(pageable);
+		if (!items.isEmpty())
+			return items;
+		throw new ApplicationException(ApplicationExceptionCause.PROD_NOT_FOUND);
+	}
+
+	@Override
 	public Product getProduct(long id) {
-		if(productDAO.existProduct(id))
+		if (productDAO.isProductById(id))
 			return productDAO.getProduct(id);
-		throw new GeneralException.NotFound(id);
+		throw new ApplicationException(ApplicationExceptionCause.PROD_NOT_FOUND);
 	}
 
     @Override
     public Product create(Product product) {
-	    if(!productDAO.existProductByNameAndDescription(product.getName(), product.getDescription()))
+	    if (!productDAO.isProductByNameAndDescription(product.getName(), product.getDescription()))
 	        return productDAO.createProduct(product);
-	    throw new GeneralException.ProductExistException();
+	    throw new ApplicationException(ApplicationExceptionCause.PRODUCT_CONFLICT);
     }
 
 	public void deleteProduct(long id) {
-		if (productDAO.existProduct(id))
-			 productDAO.deleteProduct(id);
-		throw new GeneralException.NotFound(id);
+		if (productDAO.isProductById(id))
+			productDAO.deleteProduct(id);
+		throw new ApplicationException(ApplicationExceptionCause.PROD_NOT_FOUND);
 	}
 
     @Override
 	public Product updateState(long id) {
-		if(productDAO.existProduct(id)) {
+		if (productDAO.isProductById(id)) {
 			Product product = productDAO.getProduct(id);
 			product.setState(!product.isState());
 			return productDAO.updateProduct(product);
-		}
-		throw new GeneralException.NotFound(id);
+		} throw new ApplicationException(ApplicationExceptionCause.PROD_NOT_FOUND);
 	}
 
     @Override
     public Product modifyProduct(Product update) {
-		if(productDAO.existProduct(update.getId())) {
+		if (productDAO.isProductById(update.getId())) {
 			Product product = this.manageUpdate(update);
 			return productDAO.editProduct(product);
-		}
-	    throw new GeneralException.NotFound();
+		} throw new ApplicationException(ApplicationExceptionCause.PROD_NOT_FOUND);
     }
 
 	@Override
-	public boolean existProduct(long id) {
-		return productDAO.existProduct(id);
+	public boolean isProductById(long id) {
+		return productDAO.isProductById(id);
 	}
 
     @Override
@@ -91,8 +98,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public boolean existProductByName(String name) {
-        return productDAO.existProductByName(name);
+    public boolean isProductByName(String name) {
+        return productDAO.isProductByName(name);
     }
 
     private Product manageUpdate(Product update) {

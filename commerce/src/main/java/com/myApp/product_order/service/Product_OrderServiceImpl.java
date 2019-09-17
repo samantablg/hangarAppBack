@@ -17,8 +17,6 @@ public class Product_OrderServiceImpl implements Product_OrderService {
     @Autowired
     private PriceService priceService;
 
-    // TODO añadir excepciones
-
     @Override
     public Product_Order save(Product_Order product_order) {
         return product_orderDao.save(product_order);

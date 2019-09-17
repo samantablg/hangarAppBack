@@ -22,8 +22,8 @@ public interface Product_HangarDAO {
 
     void deleteRelationship(Product_Hangar product_hangar);
 
-    Boolean isProductLinkToAnyHangar(long product);
+    boolean isProductLinkToAnyHangar(long product);
 
-    Boolean isProductLinkToHangar(long product, long hangar);
+    boolean isProductLinkToHangar(long product, long hangar);
 
 }

@@ -4,6 +4,8 @@ package com.myApp.hangar.dao;
 import com.myApp.model.Hangar;
 import com.myApp.hangar.repository.HangarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -21,38 +23,37 @@ public class HangarDaoImpl implements HangarDao {
 	    return hangarRepository.findByNameWithTrueState(name);
     }
 
-    @Override
-    public Boolean existHangarByName(String name) {
-        return hangarRepository.existHangarByName(name);
-    }
+	@Override
+	public Page<Hangar> findByStateTrue(Pageable pageable) { return hangarRepository.findByStateTrue(pageable);	}
 
 	@Override
-	public Boolean existHangarByNameAndAddress(String name, String address) { return hangarRepository.existsHangarByNameAndAddress(name, address); }
-
-	@Override
-	public Hangar getHangar(Long id) {
-		return hangarRepository.getOne(id);
-	}
+	public Hangar getHangar(Long id) { return hangarRepository.getOne(id); }
 
 	@Override
 	public Hangar createHangar(Hangar hangar) { return hangarRepository.save(hangar); }
 
-	/*@Override
-	public Hangar deleteHangar(Long id) {
-		Hangar com.myHangar.hangar = hangarRepository.getOne(id);
-		if(com.myHangar.hangar != null)
-			hangarRepository.delete(com.myHangar.hangar);
-		return null;
-	}*/
+	@Override
+	public Hangar updateHangar(Hangar hangar) {
+		return hangarRepository.saveAndFlush(hangar);
+	}
 
 	@Override
-	public boolean existHangar(Long id) {
+	public boolean isHangarById(Long id) {
 		return hangarRepository.existsById(id);
 	}
 
-    @Override
-    public Hangar updateHangar(Hangar hangar) {
-        return hangarRepository.saveAndFlush(hangar);
-    }
+	@Override
+	public boolean isHangarByName(String name) {
+		return hangarRepository.existHangarByName(name);
+	}
+
+	@Override
+	public boolean isHangarByNameAndAddress(String name, String address) { return hangarRepository.existsHangarByNameAndAddress(name, address); }
+
+    /*@Override
+	public Hangar deleteHangar(Long id) {
+		Hangar hangar = hangarRepository.getOne(id);
+		return hangarRepository.delete(hangar);
+	}*/
 
 }
