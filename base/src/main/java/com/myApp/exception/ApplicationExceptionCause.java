@@ -1,6 +1,5 @@
 package com.myApp.exception;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
@@ -10,6 +9,7 @@ import java.io.Serializable;
 public enum ApplicationExceptionCause implements Serializable {
 
     NOT_FOUND( "not found" , HttpStatus.BAD_REQUEST),
+    ORDER_NOT_FOUND( "Order not found" , HttpStatus.NOT_FOUND),
     PRICE_CONFLICT("Conflict with price",HttpStatus.BAD_REQUEST),
     PRICE_CURRENT("Current price of product", HttpStatus.CREATED),
     USER_CONFLICT("User already exists", HttpStatus.CONFLICT),
@@ -18,7 +18,9 @@ public enum ApplicationExceptionCause implements Serializable {
     NOT_STOCK("Not enough stock", HttpStatus.CONFLICT),
     PROD_HANG_UNLINK("Not exist any relationship", HttpStatus.NOT_FOUND),
     HANG_UNLINK("The hangar is not associated to any product", HttpStatus.NOT_FOUND),
-    PROD_UNLINK("The product is not associated to any hangar", HttpStatus.NOT_FOUND);
+    PROD_UNLINK("The product is not associated to any hangar", HttpStatus.NOT_FOUND),
+    ID_NOT_ALLOWED("The id is not allowed", HttpStatus.BAD_REQUEST),
+    PROD_PRICE("The product has not price assigned yet", HttpStatus.NOT_FOUND);
 
     private String code;
     private HttpStatus httpStatus;

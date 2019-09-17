@@ -5,6 +5,8 @@ import com.myApp.order.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class OrderDaoImpl implements OrderDao {
 
@@ -22,12 +24,22 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public Boolean existOrderById(long id) {
+    public boolean isOrderById(long id) {
         return orderRepository.existsById(id);
     }
 
     @Override
     public Order getOrderById(long id) {
         return orderRepository.getOne(id);
+    }
+
+    @Override
+    public List<Order> getOrdersOfClient(long id) {
+        return orderRepository.findAllByProfile(id);
+    }
+
+    @Override
+    public boolean isOrderOfClient(long id) {
+        return orderRepository.existsOrdersByProfile(id);
     }
 }

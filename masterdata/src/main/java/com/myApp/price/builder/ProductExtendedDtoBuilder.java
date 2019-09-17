@@ -1,14 +1,14 @@
 package com.myApp.price.builder;
 
-import com.myApp.price.dto.ProductExtendedDto;
+import com.myApp.price.dto.ProductExtended;
 import com.myApp.model.Product;
 
 public class ProductExtendedDtoBuilder {
 
-    private ProductExtendedDto productExtendedDto;
+    private ProductExtended productExtendedDto;
 
     public ProductExtendedDtoBuilder(Product product, float price ) {
-        this.productExtendedDto = new ProductExtendedDto();
+        this.productExtendedDto = new ProductExtended();
 
         this.productExtendedDto.setId(product.getId());
         this.productExtendedDto.setName(product.getName());
@@ -17,7 +17,7 @@ public class ProductExtendedDtoBuilder {
         this.productExtendedDto.setPrice(price);
     }
 
-    public ProductExtendedDto getProductExtendedDto() {
+    public ProductExtended getProductExtendedDto() {
         return productExtendedDto;
     }
 

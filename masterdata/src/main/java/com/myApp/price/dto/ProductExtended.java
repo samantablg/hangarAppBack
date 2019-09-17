@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class ProductExtendedDto extends ProductDto {
+public class ProductExtended extends ProductDto {
 
     private double price;
 

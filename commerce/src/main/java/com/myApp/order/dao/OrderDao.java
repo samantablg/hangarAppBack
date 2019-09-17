@@ -2,13 +2,19 @@ package com.myApp.order.dao;
 
 import com.myApp.order.model.Order;
 
+import java.util.List;
+
 public interface OrderDao {
 
     Order saveOrder(Order order);
 
     void deleteOrder(long id);
 
-    Boolean existOrderById(long id);
+    boolean isOrderById(long id);
 
     Order getOrderById(long id);
+
+    List<Order> getOrdersOfClient(long id);
+
+    boolean isOrderOfClient(long id);
 }

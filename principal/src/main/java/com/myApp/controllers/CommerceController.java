@@ -13,6 +13,7 @@ import com.myApp.profile.builder.ProfileDtoBuilder;
 import com.myApp.profile.dto.ProfileDto;
 import com.myApp.profile.service.ProfileService;
 import com.myApp.security.service.UserAppService;
+import com.myApp.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +37,9 @@ public class CommerceController {
    @Autowired
    private UserAppService userAppService;
 
+   @Autowired
+   private Util util;
+
     @PostMapping("/order")
     public ResponseEntity<OrderDto> saveOrder(@RequestHeader(value = "Authorization") String token, @RequestBody OrderDto orderDto) throws Exception {
 
@@ -52,9 +56,7 @@ public class CommerceController {
     @PostMapping("/profile")
     public ResponseEntity<ProfileDto> saveProfile(@RequestHeader(value = "Authorization") String token, @RequestBody ProfileDto profileDto) throws Exception {
 
-        if (profileDto.getId() <= 0) {
-            throw new ControllerException.idNotAllowed(profileDto.getId());
-        }
+        util.checkId(profileDto.getId());
         if (userAppService.getIdByToken(token) == profileDto.getId()) {
             UserProfile profile = new ProfileBuilder(profileDto).getProfile();
             return new ResponseEntity<>(

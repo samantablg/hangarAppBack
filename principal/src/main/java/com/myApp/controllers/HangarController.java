@@ -9,6 +9,7 @@ import com.myApp.hangar.dto.HangarDto;
 import com.myApp.model.Hangar;
 import com.myApp.hangar.repository.HangarRepository;
 import com.myApp.hangar.service.HangarServiceImpl;
+import com.myApp.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -35,10 +36,12 @@ public class HangarController {
 	@Autowired
     private HangarServiceImpl hangarService;
 
+	@Autowired
+    private Util util;
+
     @GetMapping("/hangars")
 	public ResponseEntity<List<HangarDto>> getAllHangars() {
         final List<Hangar> hangars = hangarService.getAllHangars();
-
         return new ResponseEntity<>(
                 hangars.stream().map(
                         hangar -> new DtoBuilder(hangar).getHangarDto()).collect(Collectors.toList()),
@@ -63,9 +66,7 @@ public class HangarController {
 
     @GetMapping("/hangar/{id}")
     public ResponseEntity<HangarDto> getHangarById(@PathVariable long id) {
-        if(id<=0)
-            throw new ControllerException.idNotAllowed(id);
-
+        util.checkId(id);
         final Hangar hangar = hangarService.getHangar(id);
         return new ResponseEntity<>(
                 new DtoBuilder(hangar).getHangarDto(),
@@ -76,7 +77,6 @@ public class HangarController {
     @GetMapping("/basicDataHangars")
     public ResponseEntity<List<BasicDataHangarDto>> getBasicDataOfHangars() {
         final List<Hangar> hangars = hangarService.getAllHangars();
-
         return new ResponseEntity<>(hangars.stream()
                 .map(hangar ->
                     new BasicDataHangarDtoBuilder(hangar).getBasicDataHangarDto()).collect(Collectors.toList()),
@@ -112,9 +112,7 @@ public class HangarController {
 
     @PutMapping("/hangar/{id}") //Logic Delete
     public ResponseEntity<HangarDto> updateState(@PathVariable Long id) {
-        if(id<=0) {
-            throw new ControllerException.idNotAllowed(id);
-        }
+        util.checkId(id);
         final Hangar hangar = hangarService.updateState(id);
         return new ResponseEntity<>(
                 new DtoBuilder(hangar).getHangarDto(),
@@ -129,16 +127,14 @@ public class HangarController {
                     hangars.stream().map(
                             hangar -> new DtoBuilder(hangar).getHangarDto()).collect(Collectors.toList()),
                     HttpStatus.OK);
-        }
-        throw new ControllerException.searchHangarException();
+        } throw new ControllerException.searchHangarException();
     }
 
     @RequestMapping(value ="hangar/exist/{name}", method = RequestMethod.GET)
     public ResponseEntity<?> findByHangarName(@PathVariable String name) {
         if (!hangarService.existHangarByName(name)) {
             return new ResponseEntity<>(true, HttpStatus.OK);
-        }
-        throw new ControllerException.hangarExistException();
+        } throw new ControllerException.hangarExistException();
     }
 
 }

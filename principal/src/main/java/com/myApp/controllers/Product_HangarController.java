@@ -10,6 +10,7 @@ import com.myApp.product_hangar.dto.ProductName_HangarDto;
 import com.myApp.product_hangar.dto.Product_HangarDto;
 import com.myApp.product_hangar.model.Product_Hangar;
 import com.myApp.product_hangar.service.Product_HangarServiceImpl;
+import com.myApp.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,9 @@ public class Product_HangarController {
 
     @Autowired
     private Product_HangarServiceImpl product_hangarService;
+
+    @Autowired
+    private Util util;
 
     @PostMapping(value = "/productOfHangar")
     public ResponseEntity<Product_HangarDto> addProductToHangar(@RequestBody Product_HangarDto product_hangarDto) {
@@ -47,7 +51,7 @@ public class Product_HangarController {
 
     @GetMapping("/products/{id_product}")
     public ResponseEntity<List<Product_HangarDto>> getHangarsOfProduct(@PathVariable long id_product) {
-        this.checkId(id_product);
+        util.checkId(id_product);
         final List<Product_Hangar> productsOfHangar = product_hangarService.getHangarsOfProduct(id_product);
         return new ResponseEntity<>(
                 productsOfHangar.stream().map(
@@ -58,7 +62,7 @@ public class Product_HangarController {
 
     @GetMapping("/products/hangar/{id_hangar}")
     public ResponseEntity<List<Product_HangarDto>> getProductOfHangar(@PathVariable long id_hangar) {
-        this.checkId(id_hangar);
+        util.checkId(id_hangar);
         final List<Product_Hangar> productsOfHangar = product_hangarService.getProductsOfHangar(id_hangar);
         return new ResponseEntity<>(
                 productsOfHangar.stream().map(
@@ -69,7 +73,7 @@ public class Product_HangarController {
 
     @GetMapping("/link/productsOfHangar/{id_hangar}")
     public ResponseEntity<List<ProductName_HangarDto>> getNameOfProductOfHangar(@PathVariable long id_hangar) {
-        this.checkId(id_hangar);
+        util.checkId(id_hangar);;
         product_hangarService.getNameOfProductsOfHangar(id_hangar);
         return new ResponseEntity<>(
                 product_hangarService.getNameOfProductsOfHangar(id_hangar),
@@ -90,15 +94,16 @@ public class Product_HangarController {
     @PutMapping(value="/productOfHangar/delete", produces = "application/json; charset=utf-8")
     public ResponseEntity<Boolean> unlinkProductOfHangar(@RequestBody Product_HangarDto product_hangarDto) {
         Product_Hangar product_hangar = new Product_HangarBuilder(product_hangarDto).getProduct_hangar();
+        product_hangarService.unlinkProductOfHangar(product_hangar.getProduct(), product_hangar.getHangar());
         return new ResponseEntity<>(
-                product_hangarService.unlinkProductOfHangar(product_hangar.getProduct(), product_hangar.getHangar()),
+                true,
                 HttpStatus.OK
         );
     }
 
     @GetMapping(value="productOfHangar/link/{id_product}")
     public ResponseEntity<Boolean> isProductLinkToHangar(@PathVariable long id_product) {
-        this.checkId(id_product);
+        util.checkId(id_product);
         return new ResponseEntity<>(
                 product_hangarService.isProductLinkToHangar(id_product), HttpStatus.OK
         );
@@ -106,16 +111,11 @@ public class Product_HangarController {
 
     @GetMapping("/products/unlink/{id_hangar}")
     public ResponseEntity<List<ProductDto>> getProductsUnlinkToHangar(@PathVariable long id_hangar) {
-        this.checkId(id_hangar);
+        util.checkId(id_hangar);
         final List<Product> productsOfHangarById = product_hangarService.getProductsUnlinkOfHangar(id_hangar);
         return new ResponseEntity<>(
                 productsOfHangarById.stream().map(
                     product -> new DtoBuilder(product).getProductDto()).collect(Collectors.toList()),
                 HttpStatus.OK);
-    }
-
-    private void checkId(long id) {
-        if(id <= 0)
-            throw new ControllerException.idNotAllowed(id);
     }
 }

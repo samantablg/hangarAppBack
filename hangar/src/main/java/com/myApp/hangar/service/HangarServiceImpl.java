@@ -57,12 +57,6 @@ public class HangarServiceImpl implements HangarService {
 		throw new GeneralException.HangarExistException();
 	}
 
-	/*public Hangar deleteHangar(long id) {
-		if (hangarDAO.existHangar(id))
-			return hangarDAO.deleteHangar(id);
-		return null;
-	}*/
-
 	@Override
 	public boolean hangarExistById(long id) {
 		return hangarDAO.existHangar(id);
@@ -84,5 +78,11 @@ public class HangarServiceImpl implements HangarService {
         }
         throw new GeneralException.HangarNotFoundException(id);
     }
+
+    /*public Hangar deleteHangar(long id) {
+		if (hangarDAO.existHangar(id))
+			return hangarDAO.deleteHangar(id);
+		return null;
+	}*/
 
 }

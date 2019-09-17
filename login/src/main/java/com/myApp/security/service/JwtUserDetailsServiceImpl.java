@@ -83,5 +83,4 @@ public class JwtUserDetailsServiceImpl implements UserDetailsService {
         userAppDao.assignRoleToUser(user_role);
     }
 
-
 }

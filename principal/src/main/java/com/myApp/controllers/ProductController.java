@@ -3,6 +3,7 @@ package com.myApp.controllers;
 import com.myApp.exceptions.ControllerException;
 import com.myApp.price.builder.PriceDtoBuilder;
 import com.myApp.price.dto.PriceDto;
+import com.myApp.price.dto.ProductExtended;
 import com.myApp.price.model.Price;
 import com.myApp.price.service.PriceService;
 import com.myApp.product.builder.DtoBuilder;
@@ -11,6 +12,7 @@ import com.myApp.product.dto.ProductDto;
 import com.myApp.model.Product;
 import com.myApp.product.repository.ProductRepository;
 import com.myApp.product.service.ProductService;
+import com.myApp.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -39,6 +41,9 @@ public class ProductController {
 	@Autowired
     private PriceService priceService;
 
+	@Autowired
+    private Util util;
+
 	@GetMapping("/products")
 	public ResponseEntity<List<ProductDto>> getAllActiveProducts() {
 	    final List<Product> products = productService.getAllActiveProducts();
@@ -55,6 +60,15 @@ public class ProductController {
         return new ResponseEntity<>(
                 products.stream().map(
                         product -> new DtoBuilder(product).getProductDto()).collect(Collectors.toList()),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/productsExtended")
+    public ResponseEntity<List<ProductExtended>> getAllProductsWithPrice() {
+        final List<ProductExtended> products = priceService.getProductsExtended();
+        return new ResponseEntity<>(
+                products,
                 HttpStatus.OK
         );
     }
@@ -78,8 +92,7 @@ public class ProductController {
 
 	@GetMapping("/product/{id}")
 	public ResponseEntity<ProductDto> getProductById(@PathVariable long id) {
-		if(id<=0)
-			throw new ControllerException.idNotAllowed(id);
+        util.checkId(id);
 		final Product product = productService.getProduct(id);
 		return new ResponseEntity<>(
 				new DtoBuilder(product).getProductDto(),
@@ -108,8 +121,7 @@ public class ProductController {
 
     @PutMapping("/product/{id}") //Logic Delete
     public ResponseEntity<Product> updateState(@PathVariable Long id) {
-        if(id<=0)
-            throw new ControllerException.idNotAllowed(id);
+        util.checkId(id);
         return new ResponseEntity<>(
                 productService.updateState(id),
                 HttpStatus.OK
@@ -169,8 +181,7 @@ public class ProductController {
 
     @GetMapping("price/last/{id}")
     public ResponseEntity<Price> getLastPriceOfProduct(@PathVariable long id) {
-        if(id<=0)
-            throw new ControllerException.idNotAllowed(id);
+        util.checkId(id);
         return new ResponseEntity<>(
                 priceService.getCurrentPriceOfProduct(id),
                 HttpStatus.OK

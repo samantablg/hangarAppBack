@@ -3,7 +3,6 @@ package com.myApp.order.service;
 import com.myApp.exception.ApplicationException;
 import com.myApp.exception.ApplicationExceptionCause;
 import com.myApp.order.dao.OrderDaoImpl;
-import com.myApp.order.exceptions.OrderExceptions;
 import com.myApp.order.model.Order;
 import com.myApp.product_hangar.model.Product_Hangar;
 import com.myApp.product_hangar.service.Product_HangarService;
@@ -38,9 +37,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void deleteOrder(long id) {
-        if (orderDao.existOrderById(id))
+        if (orderDao.isOrderById(id))
             orderDao.deleteOrder(id);
-        throw new OrderExceptions.orderNotFound();
+        throw new ApplicationException(ApplicationExceptionCause.ORDER_NOT_FOUND);
     }
 
     @Override //TODO definir que quiero actualizar
@@ -50,11 +49,18 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order deleteProduct_Order(long id, Product_Order product_order) {
-        if (orderDao.existOrderById(id)) {
+        if (orderDao.isOrderById(id)) {
             Order order = orderDao.getOrderById(id);
             order.getProducts_orders().remove(product_order);
             return order;
-        } throw new OrderExceptions.orderNotFound();
+        } throw new ApplicationException(ApplicationExceptionCause.ORDER_NOT_FOUND);
+    }
+
+    @Override
+    public List<Order> getOrdersOfClient(long id) {
+        if (orderDao.isOrderOfClient(id))
+            return orderDao.getOrdersOfClient(id);
+        throw new ApplicationException(ApplicationExceptionCause.ORDER_NOT_FOUND);
     }
 
     private double calculatePriceOfOrder(Order order) {

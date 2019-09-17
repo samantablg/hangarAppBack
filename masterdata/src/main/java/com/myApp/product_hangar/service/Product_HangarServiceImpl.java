@@ -52,8 +52,7 @@ public class Product_HangarServiceImpl implements Product_HangarService {
             if (!products_hangar.isEmpty())
                 return products_hangar;
             throw new ApplicationException(ApplicationExceptionCause.PROD_HANG_UNLINK);
-        }
-        throw new ApplicationException(ApplicationExceptionCause.NOT_FOUND);
+        } throw new ApplicationException(ApplicationExceptionCause.NOT_FOUND);
     }
 
     @Override
@@ -65,19 +64,17 @@ public class Product_HangarServiceImpl implements Product_HangarService {
                 return buildProductsWithNameOfHangar(products_hangar, name_products);
             }
             throw new ApplicationException(ApplicationExceptionCause.HANG_UNLINK);
-        }
-        throw new ApplicationException(ApplicationExceptionCause.NOT_FOUND);
+        } throw new ApplicationException(ApplicationExceptionCause.NOT_FOUND);
     }
 
     @Override
     public List<Product_Hangar> getHangarsOfProduct(long id_product) {
-        if(productService.existProduct(id_product)) {
-            List<Product_Hangar> result = product_hangarDAO.getHangarsOfProduct(id_product);
-            if(result != null)
-                return result;
+        if (productService.existProduct(id_product)) {
+            List<Product_Hangar> product_hangars = product_hangarDAO.getHangarsOfProduct(id_product);
+            if (!product_hangars.isEmpty())
+                return product_hangars;
             throw new ApplicationException(ApplicationExceptionCause.PROD_UNLINK);
-        }
-        throw new ApplicationException(ApplicationExceptionCause.NOT_FOUND);
+        } throw new ApplicationException(ApplicationExceptionCause.NOT_FOUND);
     }
 
     @Override
@@ -86,18 +83,15 @@ public class Product_HangarServiceImpl implements Product_HangarService {
             Product_Hangar product_hangar = product_hangarDAO.getRelationship(product, hangar);
             product_hangar.setAmount(amount);
             return product_hangarDAO.updateAmount(product_hangar);
-        }
-        throw new ApplicationException(ApplicationExceptionCause.PROD_HANG_UNLINK);
+        } throw new ApplicationException(ApplicationExceptionCause.PROD_HANG_UNLINK);
     }
 
     @Override
-    public boolean unlinkProductOfHangar(long product, long hangar) {
+    public void unlinkProductOfHangar(long product, long hangar) {
         if (product_hangarDAO.isProductLinkToHangar(product, hangar)) {
             Product_Hangar product_hangar = product_hangarDAO.getRelationship(product, hangar);
             product_hangarDAO.deleteRelationship(product_hangar);
-            return true; // Tengo que enviar algo para el controlador
-        }
-        throw new ApplicationException(ApplicationExceptionCause.PROD_HANG_UNLINK);
+        } throw new ApplicationException(ApplicationExceptionCause.PROD_HANG_UNLINK);
     }
 
     @Override
@@ -108,18 +102,15 @@ public class Product_HangarServiceImpl implements Product_HangarService {
     }
 
     @Override
-    public List<Product> getProductsUnlinkOfHangar(long id_hangar) { // usando la query sólo obtengo los productos no asociados a este hangar pero si asociados a otro hangar, pro eso lo hago de este modo
+    public List<Product> getProductsUnlinkOfHangar(long id_hangar) { // usando la query sólo obtengo los productos no asociados a este hangar pero si asociados a otro hangar, por eso lo hago de este modo
 
         List<Product> products = productService.getAllActiveProducts();
         List<Product_Hangar> products_hangar = getProductsOfHangar(id_hangar);
 
         if (!products_hangar.isEmpty()) {
             List<Product> _products = this.getProductsLinksToHangar(products_hangar);
-            return products.stream()
-                    .filter( product -> !_products.contains(product))
-                    .collect(Collectors.toList());
+            return this.filterProductsNotContentInBothArrays(products, _products);
         } throw new ApplicationException(ApplicationExceptionCause.HANG_UNLINK);
-
     }
 
     @Override
@@ -139,13 +130,13 @@ public class Product_HangarServiceImpl implements Product_HangarService {
                 ).collect(Collectors.toList());
     }
 
-    private List<ProductName_HangarDto> buildProductsWithNameOfHangar(List<Product_Hangar> productsOfHangar, List<String> nameOfProducts) {
+    private List<ProductName_HangarDto> buildProductsWithNameOfHangar(List<Product_Hangar> productsOfHangar, List<String> name_products) { // pensar otra vez la lógica de esta función
         AtomicInteger i = new AtomicInteger();
         return productsOfHangar.stream()
-                .map((item) -> {
-                    String name = nameOfProducts.get(i.get());
+                .map( product_hangar -> {
+                    String name = name_products.get(i.get());
                     i.getAndIncrement();
-                    return new ProductName_HangarDtoBuilder(item, name).getProductName_hangarDto_hangarDto();
+                    return new ProductName_HangarDtoBuilder(product_hangar, name).getProductName_hangarDto_hangarDto();
                 }).collect(Collectors.toList());
     }
 
@@ -158,5 +149,11 @@ public class Product_HangarServiceImpl implements Product_HangarService {
                 .map( product_hangar ->
                         productService.getProduct(product_hangar.getProduct())
                 ).collect(Collectors.toList());
+    }
+
+    private List<Product> filterProductsNotContentInBothArrays(List<Product> products, List<Product> _products) {
+        return products.stream()
+                .filter( product -> !_products.contains(product))
+                .collect(Collectors.toList());
     }
 }
