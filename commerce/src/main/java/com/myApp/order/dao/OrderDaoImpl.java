@@ -19,9 +19,7 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public Order saveOrder(Order order) {
-        return orderRepository.save(order);
-    }
+    public Order saveOrder(Order order) { return orderRepository.save(order); }
 
     @Override
     public Order getOrderById(long id) {

@@ -33,8 +33,8 @@ public class PriceDAOImpl implements PriceDAO {
     }
 
     @Override
-    public boolean isProductWithPrice(long product_id) {
-        return priceRepository.existsPriceByProduct(product_id);
+    public Boolean isProductWithPrice(Product product) {
+        return (priceRepository.existsPriceByProduct(product) != null);
     }
 
 }

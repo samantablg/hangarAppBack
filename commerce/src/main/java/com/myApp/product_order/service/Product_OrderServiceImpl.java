@@ -24,7 +24,7 @@ public class Product_OrderServiceImpl implements Product_OrderService {
 
     @Override
     public double getTotalPriceOfProductOrdered(Product_Order product_order) {
-        double price = getCurrentPriceOfProduct(product_order.getProduct_id());
+        double price = this.getCurrentPriceOfProduct(product_order.getProduct_id());
         return price * product_order.getQuantity();
     }
 

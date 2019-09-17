@@ -1,5 +1,7 @@
 package com.myApp.product_order.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.myApp.order.model.Order;
 import lombok.Getter;
 import lombok.Setter;
 

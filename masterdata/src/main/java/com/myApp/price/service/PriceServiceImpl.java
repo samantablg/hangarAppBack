@@ -53,9 +53,9 @@ public class PriceServiceImpl implements PriceService {
     @Override
     public Price getCurrentPriceOfProduct(long id) {
         if (productService.isProductById(id)) {
-            if (priceDAO.isProductWithPrice(id))
+            if (priceDAO.isProductWithPrice(productService.getProduct(id))) {
                 return priceDAO.getLastPriceOfProduct(id);
-            throw new ApplicationException(ApplicationExceptionCause.PROD_PRICE);
+            } throw new ApplicationException(ApplicationExceptionCause.PROD_PRICE);
         } throw new ApplicationException(ApplicationExceptionCause.PRODUCT_CONFLICT);
     }
 

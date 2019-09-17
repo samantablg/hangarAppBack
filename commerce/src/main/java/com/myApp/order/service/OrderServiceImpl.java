@@ -35,12 +35,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order saveOrder(Order order) {
-        List<Product_Order> products_order = this.saveProduct_Order(order);
-        order.setProducts_orders(products_order);
         if (order.getTotal_price() == this.calculatePriceOfOrder(order)) {
-            if (order.getTotal_products() == this.getTotalProductsOrder(order))
+            if (order.getTotal_products() == this.getTotalProductsOrder(order)) {
+                List<Product_Order> products_order = this.saveProduct_Order(order);
+                order.setProducts_orders(products_order);
                 return orderDao.saveOrder(order);
-            throw new ApplicationException(ApplicationExceptionCause.ITEMS_CONFLICT);
+            } throw new ApplicationException(ApplicationExceptionCause.ITEMS_CONFLICT);
         } throw new ApplicationException(ApplicationExceptionCause.PRICE_CONFLICT);
     }
 
@@ -51,7 +51,7 @@ public class OrderServiceImpl implements OrderService {
         throw new ApplicationException(ApplicationExceptionCause.ORDER_NOT_FOUND);
     }
 
-    @Override //TODO definir que quiero actualizar
+    @Override
     public Order updateOrder(long id) {
         return null;
     }
@@ -65,6 +65,8 @@ public class OrderServiceImpl implements OrderService {
         } throw new ApplicationException(ApplicationExceptionCause.ORDER_NOT_FOUND);
     }
 
+    // private  manage
+
     private double calculatePriceOfOrder(Order order) {
         return order.getProducts_orders().stream().mapToDouble(
                 product_order -> product_orderService.getTotalPriceOfProductOrdered(product_order)
@@ -74,7 +76,7 @@ public class OrderServiceImpl implements OrderService {
     private List<Product_Order> saveProduct_Order(Order order) {
         return order.getProducts_orders().stream().map(
                 product_order -> {
-                    updateStockAfterOrder(product_order);
+                    this.updateStockAfterOrder(product_order);
                     return product_orderService.save(product_order);
                 }
         ).collect(Collectors.toList());
