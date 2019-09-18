@@ -34,6 +34,5 @@ public class Order {
 
     @Column(name = "total_products")
     private long total_products;
-
 }
 

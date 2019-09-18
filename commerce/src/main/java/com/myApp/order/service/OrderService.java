@@ -13,7 +13,7 @@ public interface OrderService {
 
     Order saveOrder(Order order);
 
-    Order updateOrder(long id);
+    Order updateOrder(Order order);
 
     Order deleteProduct_Order(long id, Product_Order product_order);
 

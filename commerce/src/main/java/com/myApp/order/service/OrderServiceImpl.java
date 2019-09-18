@@ -51,7 +51,7 @@ public class OrderServiceImpl implements OrderService {
     public Order saveOrder(Order order) {
         if (order.getTotal_price() == this.calculatePriceOfOrder(order)) {
             if (order.getTotal_products() == this.getTotalProductsOrder(order)) {
-                List<Product_Order> products_order = this.manageProduct_Order(order);
+                List<Product_Order> products_order = this.updateStockAfterOrder(order);
                 order.setProducts_orders(products_order);
                 return orderDao.saveOrder(order);
             } throw new ApplicationException(ApplicationExceptionCause.ITEMS_CONFLICT);
@@ -63,15 +63,16 @@ public class OrderServiceImpl implements OrderService {
         if (orderDao.isOrderById(id)) {
             orderDao.deleteOrder(id);
             return true;
-        } return false;
+        } throw new ApplicationException(ApplicationExceptionCause.ORDER_NOT_FOUND);
     }
 
     @Override
-    public Order updateOrder(long id) {
+    public Order updateOrder(Order order) { //TODO voy a comprobar los product_order para ver si han cambiado o no
+        Order _order = orderDao.getOrderById(order.getId());
         return null;
     }
 
-    @Override
+    @Override // ¿Es necesaria?
     public Order deleteProduct_Order(long id, Product_Order product_order) {
         if (orderDao.isOrderById(id)) {
             Order order = orderDao.getOrderById(id);
@@ -103,23 +104,33 @@ public class OrderServiceImpl implements OrderService {
         ).sum();
     }
 
-    private List<Product_Order> manageProduct_Order(Order order) {
+    private List<Product_Order> updateStockAfterOrder(Order order) {
         return order.getProducts_orders().stream().map(
                 product_order -> {
-                    this.updateStockAfterOrder(product_order);
+                    product_hangarService.updateAmountAfterOrder(product_order.getProduct_id(), product_order.getHangar_id(), product_order.getQuantity());
                     return product_order;
                 }
         ).collect(Collectors.toList());
-    }
-
-    private Product_Hangar updateStockAfterOrder(Product_Order product_order) {
-        return product_hangarService.updateAmountAfterOrder(product_order.getProduct_id(), product_order.getHangar_id(), product_order.getQuantity());
     }
 
     private long getTotalProductsOrder(Order order) {
         return order.getProducts_orders().stream().mapToLong(
                 product_order -> product_order.getQuantity()
         ).sum();
+    }
+
+    private void addToOrder(Order order, Product_Order product_order) {
+        List<Product_Order> product_orders = order.getProducts_orders();
+        product_orders.add(product_order);
+    }
+
+    private void removeToOrder(Order order, Product_Order product_order) {
+        List<Product_Order> product_orders = order.getProducts_orders();
+        product_orders.remove(product_order);
+    }
+
+    private void updateOrder(Order order, Product_Order product_order) {
+
     }
 
 }
