@@ -10,9 +10,4 @@ import java.util.List;
 @Repository
 public interface ProfileRepository extends JpaRepository<UserProfile, Long> {
 
-    @Query("SELECT profile FROM UserProfile profile WHERE profile.id = ?1")
-    Boolean existsById(long id);
-
-    @Query("SELECT profile FROM UserProfile profile WHERE profile.name = ?1")
-    Boolean existsByName(String name);
 }

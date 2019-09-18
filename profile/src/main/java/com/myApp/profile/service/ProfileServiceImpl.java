@@ -23,7 +23,7 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public UserProfile getUserProfileById(long id) {
-        if (profileDao.existById(id))
+        if (profileDao.isProfileById(id))
             return profileDao.getProfileById(id);
         throw new ApplicationException(ApplicationExceptionCause.NOT_FOUND);
     }
@@ -39,7 +39,7 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public UserProfile updateProfile(UserProfile profile) {
 
-        if(profileDao.existById(profile.getId())) {
+        if(profileDao.isProfileById(profile.getId())) {
             return this.manageUpdate(profile);
         }
         throw new ApplicationException(ApplicationExceptionCause.NOT_FOUND);

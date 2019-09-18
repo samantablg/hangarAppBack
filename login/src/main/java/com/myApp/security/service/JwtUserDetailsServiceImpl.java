@@ -79,7 +79,7 @@ public class JwtUserDetailsServiceImpl implements UserDetailsService {
     }
 
     private void saveUserRole(UserApp user) {
-        User_Role user_role = assignRoleToUser(user);
+        User_Role user_role = this.assignRoleToUser(user);
         userAppDao.assignRoleToUser(user_role);
     }
 

@@ -2,12 +2,14 @@ package com.myApp.order.service;
 
 import com.myApp.exception.ApplicationException;
 import com.myApp.exception.ApplicationExceptionCause;
+import com.myApp.model.UserProfile;
 import com.myApp.order.dao.OrderDaoImpl;
 import com.myApp.order.model.Order;
 import com.myApp.product_hangar.model.Product_Hangar;
 import com.myApp.product_hangar.service.Product_HangarService;
 import com.myApp.product_order.model.Product_Order;
 import com.myApp.product_order.service.Product_OrderServiceImpl;
+import com.myApp.profile.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,18 +28,30 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private Product_HangarService product_hangarService;
 
+    @Autowired
+    private ProfileService profileService;
+
+    @Override
+    public List<Order> getOrders() {
+        List<Order> orders = orderDao.getOrders();
+        if (!orders.isEmpty())
+            return orders;
+        throw new ApplicationException(ApplicationExceptionCause.ORDER_NOT_FOUND);
+    }
+
     @Override
     public List<Order> getOrdersOfClient(long id) {
-        if (orderDao.isOrderOfClient(id))
-            return orderDao.getOrdersOfClient(id);
-        throw new ApplicationException(ApplicationExceptionCause.ORDER_NOT_FOUND);
+        UserProfile profile = profileService.getUserProfileById(id);
+        if (orderDao.isOrderOfClient(profile)) {
+            return orderDao.getOrdersOfClient(profile);
+        } throw new ApplicationException(ApplicationExceptionCause.ORDER_NOT_FOUND);
     }
 
     @Override
     public Order saveOrder(Order order) {
         if (order.getTotal_price() == this.calculatePriceOfOrder(order)) {
             if (order.getTotal_products() == this.getTotalProductsOrder(order)) {
-                List<Product_Order> products_order = this.saveProduct_Order(order);
+                List<Product_Order> products_order = this.manageProduct_Order(order);
                 order.setProducts_orders(products_order);
                 return orderDao.saveOrder(order);
             } throw new ApplicationException(ApplicationExceptionCause.ITEMS_CONFLICT);
@@ -45,10 +59,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void deleteOrder(long id) {
-        if (orderDao.isOrderById(id))
+    public boolean deleteOrder(long id) {
+        if (orderDao.isOrderById(id)) {
             orderDao.deleteOrder(id);
-        throw new ApplicationException(ApplicationExceptionCause.ORDER_NOT_FOUND);
+            return true;
+        } return false;
     }
 
     @Override
@@ -65,7 +80,22 @@ public class OrderServiceImpl implements OrderService {
         } throw new ApplicationException(ApplicationExceptionCause.ORDER_NOT_FOUND);
     }
 
-    // private  manage
+    @Override
+    public Order getOrderByIdAndProfile(long id, long profile) {
+        UserProfile _profile = profileService.getUserProfileById(profile);
+        if (orderDao.isOrderById(id)) {
+            if (orderDao.isOrderByIdAndProfile(id, _profile))
+                return orderDao.getOrderByIdAndProfile(id, _profile);
+            throw new ApplicationException(ApplicationExceptionCause.CLIENT_NOT_ORDER);
+        } throw new ApplicationException(ApplicationExceptionCause.ORDER_NOT_FOUND);
+    }
+
+    @Override
+    public Order getOrderById(long id) {
+        if (orderDao.isOrderById(id))
+            return orderDao.getOrderById(id);
+        throw new ApplicationException(ApplicationExceptionCause.ORDER_NOT_FOUND);
+    }
 
     private double calculatePriceOfOrder(Order order) {
         return order.getProducts_orders().stream().mapToDouble(
@@ -73,11 +103,11 @@ public class OrderServiceImpl implements OrderService {
         ).sum();
     }
 
-    private List<Product_Order> saveProduct_Order(Order order) {
+    private List<Product_Order> manageProduct_Order(Order order) {
         return order.getProducts_orders().stream().map(
                 product_order -> {
                     this.updateStockAfterOrder(product_order);
-                    return product_orderService.save(product_order);
+                    return product_order;
                 }
         ).collect(Collectors.toList());
     }

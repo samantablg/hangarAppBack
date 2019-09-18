@@ -44,11 +44,11 @@ public class HangarDaoImpl implements HangarDao {
 
 	@Override
 	public boolean isHangarByName(String name) {
-		return hangarRepository.existHangarByName(name);
+		return hangarRepository.existsByName(name);
 	}
 
 	@Override
-	public boolean isHangarByNameAndAddress(String name, String address) { return hangarRepository.existsHangarByNameAndAddress(name, address); }
+	public boolean isHangarByNameAndAddress(String name, String address) { return hangarRepository.existsByNameAndAddress(name, address); }
 
     /*@Override
 	public Hangar deleteHangar(Long id) {

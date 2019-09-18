@@ -28,11 +28,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query(value = "SELECT product.name FROM Product product WHERE product.id =?1")
     String getNameOfProduct(long id);
 
-    @Query("select p from Product p where p.name = ?1")
-    Boolean existsProductByName(String name);
+    boolean existsByName(String name);
 
-    @Query("select p from Product p where p.name =?1 and p.description =?2")
-    Boolean existsProductByNameAndDescription(String name, String address);
+    boolean existsByNameAndDescription(String name, String description);
 
     @Query("select p from Product p where p.state = true")
     List<Product> findAllWithTrueState();

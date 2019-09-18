@@ -64,7 +64,7 @@ public class HangarController {
 
     @GetMapping("/hangar/{id}")
     public ResponseEntity<HangarDto> getHangarById(@PathVariable long id) {
-        util.checkNumber(id);
+        util.checkId(id);
         final Hangar hangar = hangarService.getHangar(id);
         return new ResponseEntity<>(
                 new DtoBuilder(hangar).getHangarDto(),
@@ -104,7 +104,7 @@ public class HangarController {
 
     @PutMapping("/hangar/{id}") //Logic Delete
     public ResponseEntity<HangarDto> updateState(@PathVariable Long id) {
-        util.checkNumber(id);
+        util.checkId(id);
         final Hangar hangar = hangarService.updateState(id);
         return new ResponseEntity<>(
                 new DtoBuilder(hangar).getHangarDto(),

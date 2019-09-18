@@ -90,7 +90,7 @@ public class ProductController {
 
 	@GetMapping("/product/{id}")
 	public ResponseEntity<ProductDto> getProductById(@PathVariable long id) {
-        util.checkNumber(id);
+        util.checkId(id);
 		final Product product = productService.getProduct(id);
 		return new ResponseEntity<>(
 				new DtoBuilder(product).getProductDto(),
@@ -119,7 +119,7 @@ public class ProductController {
 
     @PutMapping("/product/{id}") //Logic Delete
     public ResponseEntity<Product> updateState(@PathVariable Long id) {
-        util.checkNumber(id);
+        util.checkId(id);
         return new ResponseEntity<>(
                 productService.updateState(id),
                 HttpStatus.OK
@@ -178,7 +178,7 @@ public class ProductController {
 
     @GetMapping("price/last/{id}")
     public ResponseEntity<Price> getLastPriceOfProduct(@PathVariable long id) {
-        util.checkNumber(id);
+        util.checkId(id);
         return new ResponseEntity<>(
                 priceService.getCurrentPriceOfProduct(id),
                 HttpStatus.OK

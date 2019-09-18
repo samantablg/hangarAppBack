@@ -12,6 +12,8 @@ public enum ApplicationExceptionCause implements Serializable {
     HANGAR_NOT_FOUND( "Hangar not found" , HttpStatus.NOT_FOUND),
     PROD_NOT_FOUND( "Product not found" , HttpStatus.NOT_FOUND),
     ORDER_NOT_FOUND( "Order not found" , HttpStatus.NOT_FOUND),
+    CLIENT_NOT_FOUND( "Client not found" , HttpStatus.NOT_FOUND),
+    CLIENT_NOT_ORDER( "Client has not this order" , HttpStatus.NOT_FOUND),
     PRICE_CONFLICT("Conflict with price",HttpStatus.BAD_REQUEST),
     ITEMS_CONFLICT("Conflict with the total of products",HttpStatus.BAD_REQUEST),
     PRICE_CURRENT("Current price of product", HttpStatus.CREATED),
@@ -23,7 +25,9 @@ public enum ApplicationExceptionCause implements Serializable {
     HANG_UNLINK("The hangar is not associated to any product", HttpStatus.NOT_FOUND),
     PROD_UNLINK("The product is not associated to any hangar", HttpStatus.NOT_FOUND),
     ID_NOT_ALLOWED("The id is not allowed", HttpStatus.BAD_REQUEST),
-    PROD_PRICE("The product has not price assigned yet", HttpStatus.NOT_FOUND);
+    QUANT_NOT_ALLOWED("The quantity is not allowed", HttpStatus.BAD_REQUEST),
+    PROD_PRICE("The product has not price assigned yet", HttpStatus.NOT_FOUND),
+    NOT_ALLOW("Permission denied", HttpStatus.FORBIDDEN);
 
     private String code;
     private HttpStatus httpStatus;

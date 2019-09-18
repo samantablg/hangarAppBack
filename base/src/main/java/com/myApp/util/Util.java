@@ -7,8 +7,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class Util {
 
-    public void checkNumber(long id) {
+    public void checkId(double id) {
         if (id <= 0)
             throw new ApplicationException(ApplicationExceptionCause.ID_NOT_ALLOWED);
+    }
+
+    public void checkNumber(double number) {
+        if (number <= 0)
+            throw new ApplicationException(ApplicationExceptionCause.QUANT_NOT_ALLOWED);
     }
 }

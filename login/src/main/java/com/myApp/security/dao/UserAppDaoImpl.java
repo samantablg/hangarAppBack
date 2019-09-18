@@ -28,7 +28,7 @@ public class UserAppDaoImpl implements UserAppDao {
     public UserApp findByUsername(String username) { return userRepository.findByUsername(username); }
 
     @Override
-    public Boolean existsByUsername(String username) {
+    public boolean existsByUsername(String username) {
         return userRepository.existsByUsername(username);
     }
 

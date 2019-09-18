@@ -57,11 +57,12 @@ public class ProductDaoImpl implements ProductDao {
 	}
 
 	@Override
-	public boolean isProductByNameAndDescription(String name, String description) { return productRepository.existsProductByNameAndDescription(name, description); }
+	public boolean isProductByNameAndDescription(String name, String description) {
+		return productRepository.existsByNameAndDescription(name, description); }
 
     @Override
     public boolean isProductByName(String name) {
-        return (productRepository.existsProductByName(name));
+        return productRepository.existsByName(name);
     }
 
 	@Override

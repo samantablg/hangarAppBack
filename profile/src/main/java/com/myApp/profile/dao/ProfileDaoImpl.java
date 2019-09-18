@@ -15,17 +15,9 @@ public class ProfileDaoImpl implements ProfileDao {
     private ProfileRepository profileRepository;
 
     @Override
-    public UserProfile save(UserProfile profile) {
-        return profileRepository.save(profile);
+    public List<UserProfile> getProfiles() {
+        return profileRepository.findAll();
     }
-
-    @Override
-    public Boolean existById(long id) {
-        return profileRepository.existsById(id);
-    }
-
-    @Override
-    public Boolean existByName(String name) { return profileRepository.existsByName(name); }
 
     @Override
     public UserProfile getProfileById(long id) {
@@ -33,7 +25,11 @@ public class ProfileDaoImpl implements ProfileDao {
     }
 
     @Override
-    public List<UserProfile> getProfiles() {
-        return profileRepository.findAll();
+    public UserProfile save(UserProfile profile) {
+        return profileRepository.save(profile);
     }
+
+    @Override
+    public Boolean isProfileById(long id) { return profileRepository.existsById(id); }
+
 }

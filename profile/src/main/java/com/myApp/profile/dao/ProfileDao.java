@@ -6,13 +6,12 @@ import java.util.List;
 
 public interface ProfileDao {
 
+    List<UserProfile> getProfiles();
+
     UserProfile save(UserProfile profile);
-
-    Boolean existById(long id);
-
-    Boolean existByName(String name);
 
     UserProfile getProfileById(long id);
 
-    List<UserProfile> getProfiles();
+    Boolean isProfileById(long id);
+
 }

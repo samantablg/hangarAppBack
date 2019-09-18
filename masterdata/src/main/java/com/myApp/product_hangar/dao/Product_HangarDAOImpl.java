@@ -56,11 +56,11 @@ public class Product_HangarDAOImpl implements Product_HangarDAO {
 
     @Override
     public boolean isProductLinkToAnyHangar(long id_product) {
-        return product_hangarRepository.existsProduct_HangarByProduct(id_product);
+        return product_hangarRepository.existsByProduct(id_product);
     }
 
     @Override
     public boolean isProductLinkToHangar(long product, long hangar) {
-        return product_hangarRepository.existsProduct_HangarByHangarAndProduct(product, hangar);
+        return product_hangarRepository.existsByHangarAndProduct(product, hangar);
     }
 }

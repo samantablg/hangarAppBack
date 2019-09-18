@@ -1,6 +1,7 @@
 package com.myApp.controllers;
 
-import com.myApp.exceptions.ControllerException;
+import com.myApp.exception.ApplicationException;
+import com.myApp.exception.ApplicationExceptionCause;
 import com.myApp.order.model.Order;
 import com.myApp.model.UserProfile;
 import com.myApp.order.builder.OrderBuilder;
@@ -40,6 +41,17 @@ public class CommerceController {
    @Autowired
    private Util util;
 
+    @GetMapping("/orders")
+    public ResponseEntity<List<OrderDto>> getAllOrders() throws Exception {
+        List<Order> orders = orderService.getOrders();
+        return new ResponseEntity<>(
+                orders.stream().map(
+                        order -> new OrderDtoBuilder(order).getOrderDto())
+                        .collect(Collectors.toList()),
+                HttpStatus.OK
+        );
+    }
+
     @PostMapping("/order")
     public ResponseEntity<OrderDto> saveOrder(@RequestHeader(value = "Authorization") String token, @RequestBody OrderDto orderDto) throws Exception {
         if (userAppService.getIdByToken(token) == orderDto.getProfile().getId()) {
@@ -49,12 +61,12 @@ public class CommerceController {
                     new OrderDtoBuilder(_order).getOrderDto(),
                     HttpStatus.OK
             );
-        } throw new ControllerException.methodNotAllowed();
+        } throw new ApplicationException(ApplicationExceptionCause.NOT_ALLOW);
     }
 
     @PostMapping("/profile")
     public ResponseEntity<ProfileDto> saveProfile(@RequestHeader(value = "Authorization") String token, @RequestBody ProfileDto profileDto) throws Exception {
-        util.checkNumber(profileDto.getId());
+        util.checkId(profileDto.getId());
 
         if (userAppService.getIdByToken(token) == profileDto.getId()) {
             UserProfile profile = new ProfileBuilder(profileDto).getProfile();
@@ -62,10 +74,59 @@ public class CommerceController {
                     new ProfileDtoBuilder(profileService.save(profile)).getProfileDto(),
                     HttpStatus.CREATED
             );
-        } throw new ControllerException.methodNotAllowed();
+        } throw new ApplicationException(ApplicationExceptionCause.NOT_ALLOW);
     }
 
-    @RequestMapping(value = "/update", method = RequestMethod.PUT)
+    @RequestMapping(value = "/order/{id_user}",  method = RequestMethod.GET)
+    public ResponseEntity<List<OrderDto>> getOrdersOfClient(@RequestHeader(value = "Authorization") String token, @PathVariable long id_user) throws Exception {
+        util.checkId(id_user);
+
+        if (userAppService.getIdByToken(token) == id_user) {
+            final List<Order> orders = orderService.getOrdersOfClient(id_user);
+            return new ResponseEntity<>(
+                    orders.stream().map(
+                            order -> new OrderDtoBuilder(order).getOrderDto())
+                            .collect(Collectors.toList()),
+                    HttpStatus.OK
+            );
+        } throw new ApplicationException(ApplicationExceptionCause.NOT_ALLOW);
+    }
+
+    @RequestMapping(value = "/order/{id_user}/{id_order}",  method = RequestMethod.GET)
+    public ResponseEntity<OrderDto> getOrderByIdOfClient(@RequestHeader(value = "Authorization") String token, @PathVariable long id_user, @PathVariable long id_order) throws Exception {
+        util.checkId(id_user);
+        util.checkId(id_order);
+
+        if (userAppService.getIdByToken(token) == id_user) {
+            Order order = orderService.getOrderByIdAndProfile(id_order, id_user);
+            return new ResponseEntity<>(
+                    new OrderDtoBuilder(order).getOrderDto(),
+                    HttpStatus.OK
+            );
+        } throw new ApplicationException(ApplicationExceptionCause.NOT_ALLOW);
+    }
+
+    @RequestMapping(value = "/updateOrder", method = RequestMethod.PUT)
+    public ResponseEntity<OrderDto> updateOrder(@RequestHeader(value = "Authorization") String token, @RequestBody OrderDto orderDto) throws Exception {
+        if (userAppService.getIdByToken(token) == orderDto.getProfile().getId()) {
+
+        } throw new ApplicationException(ApplicationExceptionCause.NOT_ALLOW);
+    }
+
+    @RequestMapping(value = "/deleteOrder/{id_order}", method = RequestMethod.DELETE)
+    public ResponseEntity<Boolean> deleteOrderById(@RequestHeader(value = "Authorization") String token, @PathVariable long id_order) {
+        util.checkId(id_order);
+
+        Order order = orderService.getOrderById(id_order);
+        if (userAppService.getIdByToken(token) == order.getProfile().getId()) {
+            return new ResponseEntity<>(
+                    orderService.deleteOrder(id_order),
+                    HttpStatus.OK
+            );
+        } throw new ApplicationException(ApplicationExceptionCause.NOT_ALLOW);
+    }
+
+    @RequestMapping(value = "/updateProfile", method = RequestMethod.PUT)
     public ResponseEntity<ProfileDto> updateUser(@Valid @RequestBody ProfileDto profileDto) throws Exception {
         UserProfile profile = new ProfileBuilder(profileDto).getProfile();
         final UserProfile _profile = profileService.updateProfile(profile);
@@ -80,13 +141,16 @@ public class CommerceController {
         List<UserProfile> profiles = profileService.getAllUsers();
         return new ResponseEntity<>(
                 profiles.stream().map(
-                        profile -> new ProfileDtoBuilder(profile).getProfileDto()).collect(Collectors.toList()),
+                        profile -> new ProfileDtoBuilder(profile).getProfileDto())
+                        .collect(Collectors.toList()),
                 HttpStatus.OK
         );
     }
 
     @GetMapping("/profile/{id}")
     public ResponseEntity<ProfileDto> getProfileById(@PathVariable long id) throws Exception {
+        util.checkId(id);
+
         UserProfile profile = profileService.getUserProfileById(id);
         return new ResponseEntity<>(
                 new ProfileDtoBuilder(profile).getProfileDto(),

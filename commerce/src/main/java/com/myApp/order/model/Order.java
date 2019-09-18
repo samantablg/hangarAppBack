@@ -22,7 +22,7 @@ public class Order {
     @ManyToOne
     private UserProfile profile;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @Column(name = "products")
     private List<Product_Order> products_orders;
 

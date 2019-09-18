@@ -1,5 +1,6 @@
 package com.myApp.order.dao;
 
+import com.myApp.model.UserProfile;
 import com.myApp.order.model.Order;
 import com.myApp.order.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +15,13 @@ public class OrderDaoImpl implements OrderDao {
     private OrderRepository orderRepository;
 
     @Override
-    public List<Order> getOrdersOfClient(long id) {
-        return orderRepository.findAllByProfile(id);
+    public List<Order> getOrders() {
+        return orderRepository.findAll();
+    }
+
+    @Override
+    public List<Order> getOrdersOfClient(UserProfile profile) {
+        return orderRepository.findAllByProfile(profile);
     }
 
     @Override
@@ -24,6 +30,11 @@ public class OrderDaoImpl implements OrderDao {
     @Override
     public Order getOrderById(long id) {
         return orderRepository.getOne(id);
+    }
+
+    @Override
+    public Order getOrderByIdAndProfile(long id, UserProfile profile) {
+        return orderRepository.findOrderByIdAndProfile(id, profile);
     }
 
     @Override
@@ -37,7 +48,12 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public boolean isOrderOfClient(long id) {
-        return orderRepository.existsOrdersByProfile(id);
+    public boolean isOrderOfClient(UserProfile profile) {
+        return orderRepository.existsByProfile(profile);
+    }
+
+    @Override
+    public boolean isOrderByIdAndProfile(long id, UserProfile profile) {
+        return orderRepository.existsByIdAndProfile(id, profile);
     }
 }
