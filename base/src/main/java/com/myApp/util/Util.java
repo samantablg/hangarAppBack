@@ -13,7 +13,7 @@ public class Util {
     }
 
     public void checkNumber(double number) {
-        if (number <= 0)
+        if (number < 0)
             throw new ApplicationException(ApplicationExceptionCause.QUANT_NOT_ALLOWED);
     }
 }
