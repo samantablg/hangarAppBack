@@ -17,7 +17,6 @@ public interface PriceRepository extends JpaRepository<Price, Long> {
     @Query(value = "SELECT * FROM Price p WHERE p.product = ?1 order by p.date desc limit 1", nativeQuery = true)
     Price getLastPriceOfProduct(long product);
 
-    @Query("SELECT p FROM Price p WHERE p.product = ?1")
-    Price existsPriceByProduct(Product product);
+    boolean existsByProduct(Product product);
 
 }

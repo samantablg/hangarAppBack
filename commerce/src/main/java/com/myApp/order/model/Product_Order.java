@@ -1,4 +1,4 @@
-package com.myApp.product_order.model;
+package com.myApp.order.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.myApp.order.model.Order;

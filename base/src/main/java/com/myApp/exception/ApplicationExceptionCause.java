@@ -11,6 +11,7 @@ public enum ApplicationExceptionCause implements Serializable {
     NOT_FOUND( "not found" , HttpStatus.BAD_REQUEST),
     HANGAR_NOT_FOUND( "Hangar not found" , HttpStatus.NOT_FOUND),
     PROD_NOT_FOUND( "Product not found" , HttpStatus.NOT_FOUND),
+    PROD_ORDER_NOT_FOUND( "Product not found" , HttpStatus.NOT_FOUND),
     ORDER_NOT_FOUND( "Order not found" , HttpStatus.NOT_FOUND),
     CLIENT_NOT_FOUND( "Client not found" , HttpStatus.NOT_FOUND),
     CLIENT_NOT_ORDER( "Client has not this order" , HttpStatus.NOT_FOUND),

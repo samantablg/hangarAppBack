@@ -15,5 +15,5 @@ public interface PriceDAO {
 
     List<Price> getAllPricesOfProduct(Product product);
 
-    Boolean isProductWithPrice(Product product);
+    boolean isProductWithPrice(Product product);
 }

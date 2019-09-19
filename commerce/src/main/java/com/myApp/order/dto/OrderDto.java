@@ -1,7 +1,7 @@
 package com.myApp.order.dto;
 
 import com.myApp.model.UserProfile;
-import com.myApp.product_order.model.Product_Order;
+import com.myApp.order.model.Product_Order;
 import lombok.Getter;
 import lombok.Setter;
 
