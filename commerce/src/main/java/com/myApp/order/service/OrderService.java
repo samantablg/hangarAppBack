@@ -11,7 +11,7 @@ public interface OrderService {
 
     List<Order> getOrdersOfClient(long id);
 
-    Order saveOrder(Order order);
+    Order saveOrder(Order order, long id_client);
 
     Order deleteProduct_Order(long id_order, long id_product_order);
 

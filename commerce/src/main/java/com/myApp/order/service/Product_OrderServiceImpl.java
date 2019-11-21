@@ -1,9 +1,6 @@
 package com.myApp.order.service;
 
-import com.myApp.exception.ApplicationException;
-import com.myApp.exception.ApplicationExceptionCause;
 import com.myApp.order.dao.Product_OrderDao;
-import com.myApp.order.service.Product_OrderService;
 import com.myApp.price.service.PriceService;
 import com.myApp.order.model.Product_Order;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,9 +44,6 @@ public class Product_OrderServiceImpl implements Product_OrderService {
     @Override
     public Product_Order getProduct_order(long id_product_order) {
         return product_orderDao.getProduct_Order(id_product_order);
-        /*if (product_orderDao.isProduct_Order(id_product_order))
-            return product_orderDao.getProduct_Order(id_product_order);
-        throw new ApplicationException(ApplicationExceptionCause.PROD_ORDER_NOT_FOUND);*/
     }
 
     @Override

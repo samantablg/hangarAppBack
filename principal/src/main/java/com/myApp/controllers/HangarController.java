@@ -1,13 +1,13 @@
 package com.myApp.controllers;
 
 import com.myApp.exceptions.ControllerException;
-import com.myApp.hangar.builder.BasicDataHangarDtoBuilder;
+import com.myApp.hangar.builder.MinifiedHangarDtoBuilder;
 import com.myApp.hangar.builder.DtoBuilder;
 import com.myApp.hangar.builder.HangarBuilder;
-import com.myApp.hangar.dto.BasicDataHangarDto;
 import com.myApp.hangar.dto.HangarDto;
 import com.myApp.model.Hangar;
 import com.myApp.hangar.service.HangarServiceImpl;
+import com.myApp.model.Minified;
 import com.myApp.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -35,7 +35,7 @@ public class HangarController {
 	@Autowired
     private Util util;
 
-    @GetMapping("/hangars")
+    @RequestMapping(value = "/hangars",  method = RequestMethod.GET)
 	public ResponseEntity<List<HangarDto>> getAllHangars() {
         final List<Hangar> hangars = hangarService.getAllHangars();
         return new ResponseEntity<>(
@@ -45,7 +45,7 @@ public class HangarController {
         );
 	}
 
-    @GetMapping("/hangars/{page}/{items}")
+    @RequestMapping(value = "/hangars/{page}/{items}",  method = RequestMethod.GET)
     public ResponseEntity<Page<Hangar>> hangarList(@PathVariable("page") int page, @PathVariable("items") int items) {
         util.checkNumber(page);
         util.checkNumber(items);
@@ -62,7 +62,8 @@ public class HangarController {
         );
     }
 
-    @GetMapping("/hangar/{id}")
+
+    @RequestMapping(value = "/hangar/{id}",  method = RequestMethod.GET)
     public ResponseEntity<HangarDto> getHangarById(@PathVariable long id) {
         util.checkId(id);
         final Hangar hangar = hangarService.getHangar(id);
@@ -72,17 +73,18 @@ public class HangarController {
         );
     }
 
-    @GetMapping("/basicDataHangars")
-    public ResponseEntity<List<BasicDataHangarDto>> getBasicDataOfHangars() {
+    @RequestMapping(value = "/basicDataHangars",  method = RequestMethod.GET)
+    public ResponseEntity<List<Minified>> getBasicDataOfHangars() {
         final List<Hangar> hangars = hangarService.getAllHangars();
-        return new ResponseEntity<>(hangars.stream()
+        return new ResponseEntity<>
+                (hangars.stream()
                 .map(hangar ->
-                    new BasicDataHangarDtoBuilder(hangar).getBasicDataHangarDto()).collect(Collectors.toList()),
+                    new MinifiedHangarDtoBuilder(hangar).getBasicDataHangarDto()).collect(Collectors.toList()),
                 HttpStatus.OK
         );
 	}
 
-	@PostMapping("/hangar")
+    @RequestMapping(value = "/hangar",  method = RequestMethod.POST)
 	public ResponseEntity<HangarDto> createHangar(@Valid @RequestBody HangarDto hangarDto) {
         Hangar hangar = new HangarBuilder(hangarDto).getHangar();
         final Hangar _hangar =  hangarService.createHangar(hangar);
@@ -92,7 +94,7 @@ public class HangarController {
         );
 	}
 
-	@PutMapping("/hangar")
+    @RequestMapping(value = "/hangar",  method = RequestMethod.PUT)
     public ResponseEntity<HangarDto> updateHangar(@Valid @RequestBody HangarDto hangarDto) {
 	    Hangar hangar = new HangarBuilder(hangarDto).getHangar();
 	    final Hangar _hangar = hangarService.modifyHangar(hangar);
@@ -102,7 +104,7 @@ public class HangarController {
         );
     }
 
-    @PutMapping("/hangar/{id}") //Logic Delete
+    @RequestMapping(value = "/hangar/{id}",  method = RequestMethod.PUT) //Logic Delete
     public ResponseEntity<HangarDto> updateState(@PathVariable Long id) {
         util.checkId(id);
         final Hangar hangar = hangarService.updateState(id);
@@ -110,8 +112,7 @@ public class HangarController {
                 new DtoBuilder(hangar).getHangarDto(),
                 HttpStatus.OK);
     }
-
-    @GetMapping("search")
+    @RequestMapping(value = "/search",  method = RequestMethod.GET)
     public ResponseEntity<List<HangarDto>> findHangarLikeName(@RequestParam String name) {
 	    if (name.length() > 0) {
 	        final List<Hangar> hangars = hangarService.getAllHangarsWithName(name);

@@ -11,11 +11,10 @@ public class OrderBuilder {
         this.order = new Order();
 
         this.order.setId(orderDto.getId());
-        this.order.setProfile(orderDto.getProfile());
+        // this.order.setProfile(orderDto.getProfile());
         this.order.setTotal_price(orderDto.getTotalPrice());
         this.order.setTotal_products(orderDto.getTotalProducts());
-        ;
-        this.order.setProducts_orders(orderDto.getProducts_orders());
+        this.order.setProducts_orders(orderDto.getProductsOfOrder());
     }
 
     public Order getOrder() {

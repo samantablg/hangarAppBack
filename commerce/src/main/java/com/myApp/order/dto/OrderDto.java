@@ -19,10 +19,10 @@ public class OrderDto {
     private long id;
 
     @NotEmpty
-    private List<Product_Order> products_orders = new ArrayList<Product_Order>();
+    private List<Product_Order> productsOfOrder = new ArrayList<Product_Order>();
 
-    @NotEmpty
-    private UserProfile profile;
+    /*@NotEmpty
+    private UserProfile profile;*/
 
     @Positive
     private double totalPrice;

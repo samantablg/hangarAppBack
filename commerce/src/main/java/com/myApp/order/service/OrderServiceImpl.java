@@ -2,7 +2,6 @@ package com.myApp.order.service;
 
 import com.myApp.exception.ApplicationException;
 import com.myApp.exception.ApplicationExceptionCause;
-import com.myApp.model.Product;
 import com.myApp.model.UserProfile;
 import com.myApp.order.dao.OrderDaoImpl;
 import com.myApp.order.model.Order;
@@ -47,13 +46,19 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order saveOrder(Order order) {
+    public Order saveOrder(Order order, long id_client) {
+
+        UserProfile profile = profileService.getUserProfileById(id_client);
+        order.setProfile(profile);
+
         if (order.getTotal_price() == this.calculatePriceOfOrder(order)) {
+
             if (order.getTotal_products() == this.calculateTotalProductsOrder(order)) {
                 List<Product_Order> products_order = this.updateStockAfterOrder(order);
                 order.setProducts_orders(products_order);
                 return orderDao.saveOrder(order);
             } throw new ApplicationException(ApplicationExceptionCause.ITEMS_CONFLICT);
+
         } throw new ApplicationException(ApplicationExceptionCause.PRICE_CONFLICT);
     }
 
@@ -151,9 +156,6 @@ public class OrderServiceImpl implements OrderService {
 
     private void removeToOrder(Order order, Product_Order product_order) {
         order.getProducts_orders().remove(product_order);
-        /*if (order.getProducts_orders().contains(product_order))
-            order.getProducts_orders().remove(product_order);
-        throw new ApplicationException(ApplicationExceptionCause.PROD_ORDER_NOT_FOUND);*/
     }
 
     private boolean isProductInOrder(Order order, Product_Order product_order) { //TODO mejorar código

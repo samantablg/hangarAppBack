@@ -3,17 +3,18 @@ package com.myApp.price.service;
 import com.myApp.exception.ApplicationException;
 import com.myApp.exception.ApplicationExceptionCause;
 import com.myApp.price.dao.PriceDAO;
-import com.myApp.price.dto.ProductExtended;
+import com.myApp.model.ProductExtended;
 import com.myApp.price.model.Price;
 import com.myApp.model.Product;
 import com.myApp.product.service.ProductServiceImpl;
+import com.myApp.product_hangar.model.Product_Hangar;
+import com.myApp.product_hangar.service.Product_HangarServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,6 +26,10 @@ public class PriceServiceImpl implements PriceService {
     @Autowired
     private ProductServiceImpl productService;
 
+    @Autowired
+    private Product_HangarServiceImpl product_hangarService;
+
+
     @Override
     public List<Price> getAllPrices() {
         List<Price> prices = priceDAO.getAllPrices();
@@ -34,10 +39,10 @@ public class PriceServiceImpl implements PriceService {
     }
 
     @Override
-    public Price createEntryPriceToProduct(long id, double price) {
-        if (productService.isProductById(id)) {
-            Product product = productService.getProduct(id);
-            Price _price = shapePrice(product, price);
+    public Price createEntryPriceToProduct(long id_product, double price) {
+        if (productService.isProductById(id_product)) {
+            Product product = productService.getProduct(id_product);
+            Price _price = this.shapePrice(product, price);
             return priceDAO.createEntryPrice(_price);
         } throw new ApplicationException(ApplicationExceptionCause.NOT_FOUND);
     }
@@ -61,21 +66,16 @@ public class PriceServiceImpl implements PriceService {
 
     @Override
     public ProductExtended getProductExtendedById(long id_product) {
-        Price price = priceDAO.getLastPriceOfProduct(id_product);
-        return this.shapeProductExtended(price);
+        Product product = productService.getProduct(id_product);
+        return this.shapeProductExtendedTest(product);
+
     }
 
     @Override
     public List<ProductExtended> getProductsExtended() {
-        List<Product> products = this.filterProductsWithPrice();
-        if (!products.isEmpty()) {
-            return products.stream()
-                    .map( product -> {
-                        Price _price = priceDAO.getLastPriceOfProduct(product.getId());
-                        return this.shapeProductExtended(_price);
-                    })
-                    .collect(Collectors.toList());
-        } throw new ApplicationException(ApplicationExceptionCause.NOT_FOUND);
+        List<Product> products = productService.getAllActiveProducts();
+        return products.stream()
+                .map( product -> this.shapeProductExtendedTest(product)).collect(Collectors.toList());
     }
 
     private Price shapePrice(Product product, double price) {
@@ -92,30 +92,33 @@ public class PriceServiceImpl implements PriceService {
             throw new ApplicationException(ApplicationExceptionCause.PRICE_CURRENT);
     }
 
-    private ProductExtended shapeProductExtended(Price price) {
-        ProductExtended product = new ProductExtended();
-        product.setPrice(price.getPrice());
-        product.setName(price.getProduct().getName());
-        product.setDescription(price.getProduct().getDescription());
-        product.setId(price.getProduct().getId());
-        product.setState(price.getProduct().isState());
-        return product;
+    private List<ProductExtended> filterProductsWithPrice() {
+        return productService.getAllProducts().stream()
+                .map(this::shapeProductExtendedTest)
+                .collect(Collectors.toList());
     }
 
-    private List<Product> filterProductsWithPrice() {
-        List<Product> products = productService.getAllProducts();
-        List<Price> prices = priceDAO.getAllPrices();
-        List<Product> _products = new ArrayList();
+    //TODO extraer código
+    private ProductExtended shapeProductExtendedTest(Product product) {
+        ProductExtended productExtended = new ProductExtended();
+        productExtended.setId(product.getId());
+        productExtended.setName(product.getName());
+        productExtended.setState(product.isState());
+        productExtended.setDescription(product.getDescription());
+        try {
+            productExtended.setPrice(priceDAO.getLastPriceOfProduct(product.getId()).getPrice());
+        } catch(Exception e) {
+            double defaultPrice = 0;
+            productExtended.setPrice(defaultPrice);
+        }
+        try {
+            List<Long> hangars = product_hangarService.getHangarsOfProduct(product.getId())
+                    .stream().map(Product_Hangar::getHangar).collect(Collectors.toList());
+            productExtended.setHangars(hangars);
+        } catch(Exception e) {
+            productExtended.setHangars(new ArrayList<>());
+        }
 
-        products.stream()
-                .forEach( product ->
-                        prices.stream()
-                        .forEach( price -> {
-                            if (price.getProduct().equals(product) && !_products.contains(product))
-                                _products.add(product);
-                            }
-                        )
-                );
-        return _products;
+        return productExtended;
     }
 }

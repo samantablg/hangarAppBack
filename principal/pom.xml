@@ -41,15 +41,61 @@
             <artifactId>base</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
-	</dependencies>
 
-	<build>
+        <!-- https://mvnrepository.com/artifact/com.shazam/shazamcrest -->
+        <dependency>
+            <groupId>com.shazam</groupId>
+            <artifactId>shazamcrest</artifactId>
+            <version>0.11</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+	<!--<build>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
-	</build>
+	</build>-->
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>cobertura-maven-plugin</artifactId>
+                    <version>2.7</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>cobertura-maven-plugin</artifactId>
+                <version>2.7</version>
+                <configuration>
+                    <quiet>true</quiet>
+                    <check/>
+                    <instrumentation>
+                        <ignoreTrivial>true</ignoreTrivial>
+                    </instrumentation>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

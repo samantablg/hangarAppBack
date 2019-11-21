@@ -16,7 +16,7 @@ public interface Product_HangarDAO {
 
     Product_Hangar addProductToHangar(Product_Hangar product_hangar);
 
-    Product_Hangar getRelationship(long product, long hangar);
+    Product_Hangar getRelationship(long hangar, long product);
 
     Product_Hangar updateAmount(Product_Hangar update);
 
@@ -24,6 +24,8 @@ public interface Product_HangarDAO {
 
     boolean isProductLinkToAnyHangar(long product);
 
-    boolean isProductLinkToHangar(long product, long hangar);
+    boolean isProductLinkToHangar(long hangar, long product);
+
+    boolean isHangarNotEmpty(long hangar);
 
 }

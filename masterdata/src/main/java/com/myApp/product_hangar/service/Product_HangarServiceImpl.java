@@ -5,9 +5,9 @@ import com.myApp.exception.ApplicationExceptionCause;
 import com.myApp.hangar.service.HangarServiceImpl;
 import com.myApp.model.Product;
 import com.myApp.product.service.ProductServiceImpl;
-import com.myApp.product_hangar.builder.ProductName_HangarDtoBuilder;
+import com.myApp.product_hangar.builder.Product_Hangar_Extended_DtoBuilder;
 import com.myApp.product_hangar.dao.Product_HangarDAO;
-import com.myApp.product_hangar.dto.ProductName_HangarDto;
+import com.myApp.product_hangar.dto.Product_Hangar_Extended_Dto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.myApp.product_hangar.model.Product_Hangar;
@@ -55,7 +55,7 @@ public class Product_HangarServiceImpl implements Product_HangarService {
     }
 
     @Override
-    public List<ProductName_HangarDto> getNameOfProductsOfHangar(long id_hangar) {
+    public List<Product_Hangar_Extended_Dto> getProductsOfHangarExtended(long id_hangar) {
         if (hangarService.isHangarById(id_hangar)) {
             List<Product_Hangar> products_hangar = product_hangarDAO.getProductsOfHangar(id_hangar);
             if (!products_hangar.isEmpty()) {
@@ -78,18 +78,19 @@ public class Product_HangarServiceImpl implements Product_HangarService {
 
     @Override
     public Product_Hangar updateAmount(long product, long hangar, long amount) {
-        if (product_hangarDAO.isProductLinkToHangar(product, hangar)) {
-            Product_Hangar product_hangar = product_hangarDAO.getRelationship(product, hangar);
+        if (product_hangarDAO.isProductLinkToHangar(hangar, product)) {
+            Product_Hangar product_hangar = product_hangarDAO.getRelationship(hangar, product);
             product_hangar.setAmount(amount);
             return product_hangarDAO.updateAmount(product_hangar);
         } throw new ApplicationException(ApplicationExceptionCause.PROD_HANG_UNLINK);
     }
 
     @Override
-    public void unlinkProductOfHangar(long product, long hangar) {
-        if (product_hangarDAO.isProductLinkToHangar(product, hangar)) {
-            Product_Hangar product_hangar = product_hangarDAO.getRelationship(product, hangar);
+    public boolean unlinkProductOfHangar(long hangar, long product) {
+        if (!product_hangarDAO.isProductLinkToHangar(hangar, product)) {
+            Product_Hangar product_hangar = product_hangarDAO.getRelationship(hangar, product);
             product_hangarDAO.deleteRelationship(product_hangar);
+            return true;
         } throw new ApplicationException(ApplicationExceptionCause.PROD_HANG_UNLINK);
     }
 
@@ -98,6 +99,11 @@ public class Product_HangarServiceImpl implements Product_HangarService {
         if (productService.isProductById(id_product))
             return product_hangarDAO.isProductLinkToAnyHangar(id_product);
         throw new ApplicationException(ApplicationExceptionCause.PROD_HANG_UNLINK);
+    }
+
+    @Override
+    public boolean isHangarNotEmpty(long hangar) {
+        return product_hangarDAO.isHangarNotEmpty(hangar);
     }
 
     @Override
@@ -114,7 +120,7 @@ public class Product_HangarServiceImpl implements Product_HangarService {
 
     @Override
     public Product_Hangar updateAmountAfterOrder(long product, long hangar, long amount) {
-        Product_Hangar product_hangar = product_hangarDAO.getRelationship(product, hangar);
+        Product_Hangar product_hangar = product_hangarDAO.getRelationship(hangar, product);
         long _amount = product_hangar.getAmount() - amount;
         if (_amount >= 0) {
             product_hangar.setAmount(_amount);
@@ -129,13 +135,13 @@ public class Product_HangarServiceImpl implements Product_HangarService {
                 ).collect(Collectors.toList());
     }
 
-    private List<ProductName_HangarDto> buildProductsWithNameOfHangar(List<Product_Hangar> productsOfHangar, List<String> name_products) { // pensar otra vez la lógica de esta función
+    private List<Product_Hangar_Extended_Dto> buildProductsWithNameOfHangar(List<Product_Hangar> productsOfHangar, List<String> name_products) { // pensar otra vez la lógica de esta función
         AtomicInteger i = new AtomicInteger();
         return productsOfHangar.stream()
                 .map( product_hangar -> {
                     String name = name_products.get(i.get());
                     i.getAndIncrement();
-                    return new ProductName_HangarDtoBuilder(product_hangar, name).getProductName_hangarDto_hangarDto();
+                    return new Product_Hangar_Extended_DtoBuilder(product_hangar, name).getProduct_hangar_extended_dto();
                 }).collect(Collectors.toList());
     }
 

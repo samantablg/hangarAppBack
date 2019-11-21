@@ -14,7 +14,7 @@ import java.util.List;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    Page<Product> findByStateTrue(Pageable pageable);
+    Page<Product>  findAllByStateIsTrue(Pageable pageable);
 
     @Query("select p from Product p where p.name = ?1")
     Product findProductByName(String name);

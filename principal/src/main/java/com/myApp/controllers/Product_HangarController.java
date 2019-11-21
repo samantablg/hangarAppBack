@@ -6,8 +6,8 @@ import com.myApp.product.dto.ProductDto;
 import com.myApp.model.Product;
 import com.myApp.product_hangar.builder.Product_HangarBuilder;
 import com.myApp.product_hangar.builder.Product_HangarDtoBuilder;
-import com.myApp.product_hangar.dto.ProductName_HangarDto;
 import com.myApp.product_hangar.dto.Product_HangarDto;
+import com.myApp.product_hangar.dto.Product_Hangar_Extended_Dto;
 import com.myApp.product_hangar.model.Product_Hangar;
 import com.myApp.product_hangar.service.Product_HangarServiceImpl;
 import com.myApp.util.Util;
@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@CrossOrigin
+@CrossOrigin("http://localhost:4200")
 @RequestMapping("/api")
 public class Product_HangarController {
 
@@ -61,7 +61,7 @@ public class Product_HangarController {
     }
 
     @GetMapping("/products/hangar/{id_hangar}")
-    public ResponseEntity<List<Product_HangarDto>> getProductOfHangar(@PathVariable long id_hangar) {
+    public ResponseEntity<List<Product_HangarDto>> getProductsOfHangar(@PathVariable long id_hangar) {
         util.checkId(id_hangar);
         final List<Product_Hangar> productsOfHangar = product_hangarService.getProductsOfHangar(id_hangar);
         return new ResponseEntity<>(
@@ -72,15 +72,15 @@ public class Product_HangarController {
     }
 
     @GetMapping("/link/productsOfHangar/{id_hangar}")
-    public ResponseEntity<List<ProductName_HangarDto>> getNameOfProductOfHangar(@PathVariable long id_hangar) {
+    public ResponseEntity<List<Product_Hangar_Extended_Dto>> getProductsOhHangarExtended(@PathVariable long id_hangar) {
         util.checkId(id_hangar);
         return new ResponseEntity<>(
-                product_hangarService.getNameOfProductsOfHangar(id_hangar),
+                product_hangarService.getProductsOfHangarExtended(id_hangar),
                 HttpStatus.OK
         );
     }
 
-    @PutMapping(value="/productOfHangar/update", produces = "application/json; charset=utf-8")
+    @PutMapping(value="/productOfHangar/update")
     public ResponseEntity<Product_HangarDto> updateAmount(@RequestBody Product_HangarDto product_hangarDto) {
         Product_Hangar product_hangar = new Product_HangarBuilder(product_hangarDto).getProduct_hangar();
         Product_Hangar _product_hangar = product_hangarService.updateAmount(product_hangar.getProduct(), product_hangar.getHangar(), product_hangar.getAmount());
@@ -90,17 +90,24 @@ public class Product_HangarController {
         );
     }
 
-    @PutMapping(value="/productOfHangar/delete", produces = "application/json; charset=utf-8")
-    public ResponseEntity<Boolean> unlinkProductOfHangar(@RequestBody Product_HangarDto product_hangarDto) {
-        Product_Hangar product_hangar = new Product_HangarBuilder(product_hangarDto).getProduct_hangar();
-        product_hangarService.unlinkProductOfHangar(product_hangar.getProduct(), product_hangar.getHangar());
+    @DeleteMapping(value="/productOfHangar/delete/{id_hangar}/{id_product}")
+    public ResponseEntity<Boolean> unlinkProductOfHangar(@PathVariable long id_hangar, @PathVariable long id_product) {
+        util.checkId(id_hangar);
+        util.checkId(id_product);
         return new ResponseEntity<>(
-                true,
+                product_hangarService.unlinkProductOfHangar(id_hangar, id_product),
+                HttpStatus.OK
+        );
+    }
+    @GetMapping(value="/productOfHangar/hangar/{id_hangar}")
+    public ResponseEntity<Boolean> isHangarNotEmpty(@PathVariable long id_hangar) {
+        return new ResponseEntity<>(
+                product_hangarService.isHangarNotEmpty(id_hangar),
                 HttpStatus.OK
         );
     }
 
-    @GetMapping(value="productOfHangar/link/{id_product}")
+    @GetMapping(value="productOfHangar/product/{id_product}")
     public ResponseEntity<Boolean> isProductLinkToHangar(@PathVariable long id_product) {
         util.checkId(id_product);
         return new ResponseEntity<>(

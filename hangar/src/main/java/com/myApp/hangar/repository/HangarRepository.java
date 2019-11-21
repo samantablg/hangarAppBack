@@ -33,6 +33,4 @@ public interface HangarRepository extends JpaRepository<Hangar, Long> {
 
     boolean existsByNameAndAddress(String name, String address);
 
-
-
 }

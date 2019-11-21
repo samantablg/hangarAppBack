@@ -1,6 +1,6 @@
 package com.myApp.price.service;
 
-import com.myApp.price.dto.ProductExtended;
+import com.myApp.model.ProductExtended;
 import com.myApp.price.model.Price;
 
 import java.util.List;
@@ -9,7 +9,7 @@ public interface PriceService {
 
     List<Price> getAllPrices();
 
-    Price createEntryPriceToProduct(long id, double price);
+    Price createEntryPriceToProduct(long id_product, double price);
 
     List<Price> getAllPricesOfProduct(long id);
 

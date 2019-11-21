@@ -1,6 +1,6 @@
 package com.myApp.product_hangar.dto;
 
-public class ProductName_HangarDto {
+public class Product_Hangar_Extended_Dto {
 
     private long hangar;
     private long product;

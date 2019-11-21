@@ -1,6 +1,6 @@
 package com.myApp.price.builder;
 
-import com.myApp.price.dto.ProductExtended;
+import com.myApp.model.ProductExtended;
 import com.myApp.model.Product;
 
 public class ProductExtendedDtoBuilder {

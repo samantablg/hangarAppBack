@@ -40,7 +40,7 @@ public class Product_HangarDAOImpl implements Product_HangarDAO {
     }
 
     @Override
-    public Product_Hangar getRelationship(long product, long hangar) {
+    public Product_Hangar getRelationship(long hangar, long product) {
         return product_hangarRepository.findByProductAndHangar(product, hangar);
     }
 
@@ -60,7 +60,13 @@ public class Product_HangarDAOImpl implements Product_HangarDAO {
     }
 
     @Override
-    public boolean isProductLinkToHangar(long product, long hangar) {
-        return product_hangarRepository.existsByHangarAndProduct(product, hangar);
+    public boolean isProductLinkToHangar(long hangar, long product) {
+        return product_hangarRepository.existsByHangarAndProduct(hangar, product);
+    }
+
+
+    @Override
+    public boolean isHangarNotEmpty(long hangar) {
+        return product_hangarRepository.existsByHangar(hangar);
     }
 }

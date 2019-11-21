@@ -3,7 +3,7 @@ package com.myApp.controllers;
 import com.myApp.exceptions.ControllerException;
 import com.myApp.price.builder.PriceDtoBuilder;
 import com.myApp.price.dto.PriceDto;
-import com.myApp.price.dto.ProductExtended;
+import com.myApp.model.ProductExtended;
 import com.myApp.price.model.Price;
 import com.myApp.price.service.PriceService;
 import com.myApp.product.builder.DtoBuilder;
@@ -157,9 +157,9 @@ public class ProductController {
         );
     }
 
-    @PostMapping("price/product/{id}")
-    public ResponseEntity<PriceDto> priceToProduct(@PathVariable long id, @RequestBody double price) {
-        Price _price =  priceService.createEntryPriceToProduct(id, price);
+    @PostMapping("price/product/{id_product}")
+    public ResponseEntity<PriceDto> priceToProduct(@PathVariable long id_product, @RequestBody double price) {
+        Price _price =  priceService.createEntryPriceToProduct(id_product, price);
         return new ResponseEntity<>(
                 new PriceDtoBuilder(_price).getPriceDto(),
                 HttpStatus.OK
